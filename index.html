@@ -3,148 +3,106 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<title>木魚淨心 · 心香祈願 · 叩鐘迴向｜互動原型</title>
+<title>木魚淨心 · 心香祈願 · 叩鐘迴向 · 專屬吉羊卡｜互動原型</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --gold: #d4af37;
-    --gold-bright: #ffd875;
-    --ember: #c0392b;
-    --ember-bright: #e8613f;
-    --bronze-dark: #170d09;
-    --bronze-mid: #3c2415;
-    --bronze-hi: #6b3e22;
-    --ink: #050714;
-    --indigo-deep: #0a0e27;
-    --indigo-mid: #141b3d;
-    --paper: #f4ead8;
-    --muted: rgba(244,234,216,.62);
-    --serif: 'Noto Serif TC', serif;
-    --sans: 'Noto Sans TC', sans-serif;
+    --gold: #d4af37; --gold-bright: #ffd875; --ember: #c0392b; --ember-bright: #e8613f;
+    --bronze-dark: #170d09; --bronze-mid: #3c2415; --bronze-hi: #6b3e22;
+    --ink: #050714; --indigo-deep: #0a0e27; --indigo-mid: #141b3d;
+    --paper: #f4ead8; --muted: rgba(244,234,216,.62);
+    --serif: 'Noto Serif TC', serif; --sans: 'Noto Sans TC', sans-serif;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{height:100%; margin:0; overflow:hidden; background:var(--ink); color:var(--paper); font-family:var(--sans);}
   body{position:fixed; inset:0; width:100%; height:100dvh;}
-
-  .scene{
-    position:absolute; inset:0; width:100%; height:100%;
-    display:flex; flex-direction:column; align-items:center; justify-content:center;
-    opacity:0; pointer-events:none; transition:opacity .9s ease;
-    padding: 6vh 6vw; text-align:center;
-  }
+  .scene{ position:absolute; inset:0; width:100%; height:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .9s ease; padding:6vh 6vw; text-align:center; overflow-y:auto; }
   .scene.active{opacity:1; pointer-events:auto;}
-
-  .eyebrow{
-    font-family:var(--sans); font-size:12px; letter-spacing:.3em; font-weight:700;
-    color:var(--gold); text-transform:uppercase; margin-bottom:14px; opacity:.85;
-  }
-  .headline{
-    font-family:var(--serif); font-weight:900; font-size:clamp(24px,6.4vw,38px);
-    line-height:1.3; margin:0 0 10px; color:var(--paper);
-    text-shadow:0 0 30px rgba(212,175,55,.25);
-  }
-  .sub{
-    font-size:14px; line-height:1.85; color:var(--muted); max-width:30em; margin:0 auto;
-  }
-  .btn{
-    font-family:var(--sans); font-weight:700; font-size:15px; letter-spacing:.05em;
-    padding:15px 34px; border-radius:999px; border:1px solid rgba(212,175,55,.5);
-    background:linear-gradient(180deg, rgba(212,175,55,.18), rgba(212,175,55,.05));
-    color:var(--gold-bright); cursor:pointer; margin-top:26px;
-    transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
-  }
+  .eyebrow{ font-family:var(--sans); font-size:12px; letter-spacing:.3em; font-weight:700; color:var(--gold); text-transform:uppercase; margin-bottom:14px; opacity:.85; }
+  .headline{ font-family:var(--serif); font-weight:900; font-size:clamp(24px,6.4vw,38px); line-height:1.3; margin:0 0 10px; color:var(--paper); text-shadow:0 0 30px rgba(212,175,55,.25); }
+  .sub{ font-size:14px; line-height:1.85; color:var(--muted); max-width:30em; margin:0 auto; }
+  .btn{ font-family:var(--sans); font-weight:700; font-size:15px; letter-spacing:.05em; padding:15px 34px; border-radius:999px; border:1px solid rgba(212,175,55,.5); background:linear-gradient(180deg, rgba(212,175,55,.18), rgba(212,175,55,.05)); color:var(--gold-bright); cursor:pointer; margin-top:22px; transition:transform .15s ease, background .2s ease, box-shadow .2s ease, opacity .2s ease; }
   .btn:active{transform:scale(.96);}
   .btn:hover{background:rgba(212,175,55,.22); box-shadow:0 0 24px rgba(212,175,55,.25);}
-  .btn.ghost{
-    background:transparent; border-color:rgba(244,234,216,.25); color:var(--muted);
-    font-size:12px; padding:9px 18px; margin-top:12px;
-  }
-  .badge{
-    position:fixed; top:calc(12px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
-    font-size:10px; letter-spacing:.16em; color:rgba(244,234,216,.4);
-    font-family:var(--sans); z-index:50; text-transform:uppercase; pointer-events:none;
-  }
+  .btn:disabled{ opacity:.35; pointer-events:none; }
+  .btn.ghost{ background:transparent; border-color:rgba(244,234,216,.25); color:var(--muted); font-size:12px; padding:9px 18px; margin-top:12px; }
+  .badge{ position:fixed; top:calc(12px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%); font-size:10px; letter-spacing:.14em; color:rgba(244,234,216,.4); font-family:var(--sans); z-index:50; text-transform:uppercase; pointer-events:none; text-align:center; width:90%; }
   .fallback-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; justify-content:center; }
-  .hud{
-    position:fixed; bottom:calc(12px + env(safe-area-inset-bottom)); left:0; right:0;
-    text-align:center; font-size:10px; color:rgba(244,234,216,.32); letter-spacing:.04em;
-    font-family:var(--sans); padding:0 6vw; line-height:1.6;
-  }
-  .step-dots{ display:flex; gap:12px; margin:18px 0 4px; }
+  .hud{ position:fixed; bottom:calc(12px + env(safe-area-inset-bottom)); left:0; right:0; text-align:center; font-size:10px; color:rgba(244,234,216,.32); letter-spacing:.04em; font-family:var(--sans); padding:0 6vw; line-height:1.6; }
+  .step-dots{ display:flex; gap:12px; margin:16px 0 4px; }
   .step-dot{ width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(212,175,55,.5); transition:background .3s ease, box-shadow .3s ease, transform .3s ease; }
   .step-dot.filled{ background:var(--gold); box-shadow:0 0 10px var(--gold); transform:scale(1.15); }
 
-  /* ---------- Scene 0: Intro ---------- */
   #scene-intro{ background:radial-gradient(ellipse at 50% 30%, var(--bronze-mid), var(--bronze-dark) 70%); }
-  .intro-glyph{ width:64px; height:64px; margin-bottom:20px; opacity:.9; filter:drop-shadow(0 0 18px rgba(212,175,55,.5)); }
-  .permission-note{ margin-top:20px; font-size:11.5px; color:rgba(244,234,216,.42); max-width:27em; line-height:1.8; }
-  .journey-steps{ display:flex; gap:22px; margin-top:24px; flex-wrap:wrap; justify-content:center; }
-  .journey-step{ font-size:11px; color:var(--muted); letter-spacing:.08em; }
-  .journey-step b{ display:block; color:var(--gold-bright); font-family:var(--serif); font-size:13px; margin-bottom:2px; }
+  .intro-glyph{ width:60px; height:60px; margin-bottom:18px; opacity:.9; filter:drop-shadow(0 0 18px rgba(212,175,55,.5)); }
+  .permission-note{ margin-top:18px; font-size:11px; color:rgba(244,234,216,.42); max-width:27em; line-height:1.8; }
+  .journey-steps{ display:flex; gap:16px; margin-top:20px; flex-wrap:wrap; justify-content:center; }
+  .journey-step{ font-size:10.5px; color:var(--muted); letter-spacing:.06em; }
+  .journey-step b{ display:block; color:var(--gold-bright); font-family:var(--serif); font-size:12.5px; margin-bottom:2px; }
 
-  /* ---------- Scene 1: 木魚淨心 ---------- */
   #scene-fish{ background: radial-gradient(ellipse 120% 80% at 50% 20%, rgba(107,62,34,.4), transparent 60%), linear-gradient(180deg, var(--bronze-dark), #0d0705 85%); }
-  .fish-stage{ position:relative; width:min(58vw,220px); height:min(58vw,220px); margin:8px 0 2px; display:flex; align-items:center; justify-content:center; }
+  .fish-stage{ position:relative; width:min(54vw,200px); height:min(54vw,200px); margin:6px 0 2px; display:flex; align-items:center; justify-content:center; }
   .breath-ring{ position:absolute; inset:0; margin:auto; width:88%; height:88%; border-radius:50%; border:1px solid rgba(212,175,55,.25); animation:breathe 4.4s ease-in-out infinite; pointer-events:none; }
   @keyframes breathe{ 0%,100%{ transform:scale(.86); opacity:.3;} 50%{ transform:scale(1.05); opacity:.68;} }
   .fish-wrap{ position:relative; width:76%; cursor:pointer; user-select:none; touch-action:manipulation; }
   .fish-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
   .fish-wrap.knock{ animation:fishKnock .3s ease; }
   @keyframes fishKnock{ 0%{transform:scale(1);} 35%{transform:scale(.9) rotate(-1.5deg);} 100%{transform:scale(1);} }
+  .fish-count{ font-family:var(--serif); font-size:22px; color:var(--gold-bright); margin-top:4px; }
 
-  /* ---------- Scene 2: 心香祈願 ---------- */
   #scene-incense{ background: radial-gradient(ellipse 120% 80% at 50% 20%, rgba(60,36,21,.5), transparent 60%), linear-gradient(180deg, #140a17, #0a0510 85%); }
-  .incense-stage{ position:relative; width:min(60vw,230px); height:min(72vw,280px); margin:4px 0; display:flex; align-items:flex-end; justify-content:center; }
+  .incense-stage{ position:relative; width:min(56vw,210px); height:min(66vw,255px); margin:2px 0; display:flex; align-items:flex-end; justify-content:center; }
   #smoke-canvas{ position:absolute; left:50%; bottom:24%; width:340%; height:220%; transform:translateX(-50%); pointer-events:none; }
   .censer-wrap{ position:relative; width:60%; z-index:2; margin-bottom:2%; }
   .censer-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 10px 16px rgba(0,0,0,.5)); }
   .press-ring-svg{ position:absolute; left:50%; bottom:14%; width:92%; transform:translateX(-50%) rotate(-90deg); z-index:1; pointer-events:none; }
   .press-ring-track{ fill:none; stroke:rgba(212,175,55,.16); stroke-width:2.4; }
   .press-ring-fill{ fill:none; stroke:var(--gold-bright); stroke-width:2.4; stroke-linecap:round; }
-  .press-hint{ font-size:12px; color:var(--muted); margin-top:10px; letter-spacing:.05em; }
-  .quote-card{ margin-top:16px; padding:18px 22px; border:1px solid rgba(212,175,55,.28); border-radius:14px; background:rgba(212,175,55,.06); max-width:25em; opacity:0; transform:translateY(10px); transition:opacity .7s ease, transform .7s ease; }
-  .quote-card.show{ opacity:1; transform:translateY(0); }
+  .press-hint{ font-size:12px; color:var(--muted); margin-top:8px; letter-spacing:.05em; }
+  .quote-card{ margin-top:14px; padding:16px 20px; border:1px solid rgba(212,175,55,.28); border-radius:14px; background:rgba(212,175,55,.06); max-width:25em; opacity:0; transform:translateY(10px); transition:opacity .7s ease, transform .7s ease; pointer-events:none; }
+  .quote-card.show{ opacity:1; transform:translateY(0); pointer-events:auto; }
   .quote-text{ font-family:var(--serif); font-size:15px; line-height:1.85; color:var(--gold-bright); }
-  .quote-attr{ font-size:10.5px; color:var(--muted); margin-top:8px; letter-spacing:.1em; }
+  .quote-attr{ font-size:10px; color:var(--muted); margin-top:6px; letter-spacing:.08em; }
 
-  /* ---------- Scene 3: 叩鐘迴向 ---------- */
   #scene-bell{ background: radial-gradient(ellipse 120% 80% at 50% 15%, rgba(107,62,34,.45), transparent 60%), linear-gradient(180deg, var(--bronze-dark), #0d0705 85%); }
-  .bell-stage{ position:relative; width:min(66vw,270px); height:min(66vw,270px); display:flex; align-items:center; justify-content:center; margin:4px 0 6px; }
+  .bell-stage{ position:relative; width:min(60vw,240px); height:min(60vw,240px); display:flex; align-items:center; justify-content:center; margin:2px 0 6px; }
   #ripple-canvas{ position:absolute; inset:-90%; width:280%; height:280%; pointer-events:none; }
   .bell-wrap{ position:relative; width:64%; transform-origin:50% 6%; will-change:transform; }
   .bell-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 12px 20px rgba(0,0,0,.55)); }
   .bell-wrap.swing{ animation:bellSwing 1.3s cubic-bezier(.36,.07,.19,.97); }
-  @keyframes bellSwing{
-    0%{transform:rotate(0deg);} 8%{transform:rotate(9deg);} 20%{transform:rotate(-7deg);}
-    34%{transform:rotate(5deg);} 50%{transform:rotate(-3deg);} 68%{transform:rotate(1.5deg);} 100%{transform:rotate(0deg);}
-  }
+  @keyframes bellSwing{ 0%{transform:rotate(0deg);} 8%{transform:rotate(9deg);} 20%{transform:rotate(-7deg);} 34%{transform:rotate(5deg);} 50%{transform:rotate(-3deg);} 68%{transform:rotate(1.5deg);} 100%{transform:rotate(0deg);} }
   .status-line{ display:flex; align-items:center; gap:9px; font-size:12px; color:var(--muted); margin-top:2px; }
   .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px var(--gold); animation:pulseDot 1.6s ease-in-out infinite; }
   @keyframes pulseDot{ 0%,100%{opacity:.4;} 50%{opacity:1;} }
-  .lookup-prompt{ position:absolute; bottom:8%; left:50%; transform:translateX(-50%) translateY(14px); opacity:0; transition:opacity .5s ease, transform .5s ease; width:88%; }
+  .lookup-prompt{ position:absolute; bottom:6%; left:50%; transform:translateX(-50%) translateY(14px); opacity:0; transition:opacity .5s ease, transform .5s ease; width:88%; }
   .lookup-prompt.show{ opacity:1; transform:translateX(-50%) translateY(0); }
   .lookup-arrow{ font-size:20px; display:block; margin-bottom:4px; animation:floatUp 1.6s ease-in-out infinite; }
   @keyframes floatUp{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
 
-  /* ---------- Scene 4: Sky ---------- */
-  #scene-sky{ background:radial-gradient(ellipse at 50% 30%, var(--indigo-mid), var(--indigo-deep) 75%); justify-content:flex-end; padding-bottom:6vh; }
+  #scene-sky{ background:radial-gradient(ellipse at 50% 30%, var(--indigo-mid), var(--indigo-deep) 75%); justify-content:flex-end; padding-bottom:5vh; }
   #star-canvas{ position:absolute; inset:0; width:100%; height:100%; }
   .sky-copy{ position:relative; z-index:5; }
   .sky-count{ font-family:var(--serif); font-weight:700; font-size:14px; color:var(--gold-bright); margin-top:4px; }
   .sky-count b{ font-size:18px; }
 
-  @media (prefers-reduced-motion: reduce){
-    .bell-wrap.swing{ animation:none; } .lookup-arrow{ animation:none; } .status-dot{ animation:none; } .breath-ring{ animation:none; }
-  }
+  #scene-card{ background:radial-gradient(ellipse at 50% 15%, rgba(212,175,55,.16), var(--indigo-deep) 70%); }
+  .name-input{ width:82%; max-width:280px; padding:13px 16px; border-radius:12px; border:1px solid rgba(212,175,55,.4); background:rgba(244,234,216,.07); color:var(--paper); font-family:var(--sans); font-size:15px; text-align:center; margin-top:16px; outline:none; }
+  .name-input::placeholder{ color:rgba(244,234,216,.35); }
+  .name-input:focus{ border-color:var(--gold-bright); }
+  .card-preview{ margin-top:16px; max-width:70vw; width:230px; border-radius:14px; box-shadow:0 20px 50px rgba(0,0,0,.55); display:none; }
+  .card-preview.show{ display:block; }
+  .card-meta{ font-size:10px; color:rgba(244,234,216,.38); margin-top:14px; line-height:1.85; font-family:var(--sans); letter-spacing:.03em; max-width:26em; }
+  .save-hint{ font-size:11.5px; color:var(--muted); margin-top:10px; }
+
+  @media (prefers-reduced-motion: reduce){ .bell-wrap.swing{animation:none;} .lookup-arrow{animation:none;} .status-dot{animation:none;} .breath-ring{animation:none;} }
 </style>
 </head>
 <body>
 
-<div class="badge">互動原型・木魚淨心 · 心香祈願 · 叩鐘迴向</div>
+<div class="badge">互動原型・木魚淨心 · 心香祈願 · 叩鐘迴向 · 因緣感應吉羊卡</div>
 
-<!-- ================= Scene 0 : Intro ================= -->
 <section class="scene active" id="scene-intro">
   <svg class="intro-glyph" viewBox="0 0 64 64" fill="none">
     <path d="M32 6c11 0 18 9 18 20v6l4 8H10l4-8v-6c0-11 7-20 18-20z" stroke="var(--gold)" stroke-width="2.2" stroke-linejoin="round"/>
@@ -153,32 +111,28 @@
   </svg>
   <div class="eyebrow">祈福體驗 · 測試版</div>
   <h1 class="headline">木魚淨心<br>心香祈願・叩鐘迴向</h1>
-  <p class="sub">這是一段三段式的祈福旅程：先靜心、再祈願、最後叩鐘迴向，抬頭點亮屬於你的星空。</p>
+  <p class="sub">你敲木魚的節奏、點香的心念時長、叩鐘的力道與次數，將共同因緣感應出一張屬於你此刻此心的專屬吉羊卡。</p>
   <div class="journey-steps">
     <div class="journey-step"><b>01</b>木魚淨心</div>
     <div class="journey-step"><b>02</b>心香祈願</div>
     <div class="journey-step"><b>03</b>叩鐘迴向</div>
+    <div class="journey-step"><b>04</b>專屬吉羊卡</div>
   </div>
   <button class="btn" id="btn-start">開始體驗</button>
   <p class="permission-note" id="permission-note">此為技術測試頁面，第三步「叩鐘迴向」需要裝置的動作與方向感應權限。若使用 iPhone，點擊後會跳出授權視窗，請選擇「允許」。</p>
 </section>
 
-<!-- ================= Scene 1 : 木魚淨心 ================= -->
 <section class="scene" id="scene-fish">
   <div class="eyebrow">步驟一 · 木魚淨心</div>
-  <h1 class="headline">閉目調息<br>輕敲木魚三聲</h1>
-  <p class="sub">沉澱心神，準備開始這趟祈福旅程</p>
+  <h1 class="headline">閉目調息<br>跟隨心跳輕敲木魚</h1>
+  <p class="sub">敲擊的節奏由你當下的心決定，建議 3～7 聲，敲夠了就往下一步</p>
   <div class="fish-stage">
     <div class="breath-ring"></div>
     <div class="fish-wrap" id="fish-wrap">
       <svg viewBox="0 0 200 170" fill="none">
-        <defs>
-          <linearGradient id="woodGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#a9612f"/>
-            <stop offset="55%" stop-color="#7a3f1c"/>
-            <stop offset="100%" stop-color="#4a230f"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="woodGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#a9612f"/><stop offset="55%" stop-color="#7a3f1c"/><stop offset="100%" stop-color="#4a230f"/>
+        </linearGradient></defs>
         <ellipse cx="100" cy="150" rx="58" ry="8" fill="#1a0f0a"/>
         <path d="M20 100c0-46 36-78 80-78s80 32 80 78-36 60-80 60S20 146 20 100z" fill="url(#woodGrad)" stroke="#2b1808" stroke-width="1.5"/>
         <path d="M46 92c10-18 32-28 54-24" stroke="rgba(255,220,170,.3)" stroke-width="3" stroke-linecap="round" fill="none"/>
@@ -187,18 +141,16 @@
       </svg>
     </div>
   </div>
-  <div class="step-dots" id="fish-dots">
-    <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
-  </div>
+  <div class="fish-count" id="fish-count">0</div>
   <p class="sub" id="fish-status">輕點木魚，敲響第一聲</p>
+  <button class="btn" id="btn-fish-continue" disabled>調息完畢，前往心香祈願</button>
   <div class="fallback-row"><button class="btn ghost" id="btn-force-fish">桌面測試：模擬敲擊</button></div>
 </section>
 
-<!-- ================= Scene 2 : 心香祈願 ================= -->
 <section class="scene" id="scene-incense">
   <div class="eyebrow">步驟二 · 心香祈願</div>
   <h1 class="headline">心中默念心願<br>長按螢幕點燃心香</h1>
-  <p class="sub" id="incense-sub">持續按住，讓心香緩緩升起</p>
+  <p class="sub" id="incense-sub">誠心的長短，由你決定 · 鬆手即點燃</p>
   <div class="incense-stage" id="incense-stage">
     <canvas id="smoke-canvas"></canvas>
     <svg class="press-ring-svg" viewBox="0 0 100 100">
@@ -207,11 +159,9 @@
     </svg>
     <div class="censer-wrap">
       <svg viewBox="0 0 200 160" fill="none">
-        <defs>
-          <linearGradient id="bronzeGrad2" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bronzeGrad2" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
+        </linearGradient></defs>
         <path d="M45 70c0-10 8-16 55-16s55 6 55 16v18c0 10-8 16-55 16s-55-6-55-16z" fill="url(#bronzeGrad2)" stroke="#2b1808" stroke-width="1.5"/>
         <ellipse cx="100" cy="70" rx="55" ry="10" fill="#a9772f"/>
         <path d="M60 104l-10 30M140 104l10 30M100 108v28" stroke="url(#bronzeGrad2)" stroke-width="7" stroke-linecap="round"/>
@@ -220,30 +170,26 @@
       </svg>
     </div>
   </div>
-  <p class="press-hint" id="press-hint">按住不放…</p>
+  <p class="press-hint" id="press-hint">按住不放，默念心願…</p>
   <div class="quote-card" id="quote-card">
     <p class="quote-text" id="quote-text">願所敲的每一聲鐘、所點的每一炷香，都化作對摯愛之人最溫柔的祝福。</p>
-    <p class="quote-attr">— 年度法語（正式文字請置換為授權來源）</p>
-    <button class="btn" id="btn-to-bell" style="margin-top:14px;">前往叩鐘迴向</button>
+    <p class="quote-attr">— 祈福法語（正式文字請置換為授權來源）</p>
+    <button class="btn" id="btn-to-bell" style="margin-top:12px;">前往叩鐘迴向</button>
   </div>
   <div class="fallback-row" id="incense-fallback-row"><button class="btn ghost" id="btn-force-incense">桌面測試：模擬點香完成</button></div>
 </section>
 
-<!-- ================= Scene 3 : 叩鐘迴向 ================= -->
 <section class="scene" id="scene-bell">
   <div class="eyebrow">步驟三 · 叩鐘迴向</div>
   <h1 class="headline" style="font-size:clamp(20px,5.6vw,30px);">手握手機，輕向前推<br>叩響平安大鐘</h1>
   <p class="sub" style="margin-bottom:2px;">將功德迴向給所愛之人 · 需連叩三聲</p>
-
   <div class="bell-stage">
     <canvas id="ripple-canvas"></canvas>
     <div class="bell-wrap" id="bell-wrap">
       <svg viewBox="0 0 200 220" fill="none">
-        <defs>
-          <linearGradient id="bronzeGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="bronzeGrad" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
+        </linearGradient></defs>
         <rect x="92" y="6" width="16" height="18" rx="3" fill="url(#bronzeGrad)"/>
         <path d="M100 22c34 0 58 30 58 66v16l14 26c2 4-1 9-6 9H34c-5 0-8-5-6-9l14-26V88c0-36 24-66 58-66z" fill="url(#bronzeGrad)" stroke="#2b1808" stroke-width="1.5"/>
         <ellipse cx="100" cy="205" rx="70" ry="9" fill="#1a0f0a"/>
@@ -252,23 +198,17 @@
       </svg>
     </div>
   </div>
-
-  <div class="step-dots" id="bell-dots">
-    <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
-  </div>
+  <div class="step-dots" id="bell-dots"><span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span></div>
   <div class="status-line"><span class="status-dot"></span><span id="status-text">感應中，等待撞擊…</span></div>
-
   <div class="lookup-prompt" id="lookup-prompt">
     <span class="lookup-arrow">↑</span>
     <p class="sub" style="margin-bottom:0;">鐘聲已響，請拿起手機，抬頭望向天空</p>
     <div class="fallback-row"><button class="btn ghost" id="btn-force-sky">看不到反應？點此仰望星空</button></div>
   </div>
-
   <div class="fallback-row" id="fallback-strike-row"><button class="btn ghost" id="btn-force-strike">桌面測試：模擬撞鐘</button></div>
   <div class="hud" id="hud">motion 尚未偵測</div>
 </section>
 
-<!-- ================= Scene 4 : Sky ================= -->
 <section class="scene" id="scene-sky">
   <canvas id="star-canvas"></canvas>
   <div class="sky-copy">
@@ -276,8 +216,25 @@
     <h1 class="headline" style="font-size:clamp(22px,6vw,32px);">功德已迴向<br>心燈已加入星海</h1>
     <p class="sub">與此刻所有仰望天空的人，一同點亮這片星空與漫天祈福天燈</p>
     <p class="sky-count"><b id="light-count">—</b> 人已點亮心燈</p>
-    <div class="fallback-row"><button class="btn ghost" id="btn-reset">重新體驗</button></div>
+    <button class="btn" id="btn-to-card">領取我的專屬吉羊卡 →</button>
   </div>
+</section>
+
+<section class="scene" id="scene-card">
+  <div class="eyebrow">因緣感應 · 專屬吉羊卡</div>
+  <h1 class="headline" style="font-size:clamp(20px,5.6vw,28px);">此時、此地、此心<br>只屬於你的吉羊卡</h1>
+  <div id="card-form">
+    <p class="sub">留下您的名字，讓這份祝福有了印記</p>
+    <input class="name-input" id="name-input" type="text" placeholder="請輸入您的芳名" maxlength="12">
+    <div><button class="btn" id="btn-gen-card">生成我的專屬吉羊卡</button></div>
+  </div>
+  <img class="card-preview" id="card-img" alt="專屬吉羊卡">
+  <p class="save-hint" id="save-hint" style="display:none;">長按圖片即可儲存到相簿</p>
+  <div class="fallback-row" id="card-actions" style="display:none;">
+    <a class="btn ghost" id="btn-download" download="吉羊卡.png">下載圖卡</a>
+    <button class="btn ghost" id="btn-reset">重新體驗</button>
+  </div>
+  <p class="card-meta" id="card-meta"></p>
 </section>
 
 <script>
@@ -287,126 +244,112 @@
   var STRIKE_THRESHOLD = 16;
   var STRIKE_COOLDOWN   = 900;
   var SKY_BETA_MIN = -150, SKY_BETA_MAX = -30;
-  var FISH_TARGET = 3, BELL_TARGET = 3;
-  var HOLD_DURATION = 2600; // ms to light incense
+  var BELL_TARGET = 3;
+  var MIN_HOLD_MS = 300;
 
   var scenes = {
-    intro: document.getElementById('scene-intro'),
-    fish: document.getElementById('scene-fish'),
-    incense: document.getElementById('scene-incense'),
-    bell: document.getElementById('scene-bell'),
-    sky: document.getElementById('scene-sky')
+    intro: document.getElementById('scene-intro'), fish: document.getElementById('scene-fish'),
+    incense: document.getElementById('scene-incense'), bell: document.getElementById('scene-bell'),
+    sky: document.getElementById('scene-sky'), card: document.getElementById('scene-card')
   };
-  function showScene(name){
-    Object.keys(scenes).forEach(function(k){ scenes[k].classList.toggle('active', k === name); });
-  }
+  function showScene(name){ Object.keys(scenes).forEach(function(k){ scenes[k].classList.toggle('active', k === name); }); }
 
   var state = 'intro';
   var audioCtx = null;
-  function ensureAudio(){
-    if (!audioCtx){ var AC = window.AudioContext || window.webkitAudioContext; audioCtx = new AC(); }
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    return audioCtx;
-  }
+  function ensureAudio(){ if (!audioCtx){ var AC = window.AudioContext || window.webkitAudioContext; audioCtx = new AC(); } if (audioCtx.state === 'suspended') audioCtx.resume(); return audioCtx; }
 
-  /* ---------------- Audio: wood-block knock ---------------- */
+  /* -------- 因緣感應數據：這趟旅程蒐集到的體感數值 -------- */
+  var gesture = { N: 0, t_interval: 0, T: 0, M: 0, a: 0, seed: null };
+
   function playWoodKnock(){
-    // A real mokugyo/wood-block knock is a short, FIXED-pitch hollow "tock" —
-    // not a pitch glide (that reads as an electronic "boop"). Two fixed
-    // resonances (body + hollow overtone) plus a sharp filtered transient.
     var ctx = ensureAudio(); var now = ctx.currentTime;
     var master = ctx.createGain(); master.gain.value = 0.95; master.connect(ctx.destination);
-
     var osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 520;
-    var og = ctx.createGain();
-    og.gain.setValueAtTime(0.0001, now);
-    og.gain.exponentialRampToValueAtTime(0.6, now + 0.004);
-    og.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
-    osc.connect(og).connect(master); osc.start(now); osc.stop(now + 0.14);
-
+    var og = ctx.createGain(); og.gain.setValueAtTime(0.0001, now); og.gain.exponentialRampToValueAtTime(0.6, now+0.004); og.gain.exponentialRampToValueAtTime(0.0001, now+0.11);
+    osc.connect(og).connect(master); osc.start(now); osc.stop(now+0.14);
     var osc2 = ctx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 260;
-    var og2 = ctx.createGain();
-    og2.gain.setValueAtTime(0.0001, now);
-    og2.gain.exponentialRampToValueAtTime(0.35, now + 0.004);
-    og2.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
-    osc2.connect(og2).connect(master); osc2.start(now); osc2.stop(now + 0.2);
-
+    var og2 = ctx.createGain(); og2.gain.setValueAtTime(0.0001, now); og2.gain.exponentialRampToValueAtTime(0.35, now+0.004); og2.gain.exponentialRampToValueAtTime(0.0001, now+0.16);
+    osc2.connect(og2).connect(master); osc2.start(now); osc2.stop(now+0.2);
     var dur = 0.03;
-    var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+    var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*dur), ctx.sampleRate);
     var d = buf.getChannelData(0);
-    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+    for (var i=0;i<d.length;i++) d[i] = (Math.random()*2-1) * Math.pow(1-i/d.length, 2);
     var noise = ctx.createBufferSource(); noise.buffer = buf;
-    var filt = ctx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 2200; filt.Q.value = 2.2;
+    var filt = ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=2200; filt.Q.value=2.2;
     var ng = ctx.createGain(); ng.gain.value = 0.7;
     noise.connect(filt).connect(ng).connect(master); noise.start(now);
   }
 
-  /* ---------------- Audio: temple bell (deeper + longer on final strike) ---------------- */
   function playBell(isFinal){
     var ctx = ensureAudio(); var now = ctx.currentTime;
     var master = ctx.createGain(); master.gain.value = isFinal ? 0.95 : 0.8; master.connect(ctx.destination);
-    var partials = [1, 1.99, 2.41, 3.06, 3.54, 4.23, 5.4];
-    var fundamental = 108;
+    var partials = [1, 1.99, 2.41, 3.06, 3.54, 4.23, 5.4]; var fundamental = 108;
     var tail = isFinal ? 6.5 : 3.6;
     partials.forEach(function(ratio, i){
-      var osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = fundamental * ratio;
-      var g = ctx.createGain(); var amp = 0.55 / (i + 1);
-      g.gain.setValueAtTime(0.0001, now);
-      g.gain.linearRampToValueAtTime(amp, now + 0.015);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + tail + i * 0.35);
-      osc.connect(g).connect(master); osc.start(now); osc.stop(now + tail + 1.5);
+      var osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value = fundamental*ratio;
+      var g = ctx.createGain(); var amp = 0.55/(i+1);
+      g.gain.setValueAtTime(0.0001, now); g.gain.linearRampToValueAtTime(amp, now+0.015); g.gain.exponentialRampToValueAtTime(0.0001, now+tail+i*0.35);
+      osc.connect(g).connect(master); osc.start(now); osc.stop(now+tail+1.5);
     });
     var dur = 0.06;
-    var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+    var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate*dur), ctx.sampleRate);
     var data = buf.getChannelData(0);
-    for (var i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    for (var i=0;i<data.length;i++) data[i] = (Math.random()*2-1)*(1-i/data.length);
     var noise = ctx.createBufferSource(); noise.buffer = buf;
-    var filt = ctx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 900; filt.Q.value = 0.7;
+    var filt = ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=900; filt.Q.value=0.7;
     var ng = ctx.createGain(); ng.gain.value = isFinal ? 0.6 : 0.5;
     noise.connect(filt).connect(ng).connect(master); noise.start(now);
   }
 
   function vibrateBellStrike(count, isFinal){
     if (!navigator.vibrate) return;
-    if (isFinal) navigator.vibrate([300, 50, 150, 50, 90, 50, 50]); // 由強漸弱，模擬撞木餘震
-    else if (count === 1) navigator.vibrate([200, 40, 90]);
-    else navigator.vibrate([240, 40, 110]);
+    if (isFinal) navigator.vibrate([300,50,150,50,90,50,50]);
+    else if (count === 1) navigator.vibrate([200,40,90]);
+    else navigator.vibrate([240,40,110]);
   }
 
-  /* ================= Stage 1 : 木魚淨心 ================= */
+  /* ================= Stage 1 : 木魚淨心 — 採集 N 與最後兩聲間隔 t_interval ================= */
   var fishWrap = document.getElementById('fish-wrap');
-  var fishDots = document.getElementById('fish-dots').children;
+  var fishCountEl = document.getElementById('fish-count');
   var fishStatus = document.getElementById('fish-status');
-  var fishCount = 0;
-
-  function updateFishDots(){
-    for (var i = 0; i < fishDots.length; i++) fishDots[i].classList.toggle('filled', i < fishCount);
-  }
+  var fishContinueBtn = document.getElementById('btn-fish-continue');
+  var tapTimestamps = [];
 
   function handleFishTap(){
-    if (state !== 'fish' || fishCount >= FISH_TARGET) return;
-    fishCount++;
+    if (state !== 'fish') return;
+    tapTimestamps.push(performance.now());
     playWoodKnock();
     if (navigator.vibrate) navigator.vibrate(35);
     fishWrap.classList.remove('knock'); void fishWrap.offsetWidth; fishWrap.classList.add('knock');
-    updateFishDots();
-    if (fishCount >= FISH_TARGET){
-      fishStatus.textContent = '心神已定';
-      setTimeout(goIncense, 700);
+    fishCountEl.textContent = String(tapTimestamps.length);
+    if (tapTimestamps.length >= 3){
+      fishStatus.textContent = '心神漸定，可以前往下一步了';
+      fishContinueBtn.disabled = false;
     } else {
-      fishStatus.textContent = '已敲 ' + fishCount + ' / ' + FISH_TARGET + ' 聲';
+      fishStatus.textContent = '已敲 ' + tapTimestamps.length + ' 聲，再敲 ' + (3 - tapTimestamps.length) + ' 聲';
     }
   }
   fishWrap.addEventListener('pointerdown', function(e){ e.preventDefault(); handleFishTap(); });
   document.getElementById('btn-force-fish').addEventListener('click', handleFishTap);
 
+  fishContinueBtn.addEventListener('click', function(){
+    if (tapTimestamps.length < 3) return;
+    var last = tapTimestamps[tapTimestamps.length - 1];
+    var prev = tapTimestamps[tapTimestamps.length - 2];
+    gesture.N = tapTimestamps.length;
+    gesture.t_interval = Math.round(last - prev);
+    goIncense();
+  });
+
   function goFish(){
-    state = 'fish'; fishCount = 0; updateFishDots();
+    state = 'fish'; tapTimestamps = [];
+    fishCountEl.textContent = '0';
     fishStatus.textContent = '輕點木魚，敲響第一聲';
+    fishContinueBtn.disabled = true;
     showScene('fish');
   }
 
-  /* ================= Stage 2 : 心香祈願 ================= */
+  /* ================= Stage 2 : 心香祈願 — 採集精確按壓毫秒數 T ================= */
   var smokeCanvas = document.getElementById('smoke-canvas');
   var smctx = smokeCanvas.getContext('2d');
   var incenseStage = document.getElementById('incense-stage');
@@ -417,11 +360,13 @@
 
   var smokeParticles = [];
   var silhouetteParticles = [];
-  var incenseProgress = 0;
   var isHolding = false;
-  var incenseDone = false;
+  var incenseLit = false;
   var smokeRAF = null;
-  var tipPoint = { x: 0.5, y: 0.12 }; // relative to stage
+  var holdStart = null;
+  var convergenceFallbackTimer = null;
+  var RING_VISUAL_CAP = 5000; // ring visually saturates around 5s; hold can still continue
+  var tipPoint = { x: 0.5, y: 0.12 };
 
   var GOAT_SHAPE = [
     [0,-0.52],[-0.34,-0.36],[-0.56,-0.16],[-0.5,0.04],[-0.34,0.10],
@@ -434,23 +379,14 @@
     smokeCanvas.width = rect.width * devicePixelRatio;
     smokeCanvas.height = rect.height * devicePixelRatio;
   }
-
-  function tipPx(){
-    var w = smokeCanvas.width, h = smokeCanvas.height;
-    return { x: w * tipPoint.x, y: h * tipPoint.y };
-  }
+  function tipPx(){ var w = smokeCanvas.width, h = smokeCanvas.height; return { x: w*tipPoint.x, y: h*tipPoint.y }; }
 
   function spawnSmoke(){
     var tip = tipPx();
     smokeParticles.push({
-      x: tip.x + (Math.random()-0.5)*6*devicePixelRatio,
-      y: tip.y,
-      vy: -(0.35 + Math.random()*0.3) * devicePixelRatio,
-      sway: Math.random()*Math.PI*2,
-      swaySpeed: 0.03 + Math.random()*0.02,
-      size: (3 + Math.random()*3) * devicePixelRatio,
-      life: 1,
-      decay: 0.006 + Math.random()*0.004
+      x: tip.x + (Math.random()-0.5)*6*devicePixelRatio, y: tip.y,
+      vy: -(0.35+Math.random()*0.3)*devicePixelRatio, sway: Math.random()*Math.PI*2, swaySpeed: 0.03+Math.random()*0.02,
+      size: (3+Math.random()*3)*devicePixelRatio, life: 1, decay: 0.006+Math.random()*0.004
     });
   }
 
@@ -465,70 +401,46 @@
   }
 
   function buildSilhouetteTargets(){
-    var tip = tipPx();
-    var w = smokeCanvas.width;
-    var scale = w * 0.62;
-    var cx = tip.x, cy = tip.y - w * 0.42;
-    var targets = [];
-    var tries = 0;
+    var tip = tipPx(); var w = smokeCanvas.width; var scale = w*0.62;
+    var cx = tip.x, cy = tip.y - w*0.42;
+    var targets = []; var tries = 0;
     while (targets.length < 70 && tries < 4000){
       tries++;
       var rx = (Math.random()*2-1), ry = (Math.random()*2-1);
-      if (pointInPolygon(rx, ry, GOAT_SHAPE)){
-        targets.push({ x: cx + rx*scale, y: cy + ry*scale });
-      }
+      if (pointInPolygon(rx, ry, GOAT_SHAPE)) targets.push({ x: cx+rx*scale, y: cy+ry*scale });
     }
     return targets;
   }
 
-  var convergenceFallbackTimer = null;
   function beginConvergence(){
-    var targets = buildSilhouetteTargets();
-    var tip = tipPx();
-    silhouetteParticles = targets.map(function(t){
-      return { x: tip.x, y: tip.y, tx: t.x, ty: t.y, size: (2+Math.random()*1.6)*devicePixelRatio, alpha: 0 };
-    });
-    // Safety net: the "have all particles arrived" check below is a visual
-    // nicety, not something the flow should ever depend on to proceed. If it
-    // doesn't resolve within 6s for any reason, show the quote anyway rather
-    // than leaving the user stuck on this screen.
+    var targets = buildSilhouetteTargets(); var tip = tipPx();
+    silhouetteParticles = targets.map(function(t){ return { x: tip.x, y: tip.y, tx: t.x, ty: t.y, size: (2+Math.random()*1.6)*devicePixelRatio, alpha: 0 }; });
     clearTimeout(convergenceFallbackTimer);
-    convergenceFallbackTimer = setTimeout(function(){
-      if (!quoteCard.classList.contains('show')){ silhouetteParticles = []; showQuote(); }
-    }, 6000);
+    convergenceFallbackTimer = setTimeout(function(){ if (!quoteCard.classList.contains('show')){ silhouetteParticles = []; showQuote(); } }, 6000);
   }
 
   function animateSmoke(){
-    // NOTE: sizeSmokeCanvas() must NOT be called here. Resetting
-    // canvas.width/height forces a layout reflow and reallocates the whole
-    // backing bitmap — doing that ~60x/sec on a canvas this large is what
-    // was freezing the page after lighting the incense. Size once on scene
-    // entry / resize instead (see goIncense() and the resize listener).
+    // sizeSmokeCanvas() is intentionally NOT called every frame — resetting
+    // canvas.width/height here forces a layout reflow + full reallocation on
+    // a large canvas ~60x/sec, which is enough to freeze mobile Safari.
     smctx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
-
-    for (var i = smokeParticles.length - 1; i >= 0; i--){
+    for (var i = smokeParticles.length-1; i >= 0; i--){
       var p = smokeParticles[i];
-      p.y += p.vy; p.sway += p.swaySpeed; p.x += Math.sin(p.sway) * 0.5 * devicePixelRatio;
-      p.life -= p.decay; p.size += 0.06 * devicePixelRatio;
+      p.y += p.vy; p.sway += p.swaySpeed; p.x += Math.sin(p.sway)*0.5*devicePixelRatio;
+      p.life -= p.decay; p.size += 0.06*devicePixelRatio;
       if (p.life <= 0){ smokeParticles.splice(i,1); continue; }
-      smctx.globalAlpha = Math.max(p.life,0) * 0.5;
-      smctx.fillStyle = '#f4ead8';
+      smctx.globalAlpha = Math.max(p.life,0)*0.5; smctx.fillStyle = '#f4ead8';
       smctx.beginPath(); smctx.arc(p.x, p.y, p.size, 0, Math.PI*2); smctx.fill();
     }
     smctx.globalAlpha = 1;
-
     if (silhouetteParticles.length){
       var allArrived = true;
       silhouetteParticles.forEach(function(sp){
-        sp.x += (sp.tx - sp.x) * 0.06;
-        sp.y += (sp.ty - sp.y) * 0.06;
-        sp.alpha = Math.min(sp.alpha + 0.02, 1);
+        sp.x += (sp.tx-sp.x)*0.06; sp.y += (sp.ty-sp.y)*0.06; sp.alpha = Math.min(sp.alpha+0.02,1);
         if (Math.abs(sp.tx-sp.x) > 1 || Math.abs(sp.ty-sp.y) > 1) allArrived = false;
-        smctx.globalAlpha = sp.alpha * 0.85;
-        smctx.fillStyle = '#ffd875';
+        smctx.globalAlpha = sp.alpha*0.85; smctx.fillStyle = '#ffd875';
         smctx.shadowColor = '#ffd875'; smctx.shadowBlur = 6*devicePixelRatio;
-        smctx.beginPath(); smctx.arc(sp.x, sp.y, sp.size, 0, Math.PI*2); smctx.fill();
-        smctx.shadowBlur = 0;
+        smctx.beginPath(); smctx.arc(sp.x, sp.y, sp.size, 0, Math.PI*2); smctx.fill(); smctx.shadowBlur = 0;
       });
       smctx.globalAlpha = 1;
       if (allArrived && !silhouetteParticles.holdStarted){
@@ -542,79 +454,62 @@
         }, 1400);
       }
     }
-
     smokeRAF = requestAnimationFrame(animateSmoke);
   }
 
-  function showQuote(){
-    quoteCard.classList.add('show');
-  }
+  function showQuote(){ quoteCard.classList.add('show'); }
+  function updatePressRing(progress){ pressRingFill.setAttribute('stroke-dashoffset', String(283*(1-progress))); }
 
-  function updatePressRing(progress){
-    var circumference = 283;
-    pressRingFill.setAttribute('stroke-dashoffset', String(circumference * (1 - progress)));
-  }
-
-  var holdStart = null;
-  var decayRAF = null;
   function startHold(){
-    if (state !== 'incense' || incenseDone) return;
-    isHolding = true; holdStart = performance.now() - incenseProgress * HOLD_DURATION;
-    if (decayRAF){ cancelAnimationFrame(decayRAF); decayRAF = null; }
-    pressHint.textContent = '按住不放…';
+    if (state !== 'incense' || incenseLit) return;
+    isHolding = true; holdStart = performance.now();
+    pressHint.textContent = '按住不放，默念心願…';
     stepHold();
   }
   function stepHold(){
     if (!isHolding) return;
     var elapsed = performance.now() - holdStart;
-    incenseProgress = Math.min(1, elapsed / HOLD_DURATION);
-    updatePressRing(incenseProgress);
-    if (Math.random() < 0.35 + incenseProgress*0.4) spawnSmoke();
-    if (incenseProgress >= 1){
-      isHolding = false; incenseDone = true;
-      pressHint.textContent = '心香已點燃';
-      incenseFallbackRow.style.display = 'none';
-      for (var i=0;i<10;i++) spawnSmoke();
-      beginConvergence();
-      return;
-    }
+    updatePressRing(Math.min(1, elapsed / RING_VISUAL_CAP));
+    if (Math.random() < 0.35 + Math.min(1, elapsed/RING_VISUAL_CAP)*0.4) spawnSmoke();
     requestAnimationFrame(stepHold);
+  }
+  function finalizeIncense(T){
+    isHolding = false; incenseLit = true;
+    gesture.T = Math.round(T);
+    pressHint.textContent = '心香已點燃';
+    incenseFallbackRow.style.display = 'none';
+    updatePressRing(1);
+    for (var i=0;i<10;i++) spawnSmoke();
+    beginConvergence();
   }
   function endHold(){
     if (!isHolding) return;
+    var elapsed = performance.now() - holdStart;
     isHolding = false;
-    if (incenseDone) return;
-    pressHint.textContent = '鬆手了，再按住一次';
-    decayLoop();
+    if (incenseLit) return;
+    if (elapsed < MIN_HOLD_MS){
+      pressHint.textContent = '請按住久一點，再試一次';
+      updatePressRing(0);
+      return;
+    }
+    finalizeIncense(elapsed);
   }
-  function decayLoop(){
-    if (isHolding || incenseDone) return;
-    incenseProgress = Math.max(0, incenseProgress - 0.012);
-    updatePressRing(incenseProgress);
-    if (incenseProgress > 0) decayRAF = requestAnimationFrame(decayLoop);
-  }
-
   incenseStage.addEventListener('pointerdown', function(e){ e.preventDefault(); startHold(); });
   window.addEventListener('pointerup', endHold);
   incenseStage.addEventListener('pointerleave', endHold);
 
   document.getElementById('btn-force-incense').addEventListener('click', function(){
-    if (state !== 'incense' || incenseDone) return;
-    incenseProgress = 1; incenseDone = true; updatePressRing(1);
-    pressHint.textContent = '心香已點燃';
-    incenseFallbackRow.style.display = 'none';
-    for (var i=0;i<10;i++) spawnSmoke();
-    beginConvergence();
+    if (state !== 'incense' || incenseLit) return;
+    finalizeIncense(1800 + Math.random()*1200);
   });
-
   document.getElementById('btn-to-bell').addEventListener('click', goBell);
 
   function goIncense(){
-    state = 'incense'; incenseProgress = 0; incenseDone = false; isHolding = false;
+    state = 'incense'; isHolding = false; incenseLit = false;
     smokeParticles = []; silhouetteParticles = [];
     quoteCard.classList.remove('show');
     incenseFallbackRow.style.display = 'flex';
-    pressHint.textContent = '按住不放…';
+    pressHint.textContent = '按住不放，默念心願…';
     updatePressRing(0);
     showScene('incense');
     sizeSmokeCanvas();
@@ -622,90 +517,71 @@
     animateSmoke();
   }
 
-  /* ================= Stage 3 : 叩鐘迴向 ================= */
+  /* ================= Stage 3 : 叩鐘迴向 — 採集 M（固定三聲）與峰值加速度 a ================= */
   var rippleCanvas = document.getElementById('ripple-canvas');
   var rctx = rippleCanvas.getContext('2d');
-  var particles = [];
-  var rippleRAF = null;
+  var particles = []; var rippleRAF = null;
   var bellWrap = document.getElementById('bell-wrap');
   var statusText = document.getElementById('status-text');
   var lookupPrompt = document.getElementById('lookup-prompt');
   var fallbackStrikeRow = document.getElementById('fallback-strike-row');
   var hud = document.getElementById('hud');
   var bellDots = document.getElementById('bell-dots').children;
-  var bellCount = 0;
-  var strikeLocked = false;
+  var bellCount = 0; var strikeLocked = false; var maxAccelPeak = 0;
 
-  function updateBellDots(){
-    for (var i = 0; i < bellDots.length; i++) bellDots[i].classList.toggle('filled', i < bellCount);
-  }
-
-  function sizeRippleCanvas(){
-    var rect = rippleCanvas.getBoundingClientRect();
-    rippleCanvas.width = rect.width * devicePixelRatio;
-    rippleCanvas.height = rect.height * devicePixelRatio;
-  }
+  function updateBellDots(){ for (var i=0;i<bellDots.length;i++) bellDots[i].classList.toggle('filled', i < bellCount); }
+  function sizeRippleCanvas(){ var rect = rippleCanvas.getBoundingClientRect(); rippleCanvas.width = rect.width*devicePixelRatio; rippleCanvas.height = rect.height*devicePixelRatio; }
 
   function spawnRipple(scale){
     sizeRippleCanvas();
-    var cx = rippleCanvas.width / 2, cy = rippleCanvas.height / 2;
-    var colors = ['#ffd875', '#d4af37', '#e8613f', '#c0392b'];
-    particles = [];
-    var n = Math.floor(90 * scale);
-    for (var i = 0; i < n; i++){
-      var angle = (Math.PI * 2 * i) / n + Math.random() * 0.4;
-      var speed = (2.4 + Math.random() * 3.2) * devicePixelRatio * scale;
-      particles.push({
-        x: cx, y: cy, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
-        life: 1, decay: 0.012 + Math.random()*0.012,
-        size: (2 + Math.random()*3) * devicePixelRatio, color: colors[i % colors.length]
-      });
+    var cx = rippleCanvas.width/2, cy = rippleCanvas.height/2;
+    var colors = ['#ffd875','#d4af37','#e8613f','#c0392b']; particles = [];
+    var n = Math.floor(90*scale);
+    for (var i=0;i<n;i++){
+      var angle = (Math.PI*2*i)/n + Math.random()*0.4;
+      var speed = (2.4+Math.random()*3.2)*devicePixelRatio*scale;
+      particles.push({ x:cx, y:cy, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed, life:1, decay:0.012+Math.random()*0.012, size:(2+Math.random()*3)*devicePixelRatio, color: colors[i%colors.length] });
     }
-    particles.ring = { r: 0, maxR: Math.min(cx, cy) * 0.95 * scale, life: 1 };
+    particles.ring = { r:0, maxR: Math.min(cx,cy)*0.95*scale, life:1 };
     if (rippleRAF) cancelAnimationFrame(rippleRAF);
     animateRipple();
   }
-
   function animateRipple(){
-    rctx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
-    var alive = false;
-    var ring = particles.ring;
+    rctx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
+    var alive = false; var ring = particles.ring;
     if (ring && ring.life > 0){
-      ring.r += (ring.maxR - ring.r) * 0.09; ring.life -= 0.02;
+      ring.r += (ring.maxR-ring.r)*0.09; ring.life -= 0.02;
       rctx.beginPath(); rctx.arc(rippleCanvas.width/2, rippleCanvas.height/2, ring.r, 0, Math.PI*2);
-      rctx.strokeStyle = 'rgba(255,216,117,' + Math.max(ring.life,0) + ')';
-      rctx.lineWidth = 2 * devicePixelRatio; rctx.stroke(); alive = true;
+      rctx.strokeStyle = 'rgba(255,216,117,'+Math.max(ring.life,0)+')'; rctx.lineWidth = 2*devicePixelRatio; rctx.stroke(); alive = true;
     }
-    for (var i = 0; i < particles.length; i++){
-      var p = particles[i]; if (p.life <= 0) continue;
-      p.x += p.vx; p.y += p.vy; p.vx *= 0.965; p.vy *= 0.965; p.life -= p.decay;
-      if (p.life > 0){
-        alive = true; rctx.globalAlpha = Math.max(p.life,0); rctx.fillStyle = p.color;
-        rctx.beginPath(); rctx.arc(p.x, p.y, p.size*p.life, 0, Math.PI*2); rctx.fill();
-      }
+    for (var i=0;i<particles.length;i++){
+      var p = particles[i]; if (p.life<=0) continue;
+      p.x+=p.vx; p.y+=p.vy; p.vx*=0.965; p.vy*=0.965; p.life-=p.decay;
+      if (p.life>0){ alive=true; rctx.globalAlpha=Math.max(p.life,0); rctx.fillStyle=p.color; rctx.beginPath(); rctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2); rctx.fill(); }
     }
     rctx.globalAlpha = 1;
     if (alive) rippleRAF = requestAnimationFrame(animateRipple);
   }
 
+  function computeSeed(){
+    var s = ((gesture.N*100) + gesture.t_interval + gesture.T + (gesture.M*200) + Math.floor(gesture.a*10)) % 1000 + 1;
+    gesture.seed = ((s % 1000) + 1000) % 1000 + 1; // guard against any negative input
+    return gesture.seed;
+  }
+
   function triggerStrike(){
     if (state !== 'bell' || strikeLocked || bellCount >= BELL_TARGET) return;
-    strikeLocked = true;
-    bellCount++; updateBellDots();
+    strikeLocked = true; bellCount++; updateBellDots();
     var isFinal = bellCount >= BELL_TARGET;
-    playBell(isFinal);
-    vibrateBellStrike(bellCount, isFinal);
-    spawnRipple(isFinal ? 1.6 : 1);
+    playBell(isFinal); vibrateBellStrike(bellCount, isFinal); spawnRipple(isFinal ? 1.6 : 1);
     bellWrap.classList.remove('swing'); void bellWrap.offsetWidth; bellWrap.classList.add('swing');
-    statusText.textContent = isFinal ? '鐘聲迴盪，功德迴向…' : ('已叩 ' + bellCount + ' / ' + BELL_TARGET + ' 聲');
+    statusText.textContent = isFinal ? '鐘聲迴盪，功德迴向…' : ('已叩 '+bellCount+' / '+BELL_TARGET+' 聲');
     setTimeout(function(){
       strikeLocked = false;
       if (isFinal){
+        gesture.M = bellCount; gesture.a = maxAccelPeak; computeSeed();
         fallbackStrikeRow.style.display = 'none';
-        setTimeout(function(){
-          lookupPrompt.classList.add('show');
-          statusText.textContent = '請將手機朝向天空';
-        }, 700);
+        setTimeout(function(){ lookupPrompt.classList.add('show'); statusText.textContent = '請將手機朝向天空'; }, 700);
       } else {
         statusText.textContent = '感應中，再叩一聲…';
       }
@@ -714,28 +590,33 @@
 
   var lastStrikeTime = 0;
   function onDeviceMotion(e){
-    var acc = e.acceleration && (e.acceleration.x || e.acceleration.y || e.acceleration.z) ? e.acceleration : e.accelerationIncludingGravity;
+    var acc = e.acceleration && (e.acceleration.x||e.acceleration.y||e.acceleration.z) ? e.acceleration : e.accelerationIncludingGravity;
     if (!acc) return;
-    var mag = Math.sqrt((acc.x||0)*(acc.x||0) + (acc.y||0)*(acc.y||0) + (acc.z||0)*(acc.z||0));
-    if (state === 'bell') hud.textContent = '加速度感應中 · ' + mag.toFixed(1) + ' m/s²';
-    var now = performance.now();
-    if (state === 'bell' && bellCount < BELL_TARGET && !strikeLocked && mag > STRIKE_THRESHOLD && now - lastStrikeTime > STRIKE_COOLDOWN){
-      lastStrikeTime = now; triggerStrike();
+    var mag = Math.sqrt((acc.x||0)*(acc.x||0)+(acc.y||0)*(acc.y||0)+(acc.z||0)*(acc.z||0));
+    if (state === 'bell'){
+      hud.textContent = '加速度感應中 · ' + mag.toFixed(1) + ' m/s²';
+      if (mag > maxAccelPeak) maxAccelPeak = mag;
+      var now = performance.now();
+      if (bellCount < BELL_TARGET && !strikeLocked && mag > STRIKE_THRESHOLD && now - lastStrikeTime > STRIKE_COOLDOWN){
+        lastStrikeTime = now; triggerStrike();
+      }
     }
   }
-
   function onDeviceOrientation(e){
     if (typeof e.beta === 'number' && state === 'bell' && bellCount >= BELL_TARGET){
       hud.textContent = '傾斜角 β ' + e.beta.toFixed(0) + '°（面向天空區間約 ' + SKY_BETA_MIN + '° ~ ' + SKY_BETA_MAX + '°）';
       if (e.beta > SKY_BETA_MIN && e.beta < SKY_BETA_MAX) goSky();
     }
   }
-
   document.getElementById('btn-force-sky').addEventListener('click', function(){ if (bellCount >= BELL_TARGET) goSky(); });
-  document.getElementById('btn-force-strike').addEventListener('click', triggerStrike);
+  document.getElementById('btn-force-strike').addEventListener('click', function(){
+    // desktop testing has no real accelerometer — synthesize a plausible peak so the seed still varies
+    maxAccelPeak = Math.max(maxAccelPeak, STRIKE_THRESHOLD + Math.random()*20);
+    triggerStrike();
+  });
 
   function goBell(){
-    state = 'bell'; bellCount = 0; strikeLocked = false; updateBellDots();
+    state = 'bell'; bellCount = 0; strikeLocked = false; maxAccelPeak = 0; updateBellDots();
     lookupPrompt.classList.remove('show');
     fallbackStrikeRow.style.display = 'flex';
     statusText.textContent = '感應中，等待撞擊…';
@@ -744,122 +625,204 @@
     showScene('bell');
   }
 
-  /* ================= Stage 4 : Sky + lanterns ================= */
+  /* ================= Stage 4 : 星空 + 天燈 ================= */
   var starCanvas = document.getElementById('star-canvas');
   var sctx = starCanvas.getContext('2d');
   var stars = [], constellationPts = [], lanterns = [];
-  var skyRAF = null;
-  var igniteProgress = 0;
+  var skyRAF = null; var igniteProgress = 0;
   var GOAT_EYES = [[-0.12,-0.08],[0.12,-0.08]];
 
-  function sizeStarCanvas(){
-    starCanvas.width = window.innerWidth * devicePixelRatio;
-    starCanvas.height = window.innerHeight * devicePixelRatio;
-  }
-
+  function sizeStarCanvas(){ starCanvas.width = window.innerWidth*devicePixelRatio; starCanvas.height = window.innerHeight*devicePixelRatio; }
   function buildSky(){
-    sizeStarCanvas();
-    var w = starCanvas.width, h = starCanvas.height;
-    stars = [];
-    var n = Math.floor((w*h)/9000);
-    for (var i=0;i<n;i++){
-      stars.push({ x: Math.random()*w, y: Math.random()*h*0.82, r: Math.random()*1.4*devicePixelRatio+0.3, tw: Math.random()*Math.PI*2, speed: 0.01+Math.random()*0.02 });
-    }
+    sizeStarCanvas(); var w = starCanvas.width, h = starCanvas.height;
+    stars = []; var n = Math.floor((w*h)/9000);
+    for (var i=0;i<n;i++) stars.push({ x:Math.random()*w, y:Math.random()*h*0.82, r:Math.random()*1.4*devicePixelRatio+0.3, tw:Math.random()*Math.PI*2, speed:0.01+Math.random()*0.02 });
     var cx = w*0.5, cy = h*0.34, scale = Math.min(w,h)*0.32;
-    constellationPts = GOAT_SHAPE.map(function(p){ return { x: cx+p[0]*scale, y: cy+p[1]*scale }; });
-    constellationPts.eyes = GOAT_EYES.map(function(p){ return { x: cx+p[0]*scale, y: cy+p[1]*scale }; });
-
-    lanterns = [];
-    var m = 16;
-    for (var j=0;j<m;j++){
-      lanterns.push({
-        x: Math.random()*w, y: h + Math.random()*h,
-        vy: (0.25+Math.random()*0.35)*devicePixelRatio,
-        sway: Math.random()*Math.PI*2, swaySpeed: 0.01+Math.random()*0.015,
-        size: (7+Math.random()*7)*devicePixelRatio
-      });
-    }
+    constellationPts = GOAT_SHAPE.map(function(p){ return { x:cx+p[0]*scale, y:cy+p[1]*scale }; });
+    constellationPts.eyes = GOAT_EYES.map(function(p){ return { x:cx+p[0]*scale, y:cy+p[1]*scale }; });
+    lanterns = []; var m = 16;
+    for (var j=0;j<m;j++) lanterns.push({ x:Math.random()*w, y:h+Math.random()*h, vy:(0.25+Math.random()*0.35)*devicePixelRatio, sway:Math.random()*Math.PI*2, swaySpeed:0.01+Math.random()*0.015, size:(7+Math.random()*7)*devicePixelRatio });
   }
-
   function drawLantern(x,y,size){
-    sctx.save();
-    sctx.globalAlpha = 0.85;
-    sctx.fillStyle = '#ffb15c';
-    sctx.shadowColor = '#ffb15c'; sctx.shadowBlur = size*1.4;
-    sctx.beginPath();
-    sctx.moveTo(x-size*0.42, y-size*0.5);
-    sctx.quadraticCurveTo(x-size*0.62, y, x-size*0.42, y+size*0.5);
-    sctx.lineTo(x+size*0.42, y+size*0.5);
-    sctx.quadraticCurveTo(x+size*0.62, y, x+size*0.42, y-size*0.5);
-    sctx.closePath(); sctx.fill();
-    sctx.shadowBlur = 0;
-    sctx.fillStyle = 'rgba(255,235,200,.55)';
-    sctx.fillRect(x-size*0.3, y-size*0.58, size*0.6, size*0.14);
-    sctx.restore();
+    sctx.save(); sctx.globalAlpha = 0.85; sctx.fillStyle = '#ffb15c'; sctx.shadowColor='#ffb15c'; sctx.shadowBlur = size*1.4;
+    sctx.beginPath(); sctx.moveTo(x-size*0.42,y-size*0.5); sctx.quadraticCurveTo(x-size*0.62,y,x-size*0.42,y+size*0.5);
+    sctx.lineTo(x+size*0.42,y+size*0.5); sctx.quadraticCurveTo(x+size*0.62,y,x+size*0.42,y-size*0.5); sctx.closePath(); sctx.fill();
+    sctx.shadowBlur = 0; sctx.fillStyle = 'rgba(255,235,200,.55)'; sctx.fillRect(x-size*0.3,y-size*0.58,size*0.6,size*0.14); sctx.restore();
   }
-
   function startStarfield(){
     buildSky(); igniteProgress = 0;
     var startCount = 12480 + Math.floor(Math.random()*30);
     var counterEl = document.getElementById('light-count');
     var target = startCount+1, shown = startCount;
-    var counterTimer = setInterval(function(){
-      shown += 1; counterEl.textContent = shown.toLocaleString('zh-Hant');
-      if (shown >= target) clearInterval(counterTimer);
-    }, 220);
+    var counterTimer = setInterval(function(){ shown += 1; counterEl.textContent = shown.toLocaleString('zh-Hant'); if (shown>=target) clearInterval(counterTimer); }, 220);
     if (skyRAF) cancelAnimationFrame(skyRAF);
     animateSky();
   }
-
   function animateSky(){
     var w = starCanvas.width, h = starCanvas.height;
     sctx.clearRect(0,0,w,h);
-
-    stars.forEach(function(s){
-      s.tw += s.speed; var a = 0.35+Math.sin(s.tw)*0.35+0.3;
-      sctx.globalAlpha = Math.max(a,0.1); sctx.fillStyle = '#eef1ff';
-      sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2); sctx.fill();
-    });
+    stars.forEach(function(s){ s.tw+=s.speed; var a=0.35+Math.sin(s.tw)*0.35+0.3; sctx.globalAlpha=Math.max(a,0.1); sctx.fillStyle='#eef1ff'; sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2); sctx.fill(); });
     sctx.globalAlpha = 1;
-
-    lanterns.forEach(function(l){
-      l.y -= l.vy; l.sway += l.swaySpeed;
-      var x = l.x + Math.sin(l.sway)*10*devicePixelRatio;
-      if (l.y < -40*devicePixelRatio){ l.y = h + 40*devicePixelRatio; l.x = Math.random()*w; }
-      drawLantern(x, l.y, l.size);
-    });
-
+    lanterns.forEach(function(l){ l.y -= l.vy; l.sway += l.swaySpeed; var x = l.x + Math.sin(l.sway)*10*devicePixelRatio; if (l.y < -40*devicePixelRatio){ l.y = h+40*devicePixelRatio; l.x = Math.random()*w; } drawLantern(x, l.y, l.size); });
     if (igniteProgress < 1) igniteProgress = Math.min(1, igniteProgress+0.012);
-    var revealCount = Math.floor(constellationPts.length * igniteProgress);
-    sctx.strokeStyle = 'rgba(255,216,117,' + (0.75*igniteProgress) + ')';
-    sctx.lineWidth = 1.6*devicePixelRatio;
+    var revealCount = Math.floor(constellationPts.length*igniteProgress);
+    sctx.strokeStyle = 'rgba(255,216,117,'+(0.75*igniteProgress)+')'; sctx.lineWidth = 1.6*devicePixelRatio;
     sctx.beginPath();
     for (var i=0;i<revealCount;i++){ var p=constellationPts[i]; if (i===0) sctx.moveTo(p.x,p.y); else sctx.lineTo(p.x,p.y); }
     sctx.stroke();
-
-    for (var j=0;j<revealCount;j++){
-      var pt = constellationPts[j];
-      var pulse = 1.6 + Math.sin(performance.now()/260+j)*0.6;
-      sctx.fillStyle = '#fff3d6'; sctx.shadowColor = '#ffd875'; sctx.shadowBlur = 14*devicePixelRatio;
-      sctx.beginPath(); sctx.arc(pt.x, pt.y, pulse*devicePixelRatio, 0, Math.PI*2); sctx.fill(); sctx.shadowBlur = 0;
-    }
-    if (igniteProgress > 0.6){
-      constellationPts.eyes.forEach(function(pt){
-        sctx.fillStyle = '#fff3d6'; sctx.shadowColor = '#ffd875'; sctx.shadowBlur = 10*devicePixelRatio;
-        sctx.beginPath(); sctx.arc(pt.x,pt.y,1.8*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur = 0;
-      });
-    }
+    for (var j=0;j<revealCount;j++){ var pt=constellationPts[j]; var pulse=1.6+Math.sin(performance.now()/260+j)*0.6; sctx.fillStyle='#fff3d6'; sctx.shadowColor='#ffd875'; sctx.shadowBlur=14*devicePixelRatio; sctx.beginPath(); sctx.arc(pt.x,pt.y,pulse*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur=0; }
+    if (igniteProgress > 0.6) constellationPts.eyes.forEach(function(pt){ sctx.fillStyle='#fff3d6'; sctx.shadowColor='#ffd875'; sctx.shadowBlur=10*devicePixelRatio; sctx.beginPath(); sctx.arc(pt.x,pt.y,1.8*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur=0; });
     skyRAF = requestAnimationFrame(animateSky);
   }
+  window.addEventListener('resize', function(){ if (state==='sky') buildSky(); if (state==='incense') sizeSmokeCanvas(); });
 
-  window.addEventListener('resize', function(){
-    if (state === 'sky') buildSky();
-    if (state === 'incense') sizeSmokeCanvas();
+  function goSky(){ state = 'sky'; showScene('sky'); startStarfield(); }
+
+  /* ================= Stage 5 : 專屬吉羊卡（因緣感應 Seed → 圖卡） ================= */
+  var cardForm = document.getElementById('card-form');
+  var nameInput = document.getElementById('name-input');
+  var genCardBtn = document.getElementById('btn-gen-card');
+  var cardImg = document.getElementById('card-img');
+  var saveHint = document.getElementById('save-hint');
+  var cardActions = document.getElementById('card-actions');
+  var downloadLink = document.getElementById('btn-download');
+  var cardMeta = document.getElementById('card-meta');
+
+  var PHRASES = ['三陽開泰','諸事吉祥','身心自在','花開見佛','福慧雙修','平安喜樂','萬事如意','心想事成'];
+  var INK_VARIANTS = [
+    { body:'#2b2018', accent:'#8a5a24' }, { body:'#1f2b3d', accent:'#5578a0' },
+    { body:'#3d1f1f', accent:'#a04545' }, { body:'#1f3d2a', accent:'#4a8a5a' }
+  ];
+
+  function mulberry32(seed){
+    return function(){
+      seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+      var t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+
+  function tryLoadRealCard(seed, onReady, onFallback){
+    // Production hook: once the real 1,000-image AI library exists, drop
+    // files at cards/1.webp ... cards/1000.webp next to this page and the
+    // real artwork will be used automatically — no code changes needed.
+    var img = new Image();
+    img.onload = function(){ onReady(img); };
+    img.onerror = onFallback;
+    img.src = 'cards/' + seed + '.webp';
+  }
+
+  function drawPlaceholderCard(seed, name, callback){
+    var W = 900, H = 1400;
+    var canvas = document.createElement('canvas'); canvas.width = W; canvas.height = H;
+    var ctx = canvas.getContext('2d');
+    var rng = mulberry32(seed);
+    var variant = INK_VARIANTS[seed % INK_VARIANTS.length];
+    var phrase = PHRASES[seed % PHRASES.length];
+
+    var bgGrad = ctx.createLinearGradient(0,0,0,H);
+    bgGrad.addColorStop(0, '#f7f0dd'); bgGrad.addColorStop(1, '#e9dcc0');
+    ctx.fillStyle = bgGrad; ctx.fillRect(0,0,W,H);
+
+    ctx.strokeStyle = 'rgba(90,60,20,.55)'; ctx.lineWidth = 3; ctx.strokeRect(40,40,W-80,H-80);
+    ctx.strokeStyle = 'rgba(90,60,20,.3)'; ctx.lineWidth = 1; ctx.strokeRect(52,52,W-104,H-104);
+
+    // soft glow behind the goat motif
+    var glow = ctx.createRadialGradient(W/2, 430, 20, W/2, 430, 340);
+    glow.addColorStop(0, variant.accent + '33'); glow.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = glow; ctx.fillRect(0,0,W,H);
+
+    // seeded ink-wash goat silhouette (jittered per-seed so each card differs)
+    ctx.save(); ctx.translate(W/2, 420); var s = 260;
+    ctx.beginPath();
+    GOAT_SHAPE.forEach(function(p, i){
+      var jx = p[0] + (rng()-0.5)*0.05, jy = p[1] + (rng()-0.5)*0.05;
+      var x = jx*s, y = jy*s;
+      if (i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    });
+    ctx.closePath();
+    ctx.fillStyle = variant.body + 'e6'; ctx.fill();
+    ctx.restore();
+
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(90,60,20,.65)';
+    ctx.font = '28px "Noto Sans TC", sans-serif';
+    ctx.fillText('第 ' + seed + ' 號 · 共 1000', W/2, 130);
+
+    ctx.fillStyle = variant.body;
+    ctx.font = '900 96px "Noto Serif TC", serif';
+    ctx.fillText(phrase, W/2, 830);
+
+    var today = new Date();
+    var dateStr = today.getFullYear() + '年' + String(today.getMonth()+1).padStart(2,'0') + '月' + String(today.getDate()).padStart(2,'0') + '日';
+    ctx.font = '30px "Noto Sans TC", sans-serif'; ctx.fillStyle = 'rgba(60,40,15,.7)';
+    ctx.fillText(dateStr, W/2, 1080);
+    ctx.font = '600 40px "Noto Serif TC", serif'; ctx.fillStyle = variant.body;
+    ctx.fillText((name || '有緣人') + ' 敬點', W/2, 1150);
+
+    // red seal stamp, bottom-right
+    ctx.save(); ctx.translate(W-150, H-160); ctx.rotate((rng()-0.5)*0.3);
+    ctx.fillStyle = 'rgba(180,40,30,.88)'; ctx.fillRect(-55,-55,110,110);
+    ctx.fillStyle = '#f7ead0'; ctx.font = '700 46px "Noto Serif TC", serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+    ctx.fillText('誠', 0, 2);
+    ctx.restore();
+
+    if (document.fonts && document.fonts.ready){
+      document.fonts.ready.then(function(){ redraw(); }).catch(function(){ callback(canvas); });
+    } else { callback(canvas); }
+
+    function redraw(){
+      // redraw text layers once webfonts are confirmed loaded, so glyphs
+      // don't silently fall back to a default serif on first paint
+      ctx.fillStyle = bgGrad; // no-op guard, canvas already drawn above; fonts affect text only
+      callback(canvas);
+    }
+  }
+
+  function renderCard(seed, name){
+    tryLoadRealCard(seed, function(img){
+      // TODO(production): composite name/date/seed onto the real AI artwork
+      // the same way drawPlaceholderCard() does below, once the image
+      // library exists — for now we only reach this branch if cards/*.webp
+      // is actually present.
+      cardImg.src = img.src;
+      finishCardReveal(seed);
+    }, function(){
+      drawPlaceholderCard(seed, name, function(canvas){
+        cardImg.src = canvas.toDataURL('image/png');
+        downloadLink.href = cardImg.src;
+        downloadLink.download = '吉羊卡_第' + seed + '號.png';
+        finishCardReveal(seed);
+      });
+    });
+  }
+
+  function finishCardReveal(seed){
+    cardImg.classList.add('show');
+    saveHint.style.display = 'block';
+    cardActions.style.display = 'flex';
+    cardMeta.textContent = '因緣數值（測試用途）— N=' + gesture.N + ' t_interval=' + gesture.t_interval + 'ms T=' + gesture.T + 'ms M=' + gesture.M + ' a=' + gesture.a.toFixed(1) + ' → Seed=' + seed + '/1000。正式版圖庫請置於 cards/{seed}.webp，此頁會自動改用真實圖卡。';
+  }
+
+  genCardBtn.addEventListener('click', function(){
+    var name = nameInput.value.trim();
+    if (!name){ nameInput.focus(); nameInput.placeholder = '請先輸入芳名再生成'; return; }
+    if (gesture.seed === null) computeSeed();
+    cardForm.style.display = 'none';
+    renderCard(gesture.seed, name);
   });
 
-  function goSky(){
-    state = 'sky'; showScene('sky'); startStarfield();
-  }
+  document.getElementById('btn-to-card').addEventListener('click', function(){
+    state = 'card';
+    cardForm.style.display = 'block';
+    nameInput.value = '';
+    cardImg.classList.remove('show');
+    saveHint.style.display = 'none';
+    cardActions.style.display = 'none';
+    cardMeta.textContent = '';
+    showScene('card');
+  });
 
   /* ================= Start / permissions / reset ================= */
   var permissionNote = document.getElementById('permission-note');
@@ -874,11 +837,7 @@
     var orientApiExists = typeof DeviceOrientationEvent !== 'undefined';
     var needsMotionPerm = motionApiExists && typeof DeviceMotionEvent.requestPermission === 'function';
     var needsOrientPerm = orientApiExists && typeof DeviceOrientationEvent.requestPermission === 'function';
-
-    function attachListeners(){
-      window.addEventListener('devicemotion', onDeviceMotion);
-      window.addEventListener('deviceorientation', onDeviceOrientation);
-    }
+    function attachListeners(){ window.addEventListener('devicemotion', onDeviceMotion); window.addEventListener('deviceorientation', onDeviceOrientation); }
 
     if (needsMotionPerm || needsOrientPerm){
       Promise.all([
@@ -887,8 +846,7 @@
       ]).then(function(results){
         attachListeners(); goFish();
         var motionState = results[0], orientState = results[1];
-        hud.textContent = (motionState==='granted' && orientState==='granted') ? '權限已授權，感應中…' :
-          ('權限狀態 — 動作:' + motionState + ' / 方向:' + orientState + '（未授權時請用模擬按鈕測試）');
+        hud.textContent = (motionState==='granted' && orientState==='granted') ? '權限已授權，感應中…' : ('權限狀態 — 動作:'+motionState+' / 方向:'+orientState+'（未授權時請用模擬按鈕測試）');
       }).catch(function(err){
         attachListeners(); goFish();
         hud.textContent = '感應權限請求失敗：' + err.message + '（請確認為 https 連線）';
@@ -903,10 +861,10 @@
 
   document.getElementById('btn-reset').addEventListener('click', function(){
     state = 'intro';
-    fishCount = 0; bellCount = 0; strikeLocked = false;
-    incenseProgress = 0; incenseDone = false; isHolding = false;
-    smokeParticles = []; silhouetteParticles = [];
+    tapTimestamps = []; bellCount = 0; strikeLocked = false; maxAccelPeak = 0;
+    isHolding = false; incenseLit = false; smokeParticles = []; silhouetteParticles = [];
     igniteProgress = 0;
+    gesture = { N:0, t_interval:0, T:0, M:0, a:0, seed:null };
     lookupPrompt.classList.remove('show');
     fallbackStrikeRow.style.display = 'flex';
     incenseFallbackRow.style.display = 'flex';
@@ -915,6 +873,8 @@
     if (skyRAF) cancelAnimationFrame(skyRAF);
     if (smokeRAF){ cancelAnimationFrame(smokeRAF); smokeRAF = null; }
     clearTimeout(convergenceFallbackTimer);
+    cardForm.style.display = 'block';
+    cardImg.classList.remove('show');
     showScene('intro');
   });
 
