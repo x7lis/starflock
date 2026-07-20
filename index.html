@@ -1,914 +1,830 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>佛光山春節「感應禪」互動體驗</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Serif TC', serif;
-            background-color: #0c0e17;
-            color: #f3f4f6;
-            overflow-x: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-        .text-glow-gold {
-            text-shadow: 0 0 8px rgba(245, 158, 11, 0.5), 0 0 15px rgba(245, 158, 11, 0.3);
-        }
-        .canvas-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-            pointer-events: none;
-        }
-        /* Page transition slide effect */
-        .stage-transition {
-            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>佛光山春節「感應禪」互動體驗</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  body{ font-family:'Noto Serif TC', serif; background-color:#0c0e17; color:#f3f4f6; overflow-x:hidden; user-select:none; -webkit-user-select:none; }
+  .text-glow-gold{ text-shadow:0 0 8px rgba(245,158,11,.5), 0 0 15px rgba(245,158,11,.3); }
+  .canvas-bg{ position:absolute; top:0; left:0; width:100%; height:100%; z-index:0; pointer-events:none; }
+  .stage-transition{ transition:all .6s cubic-bezier(0.4,0,0.2,1); }
+  .name-input{ -webkit-appearance:none; }
+  @media (prefers-reduced-motion: reduce){ .animate-spin{ animation:none; } .animate-pulse{ animation:none; } }
+</style>
 </head>
-<body class="min-h-screen flex flex-col justify-between items-center relative overflow-hidden bg-radial from-[#1e1c16] to-[#0a0a0f]">
-
-    <!-- Ambient Particle Canvas for golden sparkles -->
-    <canvas id="ambientCanvas" class="canvas-bg"></canvas>
-
-    <!-- Header (Hidden on final card generation for immersion) -->
-    <header id="appHeader" class="w-full text-center pt-6 z-10">
-        <div class="text-amber-500 font-extrabold tracking-widest text-xl text-glow-gold">高雄佛光山</div>
-        <div class="text-amber-100/60 text-xs mt-1 tracking-widest">乙巳蛇年春節 ✦ 感應禪互動</div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="w-full max-w-md flex-1 flex flex-col justify-center items-center px-6 z-10 relative">
-
-        <!-- STEP 0: NAME REGISTRATION -->
-        <section id="stageRegister" class="stage-transition w-full flex flex-col items-center">
-            <div class="text-center mb-8">
-                <div class="w-16 h-16 mx-auto mb-4 border border-amber-500/30 rounded-full flex items-center justify-center bg-amber-500/5 shadow-[0_0_15px_rgba(245,158,11,0.1)] animate-pulse">
-                    <span class="text-2xl text-amber-500">卍</span>
-                </div>
-                <h1 class="text-2xl font-bold text-amber-100 mb-2">登入春節祈福</h1>
-                <p class="text-gray-400 text-sm leading-relaxed">
-                    心誠則靈。輸入您的姓名，此時、此地、此心的體感因緣，將化為專屬您的水墨吉羊墨寶。
-                </p>
-            </div>
-            
-            <div class="w-full bg-white/5 border border-amber-500/20 rounded-xl p-6 backdrop-blur-md">
-                <label class="block text-amber-400 text-xs tracking-wider mb-2" for="userName">請輸入祈福信眾姓名</label>
-                <input type="text" id="userName" placeholder="例如：張小明" max="5" class="w-full bg-black/40 border border-amber-500/30 rounded-lg py-3 px-4 text-amber-100 text-center text-lg focus:outline-none focus:border-amber-500 transition-all font-sans mb-4">
-                <button onclick="startRitual()" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg border border-amber-400/30 active:scale-95 transition-all text-sm tracking-widest">
-                    進入靜心儀式
-                </button>
-            </div>
-        </section>
-
-        <!-- STEP 1: WOODEN FISH (木魚靜心) -->
-        <section id="stageWoodenFish" class="stage-transition hidden w-full flex flex-col items-center">
-            <div class="text-center mb-8">
-                <span class="text-xs text-amber-500/80 uppercase tracking-widest">第一部 ✦ 木魚靜心</span>
-                <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">調順呼吸 輕叩三聲</h2>
-                <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">
-                    跟隨您的呼吸與心跳，點擊畫面木魚輕敲三下。敲擊的「時間微觀差」將成為您的心靈數據。
-                </p>
-            </div>
-
-            <!-- Interactive Wooden Fish SVG -->
-            <div class="relative w-48 h-48 flex items-center justify-center cursor-pointer select-none" onclick="tapWoodenFish()">
-                <div id="fishRipple" class="absolute w-44 h-44 rounded-full border border-amber-500/0 scale-75 transition-all"></div>
-                <svg id="woodFishSvg" class="w-40 h-40 fill-amber-700/80 drop-shadow-[0_0_20px_rgba(245,158,11,0.2)] active:scale-95 transition-all" viewBox="0 0 100 100">
-                    <path d="M50,15 C28,15 15,30 15,50 C15,70 28,85 50,85 C55,85 70,83 75,75 C80,67 85,60 85,50 C85,35 75,15 50,15 Z M50,22 C68,22 76,32 78,45 C65,45 60,35 48,35 C38,35 32,42 22,42 C23,30 35,22 50,22 Z M50,78 C35,78 24,70 22,58 C32,58 38,65 48,65 C60,65 65,55 78,55 C76,68 68,78 50,78 Z"/>
-                    <circle cx="35" cy="50" r="4" fill="#3f2305" />
-                    <path d="M 52 48 Q 57 44 62 48" stroke="#3f2305" stroke-width="1.5" fill="none" />
-                    <path d="M 50 54 Q 55 50 60 54" stroke="#3f2305" stroke-width="1.5" fill="none" />
-                </svg>
-            </div>
-            
-            <div class="mt-8 text-center">
-                <span class="text-sm font-sans font-semibold text-amber-500">已敲擊：<span id="fishCount" class="text-xl">0</span> / 3</span>
-                <p class="text-gray-500 text-[10px] mt-2">（系統精確記錄每次敲擊微秒差：<span id="fishSecText" class="font-sans">0ms</span>）</p>
-            </div>
-        </section>
-
-        <!-- STEP 2: INCENSE (心香祈願) -->
-        <section id="stageIncense" class="stage-transition hidden w-full flex flex-col items-center">
-            <div class="text-center mb-6">
-                <span class="text-xs text-amber-500/80 uppercase tracking-widest">第二部 ✦ 心香祈願</span>
-                <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">心香一柱 虔誠祈願</h2>
-                <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">
-                    閉上眼默念新年心願，隨後「長按按鈕」點燃無煙心香。點香的長度完全由您心念所定。
-                </p>
-            </div>
-
-            <div class="relative w-64 h-72 flex flex-col items-center justify-end pb-4">
-                <!-- Smoke emitter -->
-                <div id="smokeOrigin" class="absolute bottom-28 w-2 h-2"></div>
-                <!-- Incense Stick Container -->
-                <div class="relative w-4 h-28 flex justify-center items-end">
-                    <div id="incenseTip" class="absolute top-0 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#f00] hidden"></div>
-                    <div id="incenseStick" class="w-1 h-0 bg-gradient-to-t from-amber-800 to-amber-500 rounded-t transition-all"></div>
-                </div>
-                <!-- Incense Censer -->
-                <svg class="w-36 h-20 fill-gray-800 drop-shadow-[0_0_15px_rgba(245,158,11,0.1)] z-10" viewBox="0 0 100 60">
-                    <path d="M10,20 L90,20 Q95,20 95,25 L85,45 Q80,55 50,55 Q20,55 15,45 L5,25 Q5,20 10,20 Z" />
-                    <rect x="42" y="55" width="16" height="5" fill="#1f2937" />
-                    <rect x="20" y="55" width="8" height="5" fill="#1f2937" />
-                    <rect x="72" y="55" width="8" height="5" fill="#1f2937" />
-                    <path d="M50,25 Q45,35 50,42 Q55,35 50,25 Z M46,29 Q40,36 48,39 Z M54,29 Q60,36 52,39 Z" fill="#d97706" />
-                </svg>
-
-                <button id="incenseBtn" 
-                        onmousedown="startLightingIncense()" 
-                        onmouseup="stopLightingIncense()" 
-                        ontouchstart="startLightingIncense()" 
-                        ontouchend="stopLightingIncense()" 
-                        class="absolute bottom-[-10px] bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-2.5 px-6 rounded-full shadow-lg border border-amber-400/30 z-20 active:scale-95 transition-all text-xs tracking-widest select-none">
-                    長按：點燃心香
-                </button>
-            </div>
-
-            <div class="text-center mt-12">
-                <span id="incenseStatus" class="text-amber-500/80 text-xs">長按上方按鈕開始心香祈願</span>
-                <p class="text-gray-500 text-[10px] mt-1">（累計燃香時長：<span id="incenseTimeText" class="font-sans">0ms</span>）</p>
-            </div>
-        </section>
-
-        <!-- STEP 3: BELL (叩鐘迴向) -->
-        <section id="stageBell" class="stage-transition hidden w-full flex flex-col items-center">
-            <div class="text-center mb-6">
-                <span class="text-xs text-amber-500/80 uppercase tracking-widest">第三部 ✦ 叩鐘迴向</span>
-                <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">推動大鐘 梵音悠揚</h2>
-                <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">
-                    請輕握手機往前揮動，叩響平安鐘三聲。揮動的加速度大小即是福慧的深度。
-                </p>
-                <!-- Permissions toggle for iOS/DeviceMotion -->
-                <button onclick="requestMotionPermission()" id="permBtn" class="mt-3 bg-white/5 border border-amber-500/20 hover:bg-white/10 text-amber-400 font-sans text-[10px] py-1 px-3 rounded-full transition-all">
-                    啟用手機陀螺儀感應
-                </button>
-            </div>
-
-            <!-- Bell Visual -->
-            <div class="relative w-56 h-56 flex items-center justify-center cursor-pointer" onclick="manualBellStrike()">
-                <div id="bellWave" class="absolute w-24 h-24 rounded-full border-2 border-amber-500/0 scale-100"></div>
-                <svg id="bronzeBell" class="w-44 h-44 fill-amber-600/90 drop-shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-300" viewBox="0 0 100 120">
-                    <path d="M42,20 Q50,5 58,20" stroke="#b45309" stroke-width="4" fill="none" />
-                    <path d="M25,30 C25,30 30,22 50,22 C70,22 75,30 75,30 C75,30 78,55 82,90 C84,95 80,105 50,105 C20,105 16,95 18,90 C22,55 25,30 25,30 Z" />
-                    <path d="M18,90 Q50,100 82,90 L82,93 Q50,103 18,93 Z" fill="#78350f" />
-                    <line x1="30" y1="45" x2="70" y2="45" stroke="#451a03" stroke-width="2" />
-                    <circle cx="35" cy="55" r="2" fill="#451a03" /><circle cx="50" cy="55" r="2" fill="#451a03" /><circle cx="65" cy="55" r="2" fill="#451a03" />
-                </svg>
-            </div>
-
-            <!-- Simulation Controls for Non-Mobile Users -->
-            <div class="w-full bg-white/5 border border-white/10 rounded-lg p-3 mt-4 text-xs">
-                <div class="flex justify-between items-center text-[10px] text-gray-400 mb-1">
-                    <span>電腦/不支援感應測試：模擬敲擊力道</span>
-                    <span id="forceVal">5.0 G</span>
-                </div>
-                <input type="range" id="forceSlider" min="1" max="20" step="0.5" value="5" oninput="document.getElementById('forceVal').innerText = this.value + ' G'" class="w-full accent-amber-500 bg-gray-800 rounded">
-                <button onclick="manualBellStrike()" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-1.5 mt-2 rounded font-sans font-semibold text-[11px] transition">
-                    點此手動叩鐘 (第三下將開始進行感應計算)
-                </button>
-            </div>
-
-            <div class="text-center mt-4">
-                <span class="text-sm font-sans font-semibold text-amber-500">已叩鐘：<span id="bellCount" class="text-xl">0</span> / 3</span>
-                <p class="text-gray-500 text-[10px] mt-1 font-mono">當前最大峰值：<span id="bellPeakText">0.00 G</span></p>
-            </div>
-        </section>
-
-        <!-- STEP 4: CALCULATION / LOADING SUTRA -->
-        <section id="stageLoading" class="stage-transition hidden w-full flex flex-col items-center">
-            <div class="text-center">
-                <div class="w-20 h-20 mx-auto mb-6 relative flex items-center justify-center">
-                    <!-- Spinning circle -->
-                    <div class="absolute inset-0 border-4 border-amber-500/10 border-t-amber-500 rounded-full animate-spin"></div>
-                    <span class="text-2xl text-amber-500 animate-pulse">卍</span>
-                </div>
-                <h3 class="text-xl font-bold text-amber-100 mb-2">正在感應當下因緣...</h3>
-                <p class="text-gray-400 text-sm max-w-xs leading-relaxed mb-1 font-mono text-[11px]" id="calcParamsText">
-                    正在解算雜湊公式 Seed 運算中...
-                </p>
-                <div class="h-1 w-48 bg-gray-800 rounded-full mx-auto overflow-hidden mt-4">
-                    <div class="h-full bg-amber-500 animate-[pulse_1.5s_infinite]" style="width: 100%"></div>
-                </div>
-            </div>
-        </section>
-
-        <!-- STEP 5: FINAL ART CARD -->
-        <section id="stageFinalCard" class="stage-transition hidden w-full flex flex-col items-center">
-            <!-- Hint to Save -->
-            <div class="text-center mb-3">
-                <span class="text-xs text-amber-500 font-bold text-glow-gold tracking-widest">✦ 走春因果福德印記 ✦</span>
-                <p class="text-gray-400 text-[11px] mt-1 leading-relaxed">
-                    下圖為此時此刻專屬您的紀念朱印，已完美融合您的呼吸、心香與叩鐘節奏。
-                </p>
-            </div>
-
-            <!-- Canvas Container -->
-            <div class="relative w-full max-w-[320px] aspect-[9/16] bg-amber-50 shadow-[0_10px_35px_rgba(0,0,0,0.5)] border border-amber-900/10 rounded-lg overflow-hidden mb-4">
-                <canvas id="blessingCanvas" class="w-full h-full block bg-[#f4f0e6]"></canvas>
-            </div>
-
-            <!-- Save Action buttons -->
-            <div class="w-full flex space-x-3 max-w-[320px]">
-                <button onclick="downloadBlessingCard()" class="flex-1 bg-amber-700 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-lg text-xs tracking-wider border border-amber-500/20 shadow transition-all active:scale-95">
-                    下載紀念朱印卡
-                </button>
-                <button onclick="restartExperience()" class="bg-gray-800 hover:bg-gray-700 text-amber-300 font-bold py-2.5 px-4 rounded-lg text-xs tracking-wider border border-amber-500/20 transition-all active:scale-95">
-                    再叩一次
-                </button>
-            </div>
-            
-            <p class="text-gray-500 text-[10px] mt-3">※ 手機用戶亦可直接「長按圖片」手動儲存至相簿</p>
-        </section>
-
-    </main>
-
-    <!-- Footer Progress bar (Hidden on final stage) -->
-    <footer id="appFooter" class="w-full text-center pb-6 z-10 transition-opacity duration-500">
-        <div id="footerProgress" class="flex justify-center items-center space-x-4 text-xs text-gray-500 font-sans">
-            <span id="ind0" class="text-amber-500 font-bold">1. 登入 ⬤</span>
-            <span id="ind1">2. 靜心 ◯</span>
-            <span id="ind2">3. 祈願 ◯</span>
-            <span id="ind3">4. 迴向 ◯</span>
-        </div>
-    </footer>
-
-    <!-- Audio & Canvas Logical Core Script -->
-    <script>
-        // --- 1. USER RAW INTERACTION PARAMETERS ---
-        let clientName = "張大明";
-        let N_fish = 0;           // Wooden fish count
-        let t_interval = 0;      // Last millisecond interval on wood fish
-        let lastFishTime = 0;
-        let T_incense = 0;       // Long press milliseconds
-        let M_bell = 0;           // Bell count
-        let max_accel = 0;       // Gyroscope peak acceleration
-        let seed = 1;            // Calculated 1 to 1000
-
-        // --- 2. WEB AUDIO SYNTHESIZER ---
-        let audioCtx = null;
-        function initAudio() {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-        }
-
-        // Procedural Wooden Fish Sound: Hollow impact, quick decay
-        function playWoodenFishSound() {
-            initAudio();
-            const now = audioCtx.currentTime;
-            const osc = audioCtx.createOscillator();
-            const gain = audioCtx.createGain();
-            
-            osc.type = 'triangle';
-            osc.frequency.setValueAtTime(550, now);
-            osc.frequency.exponentialRampToValueAtTime(120, now + 0.1);
-            
-            gain.gain.setValueAtTime(0.8, now);
-            gain.gain.exponentialRampToValueAtTime(0.001, now + 0.1);
-            
-            osc.connect(gain);
-            gain.connect(audioCtx.destination);
-            
-            osc.start(now);
-            osc.stop(now + 0.12);
-        }
-
-        // Procedural Sacred Bell Sound: Deep base, harmonic beating
-        function playBellSound() {
-            initAudio();
-            const now = audioCtx.currentTime;
-            
-            // Frequencies and weights for bell chime
-            const harmonics = [110, 220, 330, 442, 550, 663];
-            const volumeWeights = [0.8, 0.5, 0.3, 0.2, 0.1, 0.05];
-            const decays = [4.0, 3.2, 2.2, 1.8, 1.0, 0.6];
-
-            harmonics.forEach((f, idx) => {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                
-                osc.type = 'sine';
-                osc.frequency.setValueAtTime(f, now);
-                
-                // Slight vibrato for realistic metal beats
-                if (idx > 0 && idx < 4) {
-                    osc.frequency.setValueAtTime(f + (Math.sin(idx * 4) * 1.5), now);
-                }
-
-                gain.gain.setValueAtTime(volumeWeights[idx] * 0.4, now);
-                gain.gain.exponentialRampToValueAtTime(0.0001, now + decays[idx]);
-                
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                
-                osc.start(now);
-                osc.stop(now + decays[idx] + 0.1);
-            });
-        }
-
-        // Mobile vibration call
-        function triggerHaptic(duration) {
-            if (navigator.vibrate) {
-                try {
-                    navigator.vibrate(duration);
-                } catch(e) {}
-            }
-        }
-
-        // --- 3. AMBIENT BACKGROUND PARTICLES ---
-        const ambCanvas = document.getElementById('ambientCanvas');
-        const ambCtx = ambCanvas.getContext('2d');
-        let ambParticles = [];
-
-        function resizeAmbientCanvas() {
-            ambCanvas.width = window.innerWidth;
-            ambCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeAmbientCanvas);
-        resizeAmbientCanvas();
-
-        class Particle {
-            constructor() {
-                this.x = Math.random() * ambCanvas.width;
-                this.y = Math.random() * ambCanvas.height;
-                this.size = Math.random() * 2 + 0.5;
-                this.vx = (Math.random() - 0.5) * 0.2;
-                this.vy = -Math.random() * 0.3 - 0.1;
-                this.alpha = Math.random() * 0.4 + 0.1;
-            }
-            update() {
-                this.x += this.vx;
-                this.y += this.vy;
-                if (this.y < 0) this.y = ambCanvas.height;
-            }
-            draw() {
-                ambCtx.save();
-                ambCtx.globalAlpha = this.alpha;
-                ambCtx.fillStyle = '#f59e0b';
-                ambCtx.beginPath();
-                ambCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-                ambCtx.fill();
-                ambCtx.restore();
-            }
-        }
-        for(let i=0; i<40; i++) ambParticles.push(new Particle());
-
-        function animateAmbient() {
-            ambCtx.clearRect(0, 0, ambCanvas.width, ambCanvas.height);
-            ambParticles.forEach(p => {
-                p.update();
-                p.draw();
-            });
-            requestAnimationFrame(animateAmbient);
-        }
-        animateAmbient();
-
-        // --- 4. STEP 0: REGISTRATION ---
-        function startRitual() {
-            const input = document.getElementById('userName').value.trim();
-            if (!input) {
-                alert("請留下您的名字，以注入因果福氣。");
-                return;
-            }
-            clientName = input;
-            transitionTo('stageWoodenFish', 'ind1', '1. 登入 ✓', '2. 靜心 ⬤');
-        }
-
-        // --- 5. STEP 1: WOODEN FISH EVENT ---
-        function tapWoodenFish() {
-            initAudio();
-            const now = Date.now();
-            
-            if (lastFishTime !== 0) {
-                t_interval = now - lastFishTime;
-                document.getElementById('fishSecText').innerText = t_interval + "ms";
-            }
-            lastFishTime = now;
-            
-            N_fish++;
-            document.getElementById('fishCount').innerText = N_fish;
-            
-            playWoodenFishSound();
-            triggerHaptic(40);
-
-            // Scale and ripple animation
-            const svg = document.getElementById('woodFishSvg');
-            const ripple = document.getElementById('fishRipple');
-            
-            svg.classList.add('scale-90');
-            ripple.style.transform = 'scale(1.4)';
-            ripple.style.borderColor = 'rgba(245, 158, 11, 0.5)';
-            ripple.style.transition = 'all 0.3s ease-out';
-            
-            setTimeout(() => {
-                svg.classList.remove('scale-90');
-                ripple.style.transform = 'scale(0.7)';
-                ripple.style.borderColor = 'rgba(245, 158, 11, 0)';
-                ripple.style.transition = 'none';
-            }, 150);
-
-            if (N_fish >= 3) {
-                setTimeout(() => {
-                    transitionTo('stageIncense', 'ind2', '2. 靜心 ✓', '3. 祈願 ⬤');
-                }, 1000);
-            }
-        }
-
-        // --- 6. STEP 2: INCENSE BURN EVENT ---
-        let incenseInterval = null;
-        let isIncensePressed = false;
-
-        function startLightingIncense() {
-            initAudio();
-            isIncensePressed = true;
-            document.getElementById('incenseTip').classList.remove('hidden');
-            document.getElementById('incenseStatus').innerText = "心香裊裊，心願已發往十方淨土...";
-
-            incenseInterval = setInterval(() => {
-                T_incense += 50;
-                document.getElementById('incenseTimeText').innerText = T_incense + "ms";
-                
-                // Dynamic grow stick
-                const h = Math.min(100, T_incense / 30);
-                document.getElementById('incenseStick').style.height = h + '%';
-                triggerHaptic(15);
-
-                if (T_incense >= 3000) { // 3 seconds maximum burner complete
-                    stopLightingIncense();
-                    incenseComplete();
-                }
-            }, 50);
-        }
-
-        function stopLightingIncense() {
-            if (!isIncensePressed) return;
-            isIncensePressed = false;
-            clearInterval(incenseInterval);
-            document.getElementById('incenseTip').classList.add('hidden');
-            
-            if (T_incense < 1000) {
-                document.getElementById('incenseStatus').innerText = "心香未得火候，請繼續長按。";
-            } else {
-                incenseComplete();
-            }
-        }
-
-        function incenseComplete() {
-            document.getElementById('incenseStatus').innerText = "心香點燃，諸佛歡喜，福報臨門！";
-            triggerHaptic([150, 50, 150]);
-            setTimeout(() => {
-                transitionTo('stageBell', 'ind3', '3. 祈願 ✓', '4. 迴向 ⬤');
-            }, 1200);
-        }
-
-        // --- 7. STEP 3: BELL SHAKE/TAP EVENT ---
-        function requestMotionPermission() {
-            initAudio();
-            if (typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function') {
-                DeviceMotionEvent.requestPermission()
-                    .then(state => {
-                        if (state === 'granted') {
-                            window.addEventListener('devicemotion', handleMotion, true);
-                            document.getElementById('permBtn').innerText = "感測器授權成功 ✓";
-                            document.getElementById('permBtn').classList.add('bg-green-500/20');
-                        }
-                    }).catch(console.error);
-            } else {
-                window.addEventListener('devicemotion', handleMotion, true);
-                document.getElementById('permBtn').innerText = "感測器已支援 ✓";
-            }
-        }
-
-        function handleMotion(e) {
-            let acc = e.accelerationIncludingGravity;
-            if (!acc) return;
-            
-            // Calculate vector magnitude minus earth gravity
-            let magnitude = Math.sqrt(acc.x*acc.x + acc.y*acc.y + acc.z*acc.z) - 9.8;
-            if (magnitude > max_accel) {
-                max_accel = magnitude;
-                document.getElementById('bellPeakText').innerText = (max_accel / 9.8).toFixed(2) + " G";
-            }
-
-            // Swing gesture threshold
-            if (magnitude > 15 && M_bell < 3) {
-                manualBellStrike();
-            }
-        }
-
-        function manualBellStrike() {
-            initAudio();
-            M_bell++;
-            document.getElementById('bellCount').innerText = M_bell;
-
-            // Gather force
-            const forceVal = parseFloat(document.getElementById('forceSlider').value);
-            if (forceVal > max_accel) {
-                max_accel = forceVal;
-                document.getElementById('bellPeakText').innerText = max_accel.toFixed(2) + " G";
-            }
-
-            playBellSound();
-            triggerHaptic([150, 50, 100, 30, 50]);
-
-            // Visual swing
-            const bell = document.getElementById('bronzeBell');
-            const ripple = document.getElementById('bellWave');
-
-            bell.style.transform = 'translate3d(0, -10px, 0) scale(0.9) rotate(4deg)';
-            ripple.style.transform = 'scale(4)';
-            ripple.style.borderColor = 'rgba(245, 158, 11, 0.7)';
-            ripple.style.transition = 'transform 1s cubic-bezier(0.1, 0.8, 0.3, 1), border-color 1s ease-out';
-
-            setTimeout(() => {
-                bell.style.transform = 'translate3d(0, 5px, 0) scale(1.05) rotate(-3deg)';
-            }, 100);
-            setTimeout(() => {
-                bell.style.transform = 'translate3d(0, 0, 0) scale(1) rotate(0)';
-                ripple.style.transform = 'scale(1)';
-                ripple.style.borderColor = 'rgba(245, 158, 11, 0)';
-                ripple.style.transition = 'none';
-            }, 350);
-
-            if (M_bell >= 3) {
-                setTimeout(() => {
-                    runSeedAlgorithm();
-                }, 1000);
-            }
-        }
-
-        // --- 8. STEP 4: SEED COMPUTATION ---
-        function runSeedAlgorithm() {
-            transitionTo('stageLoading', 'ind3', '4. 迴向 ✓', '4. 迴向 ✓');
-            
-            // Dynamic formula
-            let N = N_fish;
-            let t = t_interval === 0 ? 500 : t_interval; // Fallback
-            let T = T_incense === 0 ? 1500 : T_incense;
-            let M = M_bell;
-            let a = max_accel === 0 ? 5.8 : max_accel;
-
-            seed = ((N * 100) + t + T + (M * 200) + Math.floor(a * 10)) % 1000 + 1;
-            
-            document.getElementById('calcParamsText').innerHTML = 
-                `因果矩陣：(${N}×100) + ${t}ms + ${T}ms + (${M}×200) + ⌊${a.toFixed(1)}×10⌋<br>` +
-                `對應感應序號：<span class="text-amber-400 font-bold">Seed #${seed}</span>`;
-
-            setTimeout(() => {
-                generateCanvasCard();
-            }, 2500);
-        }
-
-        // --- 9. STEP 5: CANVAS CARD GENERATOR ---
-        const masterBlessings = [
-            { text: "三羊開泰", pinyin: "Great peace in Spring", meaning: "大吉大利，祥瑞滿門。" },
-            { text: "花開見佛", pinyin: "Awakening to the pure self", meaning: "明心見性，清淨自性。" },
-            { text: "身心自在", pinyin: "Perfect ease of mind and body", meaning: "無罣無礙，法喜充滿。" },
-            { text: "諸事吉祥", pinyin: "May everything be fortunate", meaning: "福慧雙全，順心安康。" },
-            { text: "處處春風", pinyin: "Spring breeze everywhere", meaning: "慈悲溫暖，廣結善緣。" }
-        ];
-
-        // Procedural abstract Chinese art renderer (Generates unique ink sheep and graphics based on seed)
-        function generateCanvasCard() {
-            transitionTo('stageFinalCard');
-            // Hide App Header and Footer for maximum immersion
-            document.getElementById('appHeader').classList.add('hidden');
-            document.getElementById('appFooter').classList.add('hidden');
-
-            const canvas = document.getElementById('blessingCanvas');
-            const ctx = canvas.getContext('2d');
-            
-            // Set resolution for sharp high-quality display/download
-            canvas.width = 720;
-            canvas.height = 1280;
-
-            // Draw Background (Warm parchment/rice paper effect)
-            ctx.fillStyle = '#f3ebd9';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add soft rice paper texture fibers
-            ctx.strokeStyle = 'rgba(120, 100, 50, 0.05)';
-            ctx.lineWidth = 1;
-            for (let i = 0; i < 50; i++) {
-                ctx.beginPath();
-                let sx = Math.random() * canvas.width;
-                let sy = Math.random() * canvas.height;
-                ctx.moveTo(sx, sy);
-                ctx.quadraticCurveTo(sx + (Math.random()-0.5)*50, sy + (Math.random()-0.5)*50, sx + (Math.random()-0.5)*100, sy + (Math.random()-0.5)*100);
-                ctx.stroke();
-            }
-
-            // Draw Vintage red framing borders
-            ctx.strokeStyle = '#9d171d';
-            ctx.lineWidth = 10;
-            ctx.strokeRect(30, 30, canvas.width - 60, canvas.height - 60);
-            ctx.lineWidth = 2;
-            ctx.strokeRect(40, 40, canvas.width - 80, canvas.height - 80);
-
-            // Select calligraphy sentence based on seed
-            const blessIndex = seed % masterBlessings.length;
-            const blessing = masterBlessings[blessIndex];
-
-            // 1. Draw Master Calligraphy Text (Chinese brush simulation)
-            ctx.fillStyle = '#1c1917';
-            ctx.font = 'bold 64px "Noto Serif TC", serif';
-            ctx.textAlign = 'center';
-            ctx.fillText(blessing.text, canvas.width / 2, 140);
-            
-            // Calligraphy English / Meaning
-            ctx.fillStyle = '#6b5134';
-            ctx.font = '24px "Noto Serif TC", serif';
-            ctx.fillText(blessing.pinyin, canvas.width / 2, 190);
-
-            // 2. DRAW PROCEDURAL INK WATERCOLOR SHEEP (Based on seed style)
-            drawInkWashSheep(ctx, canvas.width / 2, canvas.height / 2 - 20, seed);
-
-            // 3. Draw Memorial Red Stamps (Classic 朱印)
-            drawClassicStamp(ctx, 550, 150, "佛光山");
-            drawClassicStamp(ctx, 150, 1060, "心誠則靈");
-
-            // 4. Draw Custom User Name & Date Blessing text
-            ctx.fillStyle = '#1c1917';
-            ctx.textAlign = 'center';
-            ctx.font = '32px "Noto Serif TC", serif';
-            ctx.fillText(`信眾 【${clientName}】 虔誠叩感`, canvas.width / 2, 900);
-
-            ctx.fillStyle = '#5c4d3c';
-            ctx.font = '24px "Noto Serif TC", serif';
-            ctx.fillText(`時維 乙巳蛇年 正月初一`, canvas.width / 2, 950);
-            ctx.fillText(`佛光普照 萬物初始 功德圓滿`, canvas.width / 2, 990);
-
-            // Unique details info
-            ctx.fillStyle = 'rgba(92, 77, 60, 0.6)';
-            ctx.font = '18px monospace';
-            ctx.fillText(`感應數據 N:${N_fish} t:${t_interval}ms T:${T_incense}ms a:${max_accel.toFixed(1)}G | Seed:${seed}`, canvas.width / 2, 1140);
-        }
-
-        // Draw Calligraphy/Ink-wash abstract sheep programmatically
-        function drawInkWashSheep(ctx, cx, cy, seed) {
-            ctx.save();
-            ctx.translate(cx, cy);
-
-            // Select color tones based on Seed (Classic Ink black, Golden Zen, Bronze, or Charcoal)
-            const inkColors = [
-                { main: 'rgba(28, 25, 23, 0.95)', soft: 'rgba(120, 110, 90, 0.4)' },
-                { main: 'rgba(154, 52, 18, 0.9)', soft: 'rgba(230, 150, 100, 0.35)' },
-                { main: 'rgba(41, 37, 36, 0.95)', soft: 'rgba(168, 162, 158, 0.4)' },
-                { main: 'rgba(120, 53, 4, 0.92)', soft: 'rgba(245, 158, 11, 0.3)' }
-            ];
-            const palette = inkColors[seed % inkColors.length];
-
-            // A: Draw soft watercolor circular backwash
-            let grad = ctx.createRadialGradient(0, 0, 10, 0, 0, 220);
-            grad.addColorStop(0, palette.soft);
-            grad.addColorStop(0.5, 'rgba(243, 235, 217, 0)');
-            ctx.fillStyle = grad;
-            ctx.beginPath();
-            ctx.arc(0, 0, 220, 0, Math.PI*2);
-            ctx.fill();
-
-            // B: Draw calligraphic abstract Sheep shape using quadratic brush curves
-            // Vary the shape based on seed%3 to yield "Vigorous Standing Sheep", "Peaceful Sitting Sheep", "Sleek Leap Sheep"
-            ctx.strokeStyle = palette.main;
-            ctx.lineCap = 'round';
-            ctx.shadowBlur = 4;
-            ctx.shadowColor = 'rgba(0,0,0,0.15)';
-
-            const sheepStyle = seed % 3;
-
-            if (sheepStyle === 0) { // Style A: Majestic horns, full body
-                // Spiral Horn Left
-                ctx.lineWidth = 14;
-                ctx.beginPath();
-                ctx.moveTo(-15, -70);
-                ctx.quadraticCurveTo(-65, -110, -85, -60);
-                ctx.quadraticCurveTo(-95, -10, -55, -20);
-                ctx.stroke();
-
-                // Spiral Horn Right
-                ctx.beginPath();
-                ctx.moveTo(15, -70);
-                ctx.quadraticCurveTo(65, -110, 85, -60);
-                ctx.quadraticCurveTo(95, -10, 55, -20);
-                ctx.stroke();
-
-                // Head Structure
-                ctx.lineWidth = 18;
-                ctx.beginPath();
-                ctx.moveTo(-15, -60);
-                ctx.quadraticCurveTo(0, -90, 15, -60);
-                ctx.lineTo(0, -10);
-                ctx.closePath();
-                ctx.stroke();
-
-                // Strong Body stroke
-                ctx.lineWidth = 26;
-                ctx.beginPath();
-                ctx.moveTo(0, -10);
-                ctx.quadraticCurveTo(-110, 30, -50, 120);
-                ctx.stroke();
-
-                // Front Leg
-                ctx.lineWidth = 12;
-                ctx.beginPath();
-                ctx.moveTo(-20, 60);
-                ctx.lineTo(-30, 160);
-                ctx.stroke();
-
-                // Back Leg
-                ctx.beginPath();
-                ctx.moveTo(-45, 110);
-                ctx.quadraticCurveTo(-75, 150, -60, 165);
-                ctx.stroke();
-                
-            } else if (sheepStyle === 1) { // Style B: Sleek Minimal Zen Ink Calligraphy Sheep
-                // Simple master curve horn
-                ctx.lineWidth = 22;
-                ctx.beginPath();
-                ctx.moveTo(0, -80);
-                ctx.quadraticCurveTo(-110, -110, -70, -20);
-                ctx.quadraticCurveTo(-30, 40, 20, 80);
-                ctx.stroke();
-
-                // Head focus
-                ctx.lineWidth = 16;
-                ctx.beginPath();
-                ctx.moveTo(-20, -50);
-                ctx.quadraticCurveTo(10, -70, 20, -40);
-                ctx.lineTo(0, 0);
-                ctx.stroke();
-
-                // Cloud-like wool splashes
-                ctx.fillStyle = palette.main;
-                ctx.globalAlpha = 0.7;
-                ctx.beginPath();
-                ctx.arc(-40, 20, 35, 0, Math.PI*2);
-                ctx.arc(-10, 50, 45, 0, Math.PI*2);
-                ctx.arc(30, 30, 25, 0, Math.PI*2);
-                ctx.fill();
-                ctx.globalAlpha = 1.0;
-
-                // Simple stylized legs
-                ctx.strokeStyle = palette.main;
-                ctx.lineWidth = 10;
-                ctx.beginPath();
-                ctx.moveTo(-30, 80);
-                ctx.lineTo(-40, 150);
-                ctx.moveTo(10, 70);
-                ctx.lineTo(15, 140);
-                ctx.stroke();
-
-            } else { // Style C: Artistic Head & Beautiful Horns Focus (Deep Zen portrait)
-                // Giant Golden Horns Left
-                ctx.lineWidth = 18;
-                ctx.beginPath();
-                ctx.moveTo(-10, -40);
-                ctx.bezierCurveTo(-90, -120, -120, -30, -50, 10);
-                ctx.stroke();
-
-                // Horns Right
-                ctx.beginPath();
-                ctx.moveTo(10, -40);
-                ctx.bezierCurveTo(90, -120, 120, -30, 50, 10);
-                ctx.stroke();
-
-                // Center head & long elegant snout
-                ctx.lineWidth = 20;
-                ctx.beginPath();
-                ctx.moveTo(-10, -30);
-                ctx.quadraticCurveTo(0, -50, 10, -30);
-                ctx.quadraticCurveTo(0, 50, 0, 90);
-                ctx.stroke();
-
-                // Floating ink splashes around
-                ctx.fillStyle = palette.main;
-                ctx.beginPath();
-                ctx.arc(-80, 50, 8, 0, Math.PI*2);
-                ctx.arc(80, 40, 6, 0, Math.PI*2);
-                ctx.arc(40, 100, 12, 0, Math.PI*2);
-                ctx.fill();
-            }
-
-            ctx.restore();
-        }
-
-        // Draw Chinese Stamp Seals
-        function drawClassicStamp(ctx, x, y, text) {
-            ctx.save();
-            ctx.strokeStyle = '#c22129';
-            ctx.fillStyle = '#c22129';
-            ctx.lineWidth = 4;
-            
-            // Outer Square box with slightly rustic rounded corners
-            ctx.strokeRect(x - 40, y - 40, 80, 80);
-            
-            // Draw text inside
-            ctx.font = 'bold 24px "Noto Serif TC", serif';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            
-            if (text.length === 3) {
-                // Stack vertically
-                ctx.fillText(text[0], x, y - 22);
-                ctx.fillText(text[1], x, y);
-                ctx.fillText(text[2], x, y + 22);
-            } else if (text.length === 4) {
-                // 2x2 Grid stamp
-                ctx.font = 'bold 20px "Noto Serif TC", serif';
-                ctx.fillText(text[0], x - 18, y - 18);
-                ctx.fillText(text[1], x + 18, y - 18);
-                ctx.fillText(text[2], x - 18, y + 18);
-                ctx.fillText(text[3], x + 18, y + 18);
-            } else {
-                ctx.fillText(text, x, y);
-            }
-
-            ctx.restore();
-        }
-
-        // Download canvas as JPEG
-        function downloadBlessingCard() {
-            const canvas = document.getElementById('blessingCanvas');
-            const link = document.createElement('a');
-            link.download = `佛光山走春福卡_${clientName}.jpg`;
-            link.href = canvas.toDataURL('image/jpeg', 0.9);
-            link.click();
-        }
-
-        // --- 10. SYSTEM NAVIGATION UTILS ---
-        function transitionTo(nextStageId, progressIndId, updatePrevText, updateNextText) {
-            const stages = ['stageRegister', 'stageWoodenFish', 'stageIncense', 'stageBell', 'stageLoading', 'stageFinalCard'];
-            
-            stages.forEach(id => {
-                const el = document.getElementById(id);
-                if (id === nextStageId) {
-                    el.classList.remove('hidden');
-                    // DOM Reflow
-                    void el.offsetWidth;
-                    el.classList.add('opacity-100', 'scale-100');
-                    el.classList.remove('opacity-0', 'scale-95');
-                } else {
-                    el.classList.add('hidden', 'opacity-0', 'scale-95');
-                    el.classList.remove('opacity-100', 'scale-100');
-                }
-            });
-
-            // Update Progress bar indicators in footer
-            if (progressIndId) {
-                const prevInd = document.querySelector('.text-amber-500');
-                if (prevInd) {
-                    prevInd.classList.remove('text-amber-500', 'font-bold', 'text-glow-gold');
-                    if (updatePrevText) prevInd.innerText = updatePrevText;
-                }
-                const nextInd = document.getElementById(progressIndId);
-                if (nextInd) {
-                    nextInd.classList.add('text-amber-500', 'font-bold', 'text-glow-gold');
-                    if (updateNextText) nextInd.innerText = updateNextText;
-                }
-            }
-        }
-
-        function restartExperience() {
-            N_fish = 0;
-            t_interval = 0;
-            lastFishTime = 0;
-            T_incense = 0;
-            M_bell = 0;
-            max_accel = 0;
-            
-            document.getElementById('fishCount').innerText = "0";
-            document.getElementById('fishSecText').innerText = "0ms";
-            document.getElementById('incenseStick').style.height = '0%';
-            document.getElementById('incenseTimeText').innerText = "0ms";
-            document.getElementById('incenseStatus').innerText = "長按上方按鈕開始心香祈願";
-            document.getElementById('bellCount').innerText = "0";
-            document.getElementById('bellPeakText').innerText = "0.00 G";
-
-            document.getElementById('appHeader').classList.remove('hidden');
-            document.getElementById('appFooter').classList.remove('hidden');
-
-            // Reset indicators
-            document.getElementById('ind1').className = "";
-            document.getElementById('ind1').innerText = "2. 靜心 ◯";
-            document.getElementById('ind2').className = "";
-            document.getElementById('ind2').innerText = "3. 祈願 ◯";
-            document.getElementById('ind3').className = "";
-            document.getElementById('ind3').innerText = "4. 迴向 ◯";
-
-            transitionTo('stageRegister', 'ind0', '', '1. 登入 ⬤');
-        }
-    </script>
+<body class="min-h-screen flex flex-col justify-between items-center relative overflow-hidden">
+
+<canvas id="ambientCanvas" class="canvas-bg"></canvas>
+
+<header id="appHeader" class="w-full text-center pt-6 z-10">
+  <div class="text-amber-500 font-extrabold tracking-widest text-xl text-glow-gold">高雄佛光山</div>
+  <div class="text-amber-100/60 text-xs mt-1 tracking-widest">春節走春 ✦ 感應禪互動（測試版）</div>
+</header>
+
+<main class="w-full max-w-md flex-1 flex flex-col justify-center items-center px-6 z-10 relative">
+
+  <!-- STEP 0 : 登入 -->
+  <section id="stageRegister" class="stage-transition w-full flex flex-col items-center">
+    <div class="text-center mb-8">
+      <div class="w-16 h-16 mx-auto mb-4 border border-amber-500/30 rounded-full flex items-center justify-center bg-amber-500/5 shadow-[0_0_15px_rgba(245,158,11,0.1)] animate-pulse">
+        <span class="text-2xl text-amber-500">卍</span>
+      </div>
+      <h1 class="text-2xl font-bold text-amber-100 mb-2">登入春節祈福</h1>
+      <p class="text-gray-400 text-sm leading-relaxed">心誠則靈。輸入您的姓名，此時、此地、此心的體感因緣，將化為專屬您的水墨吉羊墨寶。</p>
+    </div>
+    <div class="w-full bg-white/5 border border-amber-500/20 rounded-xl p-6 backdrop-blur-md">
+      <label class="block text-amber-400 text-xs tracking-wider mb-2" for="userName">請輸入祈福信眾姓名</label>
+      <input type="text" id="userName" placeholder="例如：張小明" maxlength="8" class="name-input w-full bg-black/40 border border-amber-500/30 rounded-lg py-3 px-4 text-amber-100 text-center text-lg focus:outline-none focus:border-amber-500 transition-all font-sans mb-4">
+      <button id="btnStartRitual" class="w-full bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-500 hover:to-amber-600 text-white font-bold py-3 px-6 rounded-lg shadow-lg border border-amber-400/30 active:scale-95 transition-all text-sm tracking-widest">進入靜心儀式</button>
+    </div>
+    <p class="text-gray-500 text-[10px] mt-4 max-w-xs leading-relaxed" id="permissionNote"></p>
+  </section>
+
+  <!-- STEP 1 : 木魚靜心 -->
+  <section id="stageFish" class="stage-transition hidden w-full flex flex-col items-center">
+    <div class="text-center mb-8">
+      <span class="text-xs text-amber-500/80 uppercase tracking-widest">第一部 ✦ 木魚靜心</span>
+      <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">調順呼吸 輕叩木魚</h2>
+      <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">跟隨您的呼吸與心跳輕敲木魚，建議 3～7 聲，敲夠了就前往下一步。敲擊的「時間微觀差」將成為您的心靈數據。</p>
+    </div>
+    <div class="relative w-48 h-48 flex items-center justify-center cursor-pointer select-none" id="fishTapArea">
+      <div id="fishRipple" class="absolute w-44 h-44 rounded-full border border-amber-500/0 scale-75 transition-all"></div>
+      <svg id="woodFishSvg" class="w-40 h-40 fill-amber-700/80 drop-shadow-[0_0_20px_rgba(245,158,11,0.2)] transition-all" viewBox="0 0 100 100">
+        <path d="M50,15 C28,15 15,30 15,50 C15,70 28,85 50,85 C55,85 70,83 75,75 C80,67 85,60 85,50 C85,35 75,15 50,15 Z M50,22 C68,22 76,32 78,45 C65,45 60,35 48,35 C38,35 32,42 22,42 C23,30 35,22 50,22 Z M50,78 C35,78 24,70 22,58 C32,58 38,65 48,65 C60,65 65,55 78,55 C76,68 68,78 50,78 Z"/>
+        <circle cx="35" cy="50" r="4" fill="#3f2305"/>
+        <path d="M 52 48 Q 57 44 62 48" stroke="#3f2305" stroke-width="1.5" fill="none"/>
+        <path d="M 50 54 Q 55 50 60 54" stroke="#3f2305" stroke-width="1.5" fill="none"/>
+      </svg>
+    </div>
+    <div class="mt-6 text-center">
+      <span class="text-sm font-sans font-semibold text-amber-500">已敲擊：<span id="fishCount" class="text-xl">0</span> 聲</span>
+      <p class="text-gray-500 text-[10px] mt-2">（系統精確記錄最後兩聲的時間差：<span id="fishIntervalText" class="font-sans">—</span>）</p>
+    </div>
+    <button id="btnFishContinue" disabled class="mt-6 bg-gradient-to-r from-amber-600 to-amber-700 disabled:opacity-30 disabled:pointer-events-none text-white font-bold py-2.5 px-6 rounded-lg shadow border border-amber-400/30 active:scale-95 transition-all text-xs tracking-widest">調息完畢，前往心香祈願</button>
+    <button id="btnForceFish" class="mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 text-[10px] py-1.5 px-3 rounded-full transition-all">桌面測試：模擬敲擊</button>
+  </section>
+
+  <!-- STEP 2 : 心香祈願 -->
+  <section id="stageIncense" class="stage-transition hidden w-full flex flex-col items-center">
+    <div class="text-center mb-6">
+      <span class="text-xs text-amber-500/80 uppercase tracking-widest">第二部 ✦ 心香祈願</span>
+      <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">心香一柱 虔誠祈願</h2>
+      <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">閉上眼默念新年心願，長按下方按鈕點燃心香，鬆手即點燃。長按的時長完全由您心念所定。</p>
+    </div>
+    <div class="relative w-64 h-72 flex flex-col items-center justify-end pb-4">
+      <canvas id="smokeCanvas" class="absolute left-1/2 bottom-[30%] w-[340%] h-[220%] -translate-x-1/2 pointer-events-none"></canvas>
+      <div class="relative w-4 h-28 flex justify-center items-end z-10">
+        <div id="incenseTip" class="absolute top-0 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#f00] hidden"></div>
+        <div id="incenseStick" class="w-1 h-0 bg-gradient-to-t from-amber-800 to-amber-500 rounded-t transition-all"></div>
+      </div>
+      <svg class="w-36 h-20 fill-gray-800 drop-shadow-[0_0_15px_rgba(245,158,11,0.1)] z-10" viewBox="0 0 100 60">
+        <path d="M10,20 L90,20 Q95,20 95,25 L85,45 Q80,55 50,55 Q20,55 15,45 L5,25 Q5,20 10,20 Z"/>
+        <rect x="42" y="55" width="16" height="5" fill="#1f2937"/><rect x="20" y="55" width="8" height="5" fill="#1f2937"/><rect x="72" y="55" width="8" height="5" fill="#1f2937"/>
+        <path d="M50,25 Q45,35 50,42 Q55,35 50,25 Z M46,29 Q40,36 48,39 Z M54,29 Q60,36 52,39 Z" fill="#d97706"/>
+      </svg>
+      <button id="incenseBtn" class="absolute bottom-[-10px] bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-2.5 px-6 rounded-full shadow-lg border border-amber-400/30 z-20 active:scale-95 transition-all text-xs tracking-widest select-none">長按：點燃心香</button>
+    </div>
+    <div class="text-center mt-12">
+      <span id="incenseStatus" class="text-amber-500/80 text-xs">長按上方按鈕開始心香祈願</span>
+      <p class="text-gray-500 text-[10px] mt-1">（精確按壓時長：<span id="incenseTimeText" class="font-sans">0ms</span>）</p>
+    </div>
+    <div class="quote-card mt-4 w-full bg-white/5 border border-amber-500/20 rounded-xl p-5 backdrop-blur-md opacity-0 pointer-events-none transition-all duration-700 translate-y-2" id="quoteCard">
+      <p class="text-amber-200 text-sm leading-relaxed font-serif" id="quoteText">願所敲的每一聲鐘、所點的每一炷香，都化作對摯愛之人最溫柔的祝福。</p>
+      <p class="text-gray-500 text-[10px] mt-2 tracking-wider">— 祈福法語（正式文字請置換為授權來源）</p>
+      <button id="btnToBell" class="w-full mt-4 bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-2.5 px-6 rounded-lg text-xs tracking-widest active:scale-95 transition-all">前往叩鐘迴向</button>
+    </div>
+    <button id="btnForceIncense" class="mt-3 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 text-[10px] py-1.5 px-3 rounded-full transition-all">桌面測試：模擬點香完成</button>
+  </section>
+
+  <!-- STEP 3 : 叩鐘迴向 -->
+  <section id="stageBell" class="stage-transition hidden w-full flex flex-col items-center">
+    <div class="text-center mb-6">
+      <span class="text-xs text-amber-500/80 uppercase tracking-widest">第三部 ✦ 叩鐘迴向</span>
+      <h2 class="text-2xl font-bold text-amber-100 mt-1 mb-2">推動大鐘 梵音悠揚</h2>
+      <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">請輕握手機往前揮動，叩響平安鐘三聲，將功德迴向給所愛之人。揮動的加速度大小即是福慧的深度。</p>
+      <button id="btnPerm" class="mt-3 bg-white/5 border border-amber-500/20 hover:bg-white/10 text-amber-400 font-sans text-[10px] py-1 px-3 rounded-full transition-all">啟用手機動作感應</button>
+    </div>
+    <div class="relative w-56 h-56 flex items-center justify-center" id="bellTapArea">
+      <div id="bellWave" class="absolute w-24 h-24 rounded-full border-2 border-amber-500/0 scale-100"></div>
+      <svg id="bronzeBell" class="w-44 h-44 fill-amber-600/90 drop-shadow-[0_0_20px_rgba(245,158,11,0.15)] transition-all duration-300" viewBox="0 0 100 120">
+        <path d="M42,20 Q50,5 58,20" stroke="#b45309" stroke-width="4" fill="none"/>
+        <path d="M25,30 C25,30 30,22 50,22 C70,22 75,30 75,30 C75,30 78,55 82,90 C84,95 80,105 50,105 C20,105 16,95 18,90 C22,55 25,30 25,30 Z"/>
+        <path d="M18,90 Q50,100 82,90 L82,93 Q50,103 18,93 Z" fill="#78350f"/>
+        <line x1="30" y1="45" x2="70" y2="45" stroke="#451a03" stroke-width="2"/>
+        <circle cx="35" cy="55" r="2" fill="#451a03"/><circle cx="50" cy="55" r="2" fill="#451a03"/><circle cx="65" cy="55" r="2" fill="#451a03"/>
+      </svg>
+      <canvas id="rippleCanvas" class="absolute -inset-[90%] w-[280%] h-[280%] pointer-events-none"></canvas>
+    </div>
+    <div class="w-full bg-white/5 border border-white/10 rounded-lg p-3 mt-4 text-xs">
+      <div class="flex justify-between items-center text-[10px] text-gray-400 mb-1">
+        <span>電腦/不支援感應測試：模擬敲擊力道</span><span id="forceVal">18 m/s²</span>
+      </div>
+      <input type="range" id="forceSlider" min="16" max="40" step="0.5" value="18" class="w-full accent-amber-500 bg-gray-800 rounded">
+      <button id="btnForceStrike" class="w-full bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/30 py-1.5 mt-2 rounded font-sans font-semibold text-[11px] transition">點此手動叩鐘</button>
+    </div>
+    <div class="text-center mt-4">
+      <span class="text-sm font-sans font-semibold text-amber-500">已叩鐘：<span id="bellCountText" class="text-xl">0</span> / 3</span>
+      <p class="text-gray-500 text-[10px] mt-1 font-mono" id="bellStatusText">感應中，等待撞擊…</p>
+    </div>
+    <div class="text-center mt-5 opacity-0 pointer-events-none transition-all duration-500 translate-y-2" id="lookupPrompt">
+      <span class="text-2xl block mb-1 animate-bounce">↑</span>
+      <p class="text-amber-200 text-xs">鐘聲已響，請拿起手機，抬頭望向天空</p>
+      <button id="btnForceSky" class="mt-2 bg-white/5 border border-white/10 hover:bg-white/10 text-gray-400 text-[10px] py-1.5 px-3 rounded-full transition-all">看不到反應？點此仰望星空</button>
+    </div>
+  </section>
+
+  <!-- STEP 4 : 抬頭仰望星空 -->
+  <section id="stageSky" class="stage-transition hidden w-full h-full flex flex-col items-center justify-end pb-8 absolute inset-0">
+    <canvas id="starCanvas" class="absolute inset-0 w-full h-full"></canvas>
+    <div class="relative z-10 text-center px-6">
+      <span class="text-xs text-amber-500 font-bold text-glow-gold tracking-widest">✦ 吉羊座 · 已點亮 ✦</span>
+      <h2 class="text-2xl font-bold text-amber-100 mt-2 mb-2">功德已迴向<br>心燈已加入星海</h2>
+      <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto mb-2">與此刻所有仰望天空的人，一同點亮這片星空與漫天祈福天燈</p>
+      <p class="text-amber-400 font-sans font-semibold text-sm mb-4"><span id="lightCount" class="text-lg">—</span> 人已點亮心燈</p>
+      <button id="btnToCard" class="bg-gradient-to-r from-amber-600 to-amber-700 text-white font-bold py-3 px-8 rounded-lg shadow-lg border border-amber-400/30 active:scale-95 transition-all text-sm tracking-widest">領取我的專屬吉羊卡 →</button>
+    </div>
+  </section>
+
+  <!-- STEP 5 : 因緣計算 -->
+  <section id="stageLoading" class="stage-transition hidden w-full flex flex-col items-center">
+    <div class="text-center">
+      <div class="w-20 h-20 mx-auto mb-6 relative flex items-center justify-center">
+        <div class="absolute inset-0 border-4 border-amber-500/10 border-t-amber-500 rounded-full animate-spin"></div>
+        <span class="text-2xl text-amber-500 animate-pulse">卍</span>
+      </div>
+      <h3 class="text-xl font-bold text-amber-100 mb-2">正在感應當下因緣…</h3>
+      <p class="text-gray-400 text-sm max-w-xs leading-relaxed mb-1 font-mono text-[11px]" id="calcParamsText">正在解算雜湊公式 Seed 運算中…</p>
+      <div class="h-1 w-48 bg-gray-800 rounded-full mx-auto overflow-hidden mt-4"><div class="h-full bg-amber-500 animate-pulse" style="width:100%"></div></div>
+    </div>
+  </section>
+
+  <!-- STEP 6 : 專屬吉羊卡 -->
+  <section id="stageCard" class="stage-transition hidden w-full flex flex-col items-center">
+    <div class="text-center mb-3">
+      <span class="text-xs text-amber-500 font-bold text-glow-gold tracking-widest">✦ 走春因果福德印記 ✦</span>
+      <p class="text-gray-400 text-[11px] mt-1 leading-relaxed">下圖為此時此刻專屬您的紀念朱印，已融合您的呼吸、心香與叩鐘節奏。</p>
+    </div>
+    <div class="relative w-full max-w-[320px] aspect-[9/16] bg-amber-50 shadow-[0_10px_35px_rgba(0,0,0,0.5)] border border-amber-900/10 rounded-lg overflow-hidden mb-3">
+      <canvas id="cardCanvas" class="w-full h-full block bg-[#f4f0e6]"></canvas>
+    </div>
+    <div class="w-full flex space-x-3 max-w-[320px]">
+      <a id="btnDownloadCard" download="佛光山走春福卡.jpg" class="flex-1 text-center bg-amber-700 hover:bg-amber-600 text-white font-bold py-2.5 px-4 rounded-lg text-xs tracking-wider border border-amber-500/20 shadow transition-all active:scale-95">下載紀念朱印卡</a>
+      <button id="btnRestart" class="bg-gray-800 hover:bg-gray-700 text-amber-300 font-bold py-2.5 px-4 rounded-lg text-xs tracking-wider border border-amber-500/20 transition-all active:scale-95">再叩一次</button>
+    </div>
+    <p class="text-gray-500 text-[10px] mt-3">※ 手機用戶亦可直接「長按圖片」手動儲存至相簿</p>
+    <p class="text-gray-600 text-[9px] mt-3 max-w-[320px] leading-relaxed font-mono" id="cardMeta"></p>
+  </section>
+
+</main>
+
+<footer id="appFooter" class="w-full text-center pb-6 z-10 transition-opacity duration-500">
+  <div class="flex justify-center items-center flex-wrap gap-x-3 gap-y-1 text-xs text-gray-500 font-sans px-4">
+    <span id="ind0" class="text-amber-500 font-bold">1. 登入 ⬤</span>
+    <span id="ind1">2. 靜心 ◯</span>
+    <span id="ind2">3. 祈願 ◯</span>
+    <span id="ind3">4. 迴向 ◯</span>
+    <span id="ind4">5. 星空 ◯</span>
+  </div>
+  <div class="text-gray-600 text-[9px] mt-2 font-sans" id="hud"></div>
+</footer>
+
+<script>
+(function(){
+"use strict";
+
+/* ================= 因緣感應數據 ================= */
+var clientName = '';
+var gesture = { N:0, t_interval:0, T:0, M:0, a:0, seed:null };
+
+var STRIKE_THRESHOLD = 16, STRIKE_COOLDOWN = 900, BELL_TARGET = 3, MIN_HOLD_MS = 300;
+var SKY_BETA_MIN = -150, SKY_BETA_MAX = -30;
+
+var stages = ['stageRegister','stageFish','stageIncense','stageBell','stageSky','stageLoading','stageCard'];
+var state = 'register';
+function showStage(id){
+  stages.forEach(function(s){
+    var el = document.getElementById(s);
+    if (s === id){ el.classList.remove('hidden'); void el.offsetWidth; el.style.opacity='1'; }
+    else { el.classList.add('hidden'); el.style.opacity='0'; }
+  });
+}
+function setProgress(activeIdx){
+  var labels = ['1. 登入','2. 靜心','3. 祈願','4. 迴向','5. 星空'];
+  for (var i=0;i<5;i++){
+    var el = document.getElementById('ind'+i);
+    if (i < activeIdx) el.innerHTML = labels[i] + ' ✓';
+    else if (i === activeIdx) el.innerHTML = labels[i] + ' ⬤';
+    else el.innerHTML = labels[i] + ' ◯';
+    el.className = (i===activeIdx) ? 'text-amber-500 font-bold text-glow-gold' : (i<activeIdx ? 'text-amber-700' : '');
+  }
+}
+
+/* ================= Ambient sparkle background ================= */
+var ambCanvas = document.getElementById('ambientCanvas');
+var ambCtx = ambCanvas.getContext('2d');
+var ambParticles = [];
+function resizeAmbient(){ ambCanvas.width = window.innerWidth; ambCanvas.height = window.innerHeight; }
+window.addEventListener('resize', resizeAmbient);
+resizeAmbient();
+function AmbParticle(){
+  this.x = Math.random()*ambCanvas.width; this.y = Math.random()*ambCanvas.height;
+  this.size = Math.random()*2+0.5; this.vx = (Math.random()-0.5)*0.2; this.vy = -Math.random()*0.3-0.1;
+  this.alpha = Math.random()*0.4+0.1;
+}
+AmbParticle.prototype.update = function(){ this.x+=this.vx; this.y+=this.vy; if (this.y<0) this.y = ambCanvas.height; };
+AmbParticle.prototype.draw = function(){ ambCtx.save(); ambCtx.globalAlpha=this.alpha; ambCtx.fillStyle='#f59e0b'; ambCtx.beginPath(); ambCtx.arc(this.x,this.y,this.size,0,Math.PI*2); ambCtx.fill(); ambCtx.restore(); };
+for (var ai=0; ai<40; ai++) ambParticles.push(new AmbParticle());
+(function animateAmbient(){ ambCtx.clearRect(0,0,ambCanvas.width,ambCanvas.height); ambParticles.forEach(function(p){ p.update(); p.draw(); }); requestAnimationFrame(animateAmbient); })();
+
+/* ================= Audio (kept from the working version) ================= */
+var audioCtx = null;
+function ensureAudio(){ if (!audioCtx){ var AC = window.AudioContext || window.webkitAudioContext; audioCtx = new AC(); } if (audioCtx.state==='suspended') audioCtx.resume(); return audioCtx; }
+
+function playWoodKnock(){
+  var ctx = ensureAudio(); var now = ctx.currentTime;
+  var master = ctx.createGain(); master.gain.value = 0.95; master.connect(ctx.destination);
+  var osc = ctx.createOscillator(); osc.type='sine'; osc.frequency.value=520;
+  var og = ctx.createGain(); og.gain.setValueAtTime(0.0001,now); og.gain.exponentialRampToValueAtTime(0.6,now+0.004); og.gain.exponentialRampToValueAtTime(0.0001,now+0.11);
+  osc.connect(og).connect(master); osc.start(now); osc.stop(now+0.14);
+  var osc2 = ctx.createOscillator(); osc2.type='sine'; osc2.frequency.value=260;
+  var og2 = ctx.createGain(); og2.gain.setValueAtTime(0.0001,now); og2.gain.exponentialRampToValueAtTime(0.35,now+0.004); og2.gain.exponentialRampToValueAtTime(0.0001,now+0.16);
+  osc2.connect(og2).connect(master); osc2.start(now); osc2.stop(now+0.2);
+  var dur=0.03; var buf=ctx.createBuffer(1, Math.floor(ctx.sampleRate*dur), ctx.sampleRate); var d=buf.getChannelData(0);
+  for (var i=0;i<d.length;i++) d[i]=(Math.random()*2-1)*Math.pow(1-i/d.length,2);
+  var noise=ctx.createBufferSource(); noise.buffer=buf;
+  var filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=2200; filt.Q.value=2.2;
+  var ng=ctx.createGain(); ng.gain.value=0.7;
+  noise.connect(filt).connect(ng).connect(master); noise.start(now);
+}
+
+function playBell(isFinal){
+  var ctx = ensureAudio(); var now = ctx.currentTime;
+  var master = ctx.createGain(); master.gain.value = isFinal?0.95:0.8; master.connect(ctx.destination);
+  var partials=[1,1.99,2.41,3.06,3.54,4.23,5.4]; var fundamental=108; var tail = isFinal?6.5:3.6;
+  partials.forEach(function(ratio,i){
+    var osc=ctx.createOscillator(); osc.type='sine'; osc.frequency.value=fundamental*ratio;
+    var g=ctx.createGain(); var amp=0.55/(i+1);
+    g.gain.setValueAtTime(0.0001,now); g.gain.linearRampToValueAtTime(amp,now+0.015); g.gain.exponentialRampToValueAtTime(0.0001,now+tail+i*0.35);
+    osc.connect(g).connect(master); osc.start(now); osc.stop(now+tail+1.5);
+  });
+  var dur=0.06; var buf=ctx.createBuffer(1, Math.floor(ctx.sampleRate*dur), ctx.sampleRate); var data=buf.getChannelData(0);
+  for (var i=0;i<data.length;i++) data[i]=(Math.random()*2-1)*(1-i/data.length);
+  var noise=ctx.createBufferSource(); noise.buffer=buf;
+  var filt=ctx.createBiquadFilter(); filt.type='bandpass'; filt.frequency.value=900; filt.Q.value=0.7;
+  var ng=ctx.createGain(); ng.gain.value = isFinal?0.6:0.5;
+  noise.connect(filt).connect(ng).connect(master); noise.start(now);
+}
+
+function vibrateBellStrike(count, isFinal){
+  if (!navigator.vibrate) return;
+  if (isFinal) navigator.vibrate([300,50,150,50,90,50,50]);
+  else if (count===1) navigator.vibrate([200,40,90]);
+  else navigator.vibrate([240,40,110]);
+}
+
+/* ================= STEP 0 : 登入 ================= */
+document.getElementById('btnStartRitual').addEventListener('click', function(){
+  var name = document.getElementById('userName').value.trim();
+  if (!name){ document.getElementById('userName').focus(); document.getElementById('userName').placeholder='請留下您的名字，以注入因果福氣'; return; }
+  clientName = name;
+  ensureAudio();
+  state = 'fish'; goFish();
+  setProgress(1); showStage('stageFish');
+});
+
+var permissionNote = document.getElementById('permissionNote');
+if (!window.isSecureContext){
+  permissionNote.textContent = '⚠️ 目前並非 https 安全連線，第三步「叩鐘迴向」所需的動作／方向感應權限在 iOS 上將無法跳出授權視窗。請部署到 https 網址後再測試，屆時仍可用畫面上的「模擬」按鈕測試流程。';
+  permissionNote.classList.add('text-red-400/80');
+}
+
+/* ================= STEP 1 : 木魚淨心 ================= */
+var fishTapArea = document.getElementById('fishTapArea');
+var fishSvg = document.getElementById('woodFishSvg');
+var fishRipple = document.getElementById('fishRipple');
+var fishCountEl = document.getElementById('fishCount');
+var fishIntervalText = document.getElementById('fishIntervalText');
+var fishContinueBtn = document.getElementById('btnFishContinue');
+var tapTimestamps = [];
+
+function handleFishTap(){
+  if (state !== 'fish') return;
+  tapTimestamps.push(performance.now());
+  playWoodKnock();
+  if (navigator.vibrate) navigator.vibrate(35);
+  fishSvg.classList.add('scale-90');
+  fishRipple.style.transform='scale(1.4)'; fishRipple.style.borderColor='rgba(245,158,11,0.5)'; fishRipple.style.transition='all .3s ease-out';
+  setTimeout(function(){ fishSvg.classList.remove('scale-90'); fishRipple.style.transform='scale(0.7)'; fishRipple.style.borderColor='rgba(245,158,11,0)'; fishRipple.style.transition='none'; }, 150);
+  fishCountEl.textContent = String(tapTimestamps.length);
+  if (tapTimestamps.length >= 2){
+    var last = tapTimestamps[tapTimestamps.length-1], prev = tapTimestamps[tapTimestamps.length-2];
+    fishIntervalText.textContent = Math.round(last-prev) + 'ms';
+  }
+  if (tapTimestamps.length >= 3) fishContinueBtn.disabled = false;
+}
+fishTapArea.addEventListener('pointerdown', function(e){ e.preventDefault(); handleFishTap(); });
+document.getElementById('btnForceFish').addEventListener('click', handleFishTap);
+
+fishContinueBtn.addEventListener('click', function(){
+  if (tapTimestamps.length < 3) return;
+  var last = tapTimestamps[tapTimestamps.length-1], prev = tapTimestamps[tapTimestamps.length-2];
+  gesture.N = tapTimestamps.length; gesture.t_interval = Math.round(last-prev);
+  state = 'incense'; goIncense();
+  setProgress(2); showStage('stageIncense');
+});
+
+function goFish(){
+  tapTimestamps = []; fishCountEl.textContent='0'; fishIntervalText.textContent='—'; fishContinueBtn.disabled = true;
+}
+
+/* ================= STEP 2 : 心香祈願 ================= */
+var smokeCanvas = document.getElementById('smokeCanvas');
+var smctx = smokeCanvas.getContext('2d');
+var incenseBtn = document.getElementById('incenseBtn');
+var incenseTip = document.getElementById('incenseTip');
+var incenseStick = document.getElementById('incenseStick');
+var incenseStatus = document.getElementById('incenseStatus');
+var incenseTimeText = document.getElementById('incenseTimeText');
+var quoteCard = document.getElementById('quoteCard');
+var btnForceIncense = document.getElementById('btnForceIncense');
+
+var smokeParticles = [], silhouetteParticles = [];
+var isHolding = false, incenseLit = false, holdStart = null;
+var smokeRAF = null, holdRAF = null, convergenceFallbackTimer = null;
+var RING_VISUAL_CAP = 5000;
+var tipPoint = { x:0.5, y:0.12 };
+var GOAT_SHAPE = [
+  [0,-0.52],[-0.34,-0.36],[-0.56,-0.16],[-0.5,0.04],[-0.34,0.10],
+  [-0.24,0.16],[0,0.5],[0.24,0.16],[0.34,0.10],[0.5,0.04],
+  [0.56,-0.16],[0.34,-0.36],[0,-0.52]
+];
+
+function sizeSmokeCanvas(){ var rect = smokeCanvas.getBoundingClientRect(); smokeCanvas.width = rect.width*devicePixelRatio; smokeCanvas.height = rect.height*devicePixelRatio; }
+function tipPx(){ return { x: smokeCanvas.width*tipPoint.x, y: smokeCanvas.height*tipPoint.y }; }
+function spawnSmoke(){
+  var tip = tipPx();
+  smokeParticles.push({ x: tip.x+(Math.random()-0.5)*6*devicePixelRatio, y: tip.y, vy:-(0.35+Math.random()*0.3)*devicePixelRatio, sway:Math.random()*Math.PI*2, swaySpeed:0.03+Math.random()*0.02, size:(3+Math.random()*3)*devicePixelRatio, life:1, decay:0.006+Math.random()*0.004 });
+}
+function pointInPolygon(x,y,poly){
+  var inside=false;
+  for (var i=0,j=poly.length-1;i<poly.length;j=i++){
+    var xi=poly[i][0], yi=poly[i][1], xj=poly[j][0], yj=poly[j][1];
+    var intersect = ((yi>y)!==(yj>y)) && (x < (xj-xi)*(y-yi)/((yj-yi)||0.0001)+xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+function buildSilhouetteTargets(){
+  var tip = tipPx(); var w = smokeCanvas.width; var scale = w*0.62; var cx = tip.x, cy = tip.y - w*0.42;
+  var targets = []; var tries = 0;
+  while (targets.length < 70 && tries < 4000){
+    tries++; var rx=(Math.random()*2-1), ry=(Math.random()*2-1);
+    if (pointInPolygon(rx,ry,GOAT_SHAPE)) targets.push({ x:cx+rx*scale, y:cy+ry*scale });
+  }
+  return targets;
+}
+function beginConvergence(){
+  var targets = buildSilhouetteTargets(); var tip = tipPx();
+  silhouetteParticles = targets.map(function(t){ return { x:tip.x, y:tip.y, tx:t.x, ty:t.y, size:(2+Math.random()*1.6)*devicePixelRatio, alpha:0 }; });
+  clearTimeout(convergenceFallbackTimer);
+  convergenceFallbackTimer = setTimeout(function(){ if (!quoteCard.classList.contains('opacity-100')){ silhouetteParticles=[]; showQuote(); } }, 6000);
+}
+function animateSmoke(){
+  smctx.clearRect(0,0,smokeCanvas.width,smokeCanvas.height);
+  for (var i=smokeParticles.length-1;i>=0;i--){
+    var p = smokeParticles[i];
+    p.y+=p.vy; p.sway+=p.swaySpeed; p.x+=Math.sin(p.sway)*0.5*devicePixelRatio; p.life-=p.decay; p.size+=0.06*devicePixelRatio;
+    if (p.life<=0){ smokeParticles.splice(i,1); continue; }
+    smctx.globalAlpha=Math.max(p.life,0)*0.5; smctx.fillStyle='#fef3e2';
+    smctx.beginPath(); smctx.arc(p.x,p.y,p.size,0,Math.PI*2); smctx.fill();
+  }
+  smctx.globalAlpha=1;
+  if (silhouetteParticles.length){
+    var allArrived = true;
+    silhouetteParticles.forEach(function(sp){
+      sp.x += (sp.tx-sp.x)*0.06; sp.y += (sp.ty-sp.y)*0.06; sp.alpha = Math.min(sp.alpha+0.02,1);
+      if (Math.abs(sp.tx-sp.x)>1 || Math.abs(sp.ty-sp.y)>1) allArrived=false;
+      smctx.globalAlpha=sp.alpha*0.85; smctx.fillStyle='#f59e0b'; smctx.shadowColor='#f59e0b'; smctx.shadowBlur=6*devicePixelRatio;
+      smctx.beginPath(); smctx.arc(sp.x,sp.y,sp.size,0,Math.PI*2); smctx.fill(); smctx.shadowBlur=0;
+    });
+    smctx.globalAlpha=1;
+    if (allArrived && !silhouetteParticles.holdStarted){
+      silhouetteParticles.holdStarted = true;
+      setTimeout(function(){
+        var fadeStep = setInterval(function(){
+          var alive=false;
+          silhouetteParticles.forEach(function(sp){ sp.alpha-=0.03; if (sp.alpha>0) alive=true; });
+          if (!alive){ clearInterval(fadeStep); clearTimeout(convergenceFallbackTimer); silhouetteParticles=[]; showQuote(); }
+        }, 40);
+      }, 1400);
+    }
+  }
+  smokeRAF = requestAnimationFrame(animateSmoke);
+}
+function showQuote(){ quoteCard.classList.remove('opacity-0','pointer-events-none','translate-y-2'); quoteCard.classList.add('opacity-100'); }
+
+function startHold(){
+  if (state !== 'incense' || incenseLit) return;
+  isHolding = true; holdStart = performance.now();
+  incenseTip.classList.remove('hidden');
+  incenseStatus.textContent = '心香裊裊，心願已發往十方淨土…';
+  stepHold();
+}
+function stepHold(){
+  if (!isHolding) return;
+  var elapsed = performance.now()-holdStart;
+  var ratio = Math.min(1, elapsed/RING_VISUAL_CAP);
+  incenseStick.style.height = (ratio*100) + '%';
+  incenseTimeText.textContent = Math.round(elapsed) + 'ms';
+  if (Math.random() < 0.35+ratio*0.4) spawnSmoke();
+  holdRAF = requestAnimationFrame(stepHold);
+}
+function finalizeIncense(T){
+  isHolding = false; incenseLit = true;
+  gesture.T = Math.round(T);
+  incenseTip.classList.add('hidden');
+  incenseStatus.textContent = '心香點燃，諸佛歡喜，福報臨門！';
+  incenseTimeText.textContent = gesture.T + 'ms';
+  incenseBtn.classList.add('opacity-40','pointer-events-none');
+  btnForceIncense.classList.add('hidden');
+  if (navigator.vibrate) navigator.vibrate([150,50,150]);
+  for (var i=0;i<10;i++) spawnSmoke();
+  beginConvergence();
+}
+function endHold(){
+  if (!isHolding) return;
+  var elapsed = performance.now()-holdStart;
+  isHolding = false;
+  if (incenseLit) return;
+  if (elapsed < MIN_HOLD_MS){
+    incenseStatus.textContent = '心香未得火候，請繼續長按。';
+    incenseStick.style.height = '0%';
+    return;
+  }
+  finalizeIncense(elapsed);
+}
+incenseBtn.addEventListener('pointerdown', function(e){ e.preventDefault(); startHold(); });
+window.addEventListener('pointerup', endHold);
+incenseBtn.addEventListener('pointerleave', endHold);
+btnForceIncense.addEventListener('click', function(){ if (state!=='incense' || incenseLit) return; finalizeIncense(1800+Math.random()*1200); });
+document.getElementById('btnToBell').addEventListener('click', function(){ state='bell'; goBell(); setProgress(3); showStage('stageBell'); });
+
+function goIncense(){
+  isHolding=false; incenseLit=false; smokeParticles=[]; silhouetteParticles=[];
+  quoteCard.classList.add('opacity-0','pointer-events-none','translate-y-2'); quoteCard.classList.remove('opacity-100');
+  incenseBtn.classList.remove('opacity-40','pointer-events-none');
+  btnForceIncense.classList.remove('hidden');
+  incenseStick.style.height='0%'; incenseTimeText.textContent='0ms';
+  incenseStatus.textContent='長按上方按鈕開始心香祈願';
+  sizeSmokeCanvas();
+  if (smokeRAF) cancelAnimationFrame(smokeRAF);
+  animateSmoke();
+}
+
+/* ================= STEP 3 : 叩鐘迴向 ================= */
+var rippleCanvas = document.getElementById('rippleCanvas');
+var rctx = rippleCanvas.getContext('2d');
+var particles = []; var rippleRAF = null;
+var bronzeBell = document.getElementById('bronzeBell');
+var bellWave = document.getElementById('bellWave');
+var bellCountText = document.getElementById('bellCountText');
+var bellStatusText = document.getElementById('bellStatusText');
+var lookupPrompt = document.getElementById('lookupPrompt');
+var hud = document.getElementById('hud');
+var bellCount = 0, strikeLocked = false, maxAccelPeak = 0;
+
+function sizeRippleCanvas(){ var rect = rippleCanvas.getBoundingClientRect(); rippleCanvas.width = rect.width*devicePixelRatio; rippleCanvas.height = rect.height*devicePixelRatio; }
+function spawnRipple(scale){
+  sizeRippleCanvas();
+  var cx = rippleCanvas.width/2, cy = rippleCanvas.height/2;
+  var colors = ['#fde68a','#f59e0b','#e8613f','#c0392b']; particles = [];
+  var n = Math.floor(90*scale);
+  for (var i=0;i<n;i++){
+    var angle = (Math.PI*2*i)/n + Math.random()*0.4;
+    var speed = (2.4+Math.random()*3.2)*devicePixelRatio*scale;
+    particles.push({ x:cx, y:cy, vx:Math.cos(angle)*speed, vy:Math.sin(angle)*speed, life:1, decay:0.012+Math.random()*0.012, size:(2+Math.random()*3)*devicePixelRatio, color:colors[i%colors.length] });
+  }
+  particles.ring = { r:0, maxR: Math.min(cx,cy)*0.95*scale, life:1 };
+  if (rippleRAF) cancelAnimationFrame(rippleRAF);
+  animateRipple();
+}
+function animateRipple(){
+  rctx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
+  var alive=false; var ring = particles.ring;
+  if (ring && ring.life>0){
+    ring.r += (ring.maxR-ring.r)*0.09; ring.life -= 0.02;
+    rctx.beginPath(); rctx.arc(rippleCanvas.width/2, rippleCanvas.height/2, ring.r, 0, Math.PI*2);
+    rctx.strokeStyle='rgba(245,197,94,'+Math.max(ring.life,0)+')'; rctx.lineWidth=2*devicePixelRatio; rctx.stroke(); alive=true;
+  }
+  for (var i=0;i<particles.length;i++){
+    var p = particles[i]; if (p.life<=0) continue;
+    p.x+=p.vx; p.y+=p.vy; p.vx*=0.965; p.vy*=0.965; p.life-=p.decay;
+    if (p.life>0){ alive=true; rctx.globalAlpha=Math.max(p.life,0); rctx.fillStyle=p.color; rctx.beginPath(); rctx.arc(p.x,p.y,p.size*p.life,0,Math.PI*2); rctx.fill(); }
+  }
+  rctx.globalAlpha=1;
+  if (alive) rippleRAF = requestAnimationFrame(animateRipple);
+}
+
+function computeSeed(){
+  var s = ((gesture.N*100) + gesture.t_interval + gesture.T + (gesture.M*200) + Math.floor(gesture.a*10)) % 1000 + 1;
+  gesture.seed = ((s % 1000)+1000) % 1000 + 1;
+  return gesture.seed;
+}
+
+function triggerStrike(){
+  if (state !== 'bell' || strikeLocked || bellCount >= BELL_TARGET) return;
+  strikeLocked = true; bellCount++; bellCountText.textContent = String(bellCount);
+  var isFinal = bellCount >= BELL_TARGET;
+  playBell(isFinal); vibrateBellStrike(bellCount, isFinal); spawnRipple(isFinal?1.6:1);
+  bronzeBell.style.transform = 'translate3d(0,-10px,0) scale(0.9) rotate(4deg)';
+  bellWave.style.transform = 'scale(4)'; bellWave.style.borderColor = 'rgba(245,158,11,0.7)'; bellWave.style.transition = 'transform 1s cubic-bezier(0.1,0.8,0.3,1), border-color 1s ease-out';
+  setTimeout(function(){ bronzeBell.style.transform = 'translate3d(0,5px,0) scale(1.05) rotate(-3deg)'; }, 100);
+  setTimeout(function(){ bronzeBell.style.transform = 'translate3d(0,0,0) scale(1) rotate(0)'; bellWave.style.transform='scale(1)'; bellWave.style.borderColor='rgba(245,158,11,0)'; bellWave.style.transition='none'; }, 350);
+  bellStatusText.textContent = isFinal ? '鐘聲迴盪，功德迴向…' : ('已叩 '+bellCount+' / '+BELL_TARGET+' 聲');
+  setTimeout(function(){
+    strikeLocked = false;
+    if (isFinal){
+      gesture.M = bellCount; gesture.a = maxAccelPeak; computeSeed();
+      setTimeout(function(){ lookupPrompt.classList.remove('opacity-0','pointer-events-none','translate-y-2'); lookupPrompt.classList.add('opacity-100'); bellStatusText.textContent='請將手機朝向天空'; }, 700);
+    } else {
+      bellStatusText.textContent = '感應中，再叩一聲…';
+    }
+  }, isFinal?1300:900);
+}
+
+var lastStrikeTime = 0;
+function onDeviceMotion(e){
+  var acc = e.acceleration && (e.acceleration.x||e.acceleration.y||e.acceleration.z) ? e.acceleration : e.accelerationIncludingGravity;
+  if (!acc) return;
+  var mag = Math.sqrt((acc.x||0)*(acc.x||0)+(acc.y||0)*(acc.y||0)+(acc.z||0)*(acc.z||0));
+  if (state === 'bell'){
+    hud.textContent = '加速度感應中 · ' + mag.toFixed(1) + ' m/s²';
+    if (mag > maxAccelPeak) maxAccelPeak = mag;
+    var now = performance.now();
+    if (bellCount < BELL_TARGET && !strikeLocked && mag > STRIKE_THRESHOLD && now-lastStrikeTime > STRIKE_COOLDOWN){ lastStrikeTime = now; triggerStrike(); }
+  }
+}
+function onDeviceOrientation(e){
+  if (typeof e.beta === 'number' && state === 'bell' && bellCount >= BELL_TARGET){
+    hud.textContent = '傾斜角 β ' + e.beta.toFixed(0) + '°（面向天空區間約 ' + SKY_BETA_MIN + '° ~ ' + SKY_BETA_MAX + '°）';
+    if (e.beta > SKY_BETA_MIN && e.beta < SKY_BETA_MAX) goSky();
+  }
+}
+
+var motionAttached = false;
+document.getElementById('btnPerm').addEventListener('click', function(){
+  ensureAudio();
+  var btn = document.getElementById('btnPerm');
+  var motionApiExists = typeof DeviceMotionEvent !== 'undefined';
+  var orientApiExists = typeof DeviceOrientationEvent !== 'undefined';
+  var needsMotionPerm = motionApiExists && typeof DeviceMotionEvent.requestPermission === 'function';
+  var needsOrientPerm = orientApiExists && typeof DeviceOrientationEvent.requestPermission === 'function';
+  function attach(){ if (motionAttached) return; motionAttached = true; window.addEventListener('devicemotion', onDeviceMotion); window.addEventListener('deviceorientation', onDeviceOrientation); }
+  if (needsMotionPerm || needsOrientPerm){
+    Promise.all([
+      needsMotionPerm ? DeviceMotionEvent.requestPermission() : Promise.resolve('granted'),
+      needsOrientPerm ? DeviceOrientationEvent.requestPermission() : Promise.resolve('granted')
+    ]).then(function(results){
+      attach();
+      if (results[0]==='granted' && results[1]==='granted'){ btn.textContent='感測器授權成功 ✓'; btn.classList.add('bg-green-500/20'); }
+      else { btn.textContent='部分權限未授權，請用下方模擬按鈕'; }
+    }).catch(function(err){ attach(); btn.textContent='授權失敗：'+err.message; });
+  } else if (!motionApiExists && !orientApiExists){
+    btn.textContent = '此瀏覽器不支援動作感應，請用模擬按鈕';
+  } else {
+    attach(); btn.textContent = '感測器已支援 ✓'; btn.classList.add('bg-green-500/20');
+  }
+});
+
+var forceSlider = document.getElementById('forceSlider');
+forceSlider.addEventListener('input', function(){ document.getElementById('forceVal').textContent = forceSlider.value + ' m/s²'; });
+document.getElementById('btnForceStrike').addEventListener('click', function(){
+  maxAccelPeak = Math.max(maxAccelPeak, parseFloat(forceSlider.value));
+  triggerStrike();
+});
+document.getElementById('btnForceSky').addEventListener('click', function(){ if (bellCount >= BELL_TARGET) goSky(); });
+
+function goBell(){
+  bellCount = 0; strikeLocked = false; maxAccelPeak = 0; bellCountText.textContent='0';
+  lookupPrompt.classList.add('opacity-0','pointer-events-none','translate-y-2'); lookupPrompt.classList.remove('opacity-100');
+  bellStatusText.textContent = '感應中，等待撞擊…';
+  if (smokeRAF){ cancelAnimationFrame(smokeRAF); smokeRAF = null; }
+  clearTimeout(convergenceFallbackTimer);
+}
+
+/* ================= STEP 4 : 星空 + 天燈 ================= */
+var starCanvas = document.getElementById('starCanvas');
+var sctx = starCanvas.getContext('2d');
+var stars=[], constellationPts=[], lanterns=[];
+var skyRAF = null, igniteProgress = 0;
+var GOAT_EYES = [[-0.12,-0.08],[0.12,-0.08]];
+
+function sizeStarCanvas(){ starCanvas.width = window.innerWidth*devicePixelRatio; starCanvas.height = window.innerHeight*devicePixelRatio; }
+function buildSky(){
+  sizeStarCanvas(); var w=starCanvas.width, h=starCanvas.height;
+  stars=[]; var n=Math.floor((w*h)/9000);
+  for (var i=0;i<n;i++) stars.push({ x:Math.random()*w, y:Math.random()*h*0.82, r:Math.random()*1.4*devicePixelRatio+0.3, tw:Math.random()*Math.PI*2, speed:0.01+Math.random()*0.02 });
+  var cx=w*0.5, cy=h*0.34, scale=Math.min(w,h)*0.32;
+  constellationPts = GOAT_SHAPE.map(function(p){ return { x:cx+p[0]*scale, y:cy+p[1]*scale }; });
+  constellationPts.eyes = GOAT_EYES.map(function(p){ return { x:cx+p[0]*scale, y:cy+p[1]*scale }; });
+  lanterns=[]; var m=16;
+  for (var j=0;j<m;j++) lanterns.push({ x:Math.random()*w, y:h+Math.random()*h, vy:(0.25+Math.random()*0.35)*devicePixelRatio, sway:Math.random()*Math.PI*2, swaySpeed:0.01+Math.random()*0.015, size:(7+Math.random()*7)*devicePixelRatio });
+}
+function drawLantern(x,y,size){
+  sctx.save(); sctx.globalAlpha=0.85; sctx.fillStyle='#ffb15c'; sctx.shadowColor='#ffb15c'; sctx.shadowBlur=size*1.4;
+  sctx.beginPath(); sctx.moveTo(x-size*0.42,y-size*0.5); sctx.quadraticCurveTo(x-size*0.62,y,x-size*0.42,y+size*0.5);
+  sctx.lineTo(x+size*0.42,y+size*0.5); sctx.quadraticCurveTo(x+size*0.62,y,x+size*0.42,y-size*0.5); sctx.closePath(); sctx.fill();
+  sctx.shadowBlur=0; sctx.fillStyle='rgba(255,235,200,.55)'; sctx.fillRect(x-size*0.3,y-size*0.58,size*0.6,size*0.14); sctx.restore();
+}
+function startStarfield(){
+  buildSky(); igniteProgress=0;
+  var startCount = 12480+Math.floor(Math.random()*30);
+  var counterEl = document.getElementById('lightCount');
+  var target = startCount+1, shown = startCount;
+  var counterTimer = setInterval(function(){ shown+=1; counterEl.textContent = shown.toLocaleString('zh-Hant'); if (shown>=target) clearInterval(counterTimer); }, 220);
+  if (skyRAF) cancelAnimationFrame(skyRAF);
+  animateSky();
+}
+function animateSky(){
+  var w=starCanvas.width, h=starCanvas.height;
+  sctx.clearRect(0,0,w,h);
+  stars.forEach(function(s){ s.tw+=s.speed; var a=0.35+Math.sin(s.tw)*0.35+0.3; sctx.globalAlpha=Math.max(a,0.1); sctx.fillStyle='#eef1ff'; sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2); sctx.fill(); });
+  sctx.globalAlpha=1;
+  lanterns.forEach(function(l){ l.y-=l.vy; l.sway+=l.swaySpeed; var x=l.x+Math.sin(l.sway)*10*devicePixelRatio; if (l.y<-40*devicePixelRatio){ l.y=h+40*devicePixelRatio; l.x=Math.random()*w; } drawLantern(x,l.y,l.size); });
+  if (igniteProgress<1) igniteProgress = Math.min(1, igniteProgress+0.012);
+  var revealCount = Math.floor(constellationPts.length*igniteProgress);
+  sctx.strokeStyle='rgba(245,197,94,'+(0.75*igniteProgress)+')'; sctx.lineWidth=1.6*devicePixelRatio;
+  sctx.beginPath();
+  for (var i=0;i<revealCount;i++){ var p=constellationPts[i]; if (i===0) sctx.moveTo(p.x,p.y); else sctx.lineTo(p.x,p.y); }
+  sctx.stroke();
+  for (var j=0;j<revealCount;j++){ var pt=constellationPts[j]; var pulse=1.6+Math.sin(performance.now()/260+j)*0.6; sctx.fillStyle='#fff3d6'; sctx.shadowColor='#f59e0b'; sctx.shadowBlur=14*devicePixelRatio; sctx.beginPath(); sctx.arc(pt.x,pt.y,pulse*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur=0; }
+  if (igniteProgress>0.6) constellationPts.eyes.forEach(function(pt){ sctx.fillStyle='#fff3d6'; sctx.shadowColor='#f59e0b'; sctx.shadowBlur=10*devicePixelRatio; sctx.beginPath(); sctx.arc(pt.x,pt.y,1.8*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur=0; });
+  skyRAF = requestAnimationFrame(animateSky);
+}
+window.addEventListener('resize', function(){ if (state==='sky') buildSky(); if (state==='incense') sizeSmokeCanvas(); });
+
+function goSky(){ state='sky'; setProgress(4); showStage('stageSky'); startStarfield(); }
+document.getElementById('btnToCard').addEventListener('click', function(){
+  if (skyRAF){ cancelAnimationFrame(skyRAF); skyRAF = null; }
+  state='loading'; showStage('stageLoading');
+  document.getElementById('calcParamsText').innerHTML =
+    '因果矩陣：(' + gesture.N + '×100) + ' + gesture.t_interval + 'ms + ' + gesture.T + 'ms + (' + gesture.M + '×200) + ⌊' + gesture.a.toFixed(1) + '×10⌋<br>對應感應序號：<span class="text-amber-400 font-bold">Seed #' + gesture.seed + '</span>';
+  setTimeout(function(){ state='card'; showStage('stageCard'); generateCard(); }, 2200);
+});
+
+/* ================= STEP 6 : 專屬吉羊卡 ================= */
+var PHRASES = [
+  { text:'三羊開泰', note:'大吉大利，祥瑞滿門。' }, { text:'花開見佛', note:'明心見性，清淨自性。' },
+  { text:'身心自在', note:'無罣無礙，法喜充滿。' }, { text:'諸事吉祥', note:'福慧雙全，順心安康。' },
+  { text:'處處春風', note:'慈悲溫暖，廣結善緣。' }, { text:'萬事如意', note:'心想事成，福報圓滿。' },
+  { text:'福慧雙修', note:'智慧與福德，一同增長。' }, { text:'心想事成', note:'所願皆遂，吉羊隨行。' }
+];
+var INK_COLORS = [
+  { main:'rgba(28,25,23,0.95)', soft:'rgba(120,110,90,0.4)' }, { main:'rgba(154,52,18,0.9)', soft:'rgba(230,150,100,0.35)' },
+  { main:'rgba(41,37,36,0.95)', soft:'rgba(168,162,158,0.4)' }, { main:'rgba(120,53,4,0.92)', soft:'rgba(245,158,11,0.3)' }
+];
+
+function tryLoadRealCard(seed, onReady, onFallback){
+  // Production hook: once the real 1,000-image AI library exists, drop files
+  // at cards/1.webp ... cards/1000.webp next to this page and the real
+  // artwork is used automatically — no code changes needed.
+  var img = new Image();
+  img.onload = function(){ onReady(img); };
+  img.onerror = onFallback;
+  img.src = 'cards/' + seed + '.webp';
+}
+
+function drawInkWashSheep(ctx, cx, cy, seed){
+  ctx.save(); ctx.translate(cx, cy);
+  var palette = INK_COLORS[seed % INK_COLORS.length];
+  var grad = ctx.createRadialGradient(0,0,10,0,0,220);
+  grad.addColorStop(0, palette.soft); grad.addColorStop(1, 'rgba(243,235,217,0)');
+  ctx.fillStyle = grad; ctx.beginPath(); ctx.arc(0,0,220,0,Math.PI*2); ctx.fill();
+
+  ctx.strokeStyle = palette.main; ctx.lineCap = 'round'; ctx.shadowBlur = 4; ctx.shadowColor = 'rgba(0,0,0,0.15)';
+  var sheepStyle = seed % 3;
+
+  if (sheepStyle === 0){
+    ctx.lineWidth = 14; ctx.beginPath(); ctx.moveTo(-15,-70); ctx.quadraticCurveTo(-65,-110,-85,-60); ctx.quadraticCurveTo(-95,-10,-55,-20); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(15,-70); ctx.quadraticCurveTo(65,-110,85,-60); ctx.quadraticCurveTo(95,-10,55,-20); ctx.stroke();
+    ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(-15,-60); ctx.quadraticCurveTo(0,-90,15,-60); ctx.lineTo(0,-10); ctx.closePath(); ctx.stroke();
+    ctx.lineWidth = 26; ctx.beginPath(); ctx.moveTo(0,-10); ctx.quadraticCurveTo(-110,30,-50,120); ctx.stroke();
+    ctx.lineWidth = 12; ctx.beginPath(); ctx.moveTo(-20,60); ctx.lineTo(-30,160); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-45,110); ctx.quadraticCurveTo(-75,150,-60,165); ctx.stroke();
+  } else if (sheepStyle === 1){
+    ctx.lineWidth = 22; ctx.beginPath(); ctx.moveTo(0,-80); ctx.quadraticCurveTo(-110,-110,-70,-20); ctx.quadraticCurveTo(-30,40,20,80); ctx.stroke();
+    ctx.lineWidth = 16; ctx.beginPath(); ctx.moveTo(-20,-50); ctx.quadraticCurveTo(10,-70,20,-40); ctx.lineTo(0,0); ctx.stroke();
+    ctx.fillStyle = palette.main; ctx.globalAlpha = 0.7;
+    ctx.beginPath(); ctx.arc(-40,20,35,0,Math.PI*2); ctx.arc(-10,50,45,0,Math.PI*2); ctx.arc(30,30,25,0,Math.PI*2); ctx.fill();
+    ctx.globalAlpha = 1.0;
+    ctx.strokeStyle = palette.main; ctx.lineWidth = 10;
+    ctx.beginPath(); ctx.moveTo(-30,80); ctx.lineTo(-40,150); ctx.moveTo(10,70); ctx.lineTo(15,140); ctx.stroke();
+  } else {
+    ctx.lineWidth = 18; ctx.beginPath(); ctx.moveTo(-10,-40); ctx.bezierCurveTo(-90,-120,-120,-30,-50,10); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(10,-40); ctx.bezierCurveTo(90,-120,120,-30,50,10); ctx.stroke();
+    ctx.lineWidth = 20; ctx.beginPath(); ctx.moveTo(-10,-30); ctx.quadraticCurveTo(0,-50,10,-30); ctx.quadraticCurveTo(0,50,0,90); ctx.stroke();
+    ctx.fillStyle = palette.main;
+    ctx.beginPath(); ctx.arc(-80,50,8,0,Math.PI*2); ctx.arc(80,40,6,0,Math.PI*2); ctx.arc(40,100,12,0,Math.PI*2); ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawClassicStamp(ctx, x, y, text){
+  ctx.save(); ctx.strokeStyle = '#c22129'; ctx.fillStyle = '#c22129'; ctx.lineWidth = 4;
+  ctx.strokeRect(x-40, y-40, 80, 80);
+  ctx.font = 'bold 24px "Noto Serif TC", serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  if (text.length === 3){ ctx.fillText(text[0],x,y-22); ctx.fillText(text[1],x,y); ctx.fillText(text[2],x,y+22); }
+  else if (text.length === 4){ ctx.font='bold 20px "Noto Serif TC", serif'; ctx.fillText(text[0],x-18,y-18); ctx.fillText(text[1],x+18,y-18); ctx.fillText(text[2],x-18,y+18); ctx.fillText(text[3],x+18,y+18); }
+  else { ctx.fillText(text, x, y); }
+  ctx.restore();
+}
+
+function drawPlaceholderCardOnCanvas(canvas, seed, name){
+  var ctx = canvas.getContext('2d');
+  canvas.width = 720; canvas.height = 1280;
+  var W = canvas.width, H = canvas.height;
+
+  ctx.fillStyle = '#f3ebd9'; ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle = 'rgba(120,100,50,0.05)'; ctx.lineWidth = 1;
+  for (var i=0;i<50;i++){
+    ctx.beginPath();
+    var sx=Math.random()*W, sy=Math.random()*H;
+    ctx.moveTo(sx,sy);
+    ctx.quadraticCurveTo(sx+(Math.random()-0.5)*50, sy+(Math.random()-0.5)*50, sx+(Math.random()-0.5)*100, sy+(Math.random()-0.5)*100);
+    ctx.stroke();
+  }
+  ctx.strokeStyle = '#9d171d'; ctx.lineWidth = 10; ctx.strokeRect(30,30,W-60,H-60);
+  ctx.lineWidth = 2; ctx.strokeRect(40,40,W-80,H-80);
+
+  var blessing = PHRASES[seed % PHRASES.length];
+  ctx.fillStyle = '#1c1917'; ctx.font = 'bold 64px "Noto Serif TC", serif'; ctx.textAlign = 'center';
+  ctx.fillText(blessing.text, W/2, 150);
+  ctx.fillStyle = '#6b5134'; ctx.font = '22px "Noto Serif TC", serif';
+  ctx.fillText(blessing.note, W/2, 195);
+
+  drawInkWashSheep(ctx, W/2, H/2 - 20, seed);
+
+  drawClassicStamp(ctx, 550, 160, '佛光山');
+  drawClassicStamp(ctx, 150, 1050, '心誠則靈');
+
+  var today = new Date();
+  var dateStr = today.getFullYear() + '年' + String(today.getMonth()+1).padStart(2,'0') + '月' + String(today.getDate()).padStart(2,'0') + '日';
+
+  ctx.fillStyle = '#1c1917'; ctx.textAlign = 'center'; ctx.font = '32px "Noto Serif TC", serif';
+  ctx.fillText('信眾 【' + (name || '有緣人') + '】 虔誠叩感', W/2, 910);
+  ctx.fillStyle = '#5c4d3c'; ctx.font = '24px "Noto Serif TC", serif';
+  ctx.fillText(dateStr + ' · 走春祈福', W/2, 955);
+  ctx.fillText('佛光普照 · 功德圓滿', W/2, 990);
+  // NOTE: no debug numbers are baked into the shareable image on purpose —
+  // they're shown separately below the card (#cardMeta) so a downloaded /
+  // shared card stays clean.
+}
+
+function generateCard(){
+  var canvas = document.getElementById('cardCanvas');
+  var seed = gesture.seed;
+  tryLoadRealCard(seed, function(img){
+    // TODO(production): once cards/*.webp exists, composite name/date/seed
+    // onto the real artwork the same way drawPlaceholderCardOnCanvas() does.
+    var ctx = canvas.getContext('2d');
+    canvas.width = img.naturalWidth; canvas.height = img.naturalHeight;
+    ctx.drawImage(img, 0, 0);
+    finishCard(seed);
+  }, function(){
+    drawPlaceholderCardOnCanvas(canvas, seed, clientName);
+    finishCard(seed);
+  });
+}
+function finishCard(seed){
+  var link = document.getElementById('btnDownloadCard');
+  link.href = document.getElementById('cardCanvas').toDataURL('image/jpeg', 0.92);
+  link.download = '佛光山走春福卡_第' + seed + '號.jpg';
+  document.getElementById('cardMeta').textContent = '因緣數值（測試用途）— N=' + gesture.N + ' t_interval=' + gesture.t_interval + 'ms T=' + gesture.T + 'ms M=' + gesture.M + ' a=' + gesture.a.toFixed(1) + ' → Seed=' + seed + '/1000。正式版圖庫請置於 cards/{seed}.webp，此頁會自動改用真實圖卡。';
+  // hide chrome around the final card for a fully immersive reveal, matching the uploaded design
+  document.getElementById('appHeader').classList.add('hidden');
+  document.getElementById('appFooter').classList.add('hidden');
+}
+
+document.getElementById('btnRestart').addEventListener('click', function(){
+  gesture = { N:0, t_interval:0, T:0, M:0, a:0, seed:null };
+  bellCount = 0; strikeLocked = false; maxAccelPeak = 0; tapTimestamps = [];
+  isHolding = false; incenseLit = false; smokeParticles = []; silhouetteParticles = [];
+  igniteProgress = 0;
+  if (skyRAF){ cancelAnimationFrame(skyRAF); skyRAF = null; }
+  if (smokeRAF){ cancelAnimationFrame(smokeRAF); smokeRAF = null; }
+  clearTimeout(convergenceFallbackTimer);
+  document.getElementById('userName').value = '';
+  document.getElementById('appHeader').classList.remove('hidden');
+  document.getElementById('appFooter').classList.remove('hidden');
+  state = 'register';
+  setProgress(0);
+  showStage('stageRegister');
+});
+
+})();
+</script>
 </body>
 </html>
