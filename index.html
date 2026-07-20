@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
-<title>叩響心鐘 · 點亮星空羊群｜互動原型</title>
+<title>木魚淨心 · 心香祈願 · 叩鐘迴向｜互動原型</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;700;900&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
@@ -36,121 +36,115 @@
   }
   .scene.active{opacity:1; pointer-events:auto;}
 
-  /* ---------- shared UI bits ---------- */
   .eyebrow{
     font-family:var(--sans); font-size:12px; letter-spacing:.3em; font-weight:700;
     color:var(--gold); text-transform:uppercase; margin-bottom:14px; opacity:.85;
   }
   .headline{
-    font-family:var(--serif); font-weight:900; font-size:clamp(28px,7.5vw,46px);
-    line-height:1.25; margin:0 0 14px; color:var(--paper);
+    font-family:var(--serif); font-weight:900; font-size:clamp(24px,6.4vw,38px);
+    line-height:1.3; margin:0 0 10px; color:var(--paper);
     text-shadow:0 0 30px rgba(212,175,55,.25);
   }
   .sub{
-    font-size:14.5px; line-height:1.9; color:var(--muted); max-width:32em; margin:0 auto;
+    font-size:14px; line-height:1.85; color:var(--muted); max-width:30em; margin:0 auto;
   }
   .btn{
     font-family:var(--sans); font-weight:700; font-size:15px; letter-spacing:.05em;
     padding:15px 34px; border-radius:999px; border:1px solid rgba(212,175,55,.5);
     background:linear-gradient(180deg, rgba(212,175,55,.18), rgba(212,175,55,.05));
-    color:var(--gold-bright); cursor:pointer; margin-top:30px;
+    color:var(--gold-bright); cursor:pointer; margin-top:26px;
     transition:transform .15s ease, background .2s ease, box-shadow .2s ease;
   }
   .btn:active{transform:scale(.96);}
   .btn:hover{background:rgba(212,175,55,.22); box-shadow:0 0 24px rgba(212,175,55,.25);}
   .btn.ghost{
     background:transparent; border-color:rgba(244,234,216,.25); color:var(--muted);
-    font-size:12.5px; padding:10px 20px; margin-top:14px;
+    font-size:12px; padding:9px 18px; margin-top:12px;
   }
   .badge{
-    position:fixed; top:calc(14px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
-    font-size:10.5px; letter-spacing:.18em; color:rgba(244,234,216,.4);
+    position:fixed; top:calc(12px + env(safe-area-inset-top)); left:50%; transform:translateX(-50%);
+    font-size:10px; letter-spacing:.16em; color:rgba(244,234,216,.4);
     font-family:var(--sans); z-index:50; text-transform:uppercase; pointer-events:none;
   }
+  .fallback-row{ display:flex; gap:10px; margin-top:14px; flex-wrap:wrap; justify-content:center; }
+  .hud{
+    position:fixed; bottom:calc(12px + env(safe-area-inset-bottom)); left:0; right:0;
+    text-align:center; font-size:10px; color:rgba(244,234,216,.32); letter-spacing:.04em;
+    font-family:var(--sans); padding:0 6vw; line-height:1.6;
+  }
+  .step-dots{ display:flex; gap:12px; margin:18px 0 4px; }
+  .step-dot{ width:10px;height:10px;border-radius:50%;border:1.5px solid rgba(212,175,55,.5); transition:background .3s ease, box-shadow .3s ease, transform .3s ease; }
+  .step-dot.filled{ background:var(--gold); box-shadow:0 0 10px var(--gold); transform:scale(1.15); }
 
-  /* ---------- Scene 1: Intro ---------- */
+  /* ---------- Scene 0: Intro ---------- */
   #scene-intro{ background:radial-gradient(ellipse at 50% 30%, var(--bronze-mid), var(--bronze-dark) 70%); }
-  .intro-glyph{
-    width:74px; height:74px; margin-bottom:22px; opacity:.9;
-    filter:drop-shadow(0 0 18px rgba(212,175,55,.5));
-  }
-  .permission-note{
-    margin-top:22px; font-size:12px; color:rgba(244,234,216,.42); max-width:26em; line-height:1.8;
-  }
+  .intro-glyph{ width:64px; height:64px; margin-bottom:20px; opacity:.9; filter:drop-shadow(0 0 18px rgba(212,175,55,.5)); }
+  .permission-note{ margin-top:20px; font-size:11.5px; color:rgba(244,234,216,.42); max-width:27em; line-height:1.8; }
+  .journey-steps{ display:flex; gap:22px; margin-top:24px; flex-wrap:wrap; justify-content:center; }
+  .journey-step{ font-size:11px; color:var(--muted); letter-spacing:.08em; }
+  .journey-step b{ display:block; color:var(--gold-bright); font-family:var(--serif); font-size:13px; margin-bottom:2px; }
 
-  /* ---------- Scene 2: Bell ---------- */
-  #scene-bell{
-    background:
-      radial-gradient(ellipse 120% 80% at 50% 15%, rgba(107,62,34,.45), transparent 60%),
-      linear-gradient(180deg, var(--bronze-dark), #0d0705 85%);
-  }
-  .bell-stage{
-    position:relative; width:min(72vw,300px); height:min(72vw,300px);
-    display:flex; align-items:center; justify-content:center; margin:6px 0 8px;
-  }
+  /* ---------- Scene 1: 木魚淨心 ---------- */
+  #scene-fish{ background: radial-gradient(ellipse 120% 80% at 50% 20%, rgba(107,62,34,.4), transparent 60%), linear-gradient(180deg, var(--bronze-dark), #0d0705 85%); }
+  .fish-stage{ position:relative; width:min(58vw,220px); height:min(58vw,220px); margin:8px 0 2px; display:flex; align-items:center; justify-content:center; }
+  .breath-ring{ position:absolute; inset:0; margin:auto; width:88%; height:88%; border-radius:50%; border:1px solid rgba(212,175,55,.25); animation:breathe 4.4s ease-in-out infinite; pointer-events:none; }
+  @keyframes breathe{ 0%,100%{ transform:scale(.86); opacity:.3;} 50%{ transform:scale(1.05); opacity:.68;} }
+  .fish-wrap{ position:relative; width:76%; cursor:pointer; user-select:none; touch-action:manipulation; }
+  .fish-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 10px 18px rgba(0,0,0,.5)); }
+  .fish-wrap.knock{ animation:fishKnock .3s ease; }
+  @keyframes fishKnock{ 0%{transform:scale(1);} 35%{transform:scale(.9) rotate(-1.5deg);} 100%{transform:scale(1);} }
+
+  /* ---------- Scene 2: 心香祈願 ---------- */
+  #scene-incense{ background: radial-gradient(ellipse 120% 80% at 50% 20%, rgba(60,36,21,.5), transparent 60%), linear-gradient(180deg, #140a17, #0a0510 85%); }
+  .incense-stage{ position:relative; width:min(60vw,230px); height:min(72vw,280px); margin:4px 0; display:flex; align-items:flex-end; justify-content:center; }
+  #smoke-canvas{ position:absolute; left:50%; bottom:24%; width:340%; height:220%; transform:translateX(-50%); pointer-events:none; }
+  .censer-wrap{ position:relative; width:60%; z-index:2; margin-bottom:2%; }
+  .censer-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 10px 16px rgba(0,0,0,.5)); }
+  .press-ring-svg{ position:absolute; left:50%; bottom:14%; width:92%; transform:translateX(-50%) rotate(-90deg); z-index:1; pointer-events:none; }
+  .press-ring-track{ fill:none; stroke:rgba(212,175,55,.16); stroke-width:2.4; }
+  .press-ring-fill{ fill:none; stroke:var(--gold-bright); stroke-width:2.4; stroke-linecap:round; }
+  .press-hint{ font-size:12px; color:var(--muted); margin-top:10px; letter-spacing:.05em; }
+  .quote-card{ margin-top:16px; padding:18px 22px; border:1px solid rgba(212,175,55,.28); border-radius:14px; background:rgba(212,175,55,.06); max-width:25em; opacity:0; transform:translateY(10px); transition:opacity .7s ease, transform .7s ease; }
+  .quote-card.show{ opacity:1; transform:translateY(0); }
+  .quote-text{ font-family:var(--serif); font-size:15px; line-height:1.85; color:var(--gold-bright); }
+  .quote-attr{ font-size:10.5px; color:var(--muted); margin-top:8px; letter-spacing:.1em; }
+
+  /* ---------- Scene 3: 叩鐘迴向 ---------- */
+  #scene-bell{ background: radial-gradient(ellipse 120% 80% at 50% 15%, rgba(107,62,34,.45), transparent 60%), linear-gradient(180deg, var(--bronze-dark), #0d0705 85%); }
+  .bell-stage{ position:relative; width:min(66vw,270px); height:min(66vw,270px); display:flex; align-items:center; justify-content:center; margin:4px 0 6px; }
   #ripple-canvas{ position:absolute; inset:-90%; width:280%; height:280%; pointer-events:none; }
   .bell-wrap{ position:relative; width:64%; transform-origin:50% 6%; will-change:transform; }
   .bell-wrap svg{ width:100%; height:auto; filter:drop-shadow(0 12px 20px rgba(0,0,0,.55)); }
-  .bell-wrap.swing{ animation:bellSwing 1.4s cubic-bezier(.36,.07,.19,.97); }
+  .bell-wrap.swing{ animation:bellSwing 1.3s cubic-bezier(.36,.07,.19,.97); }
   @keyframes bellSwing{
-    0%{transform:rotate(0deg);}
-    8%{transform:rotate(9deg);}
-    20%{transform:rotate(-7deg);}
-    34%{transform:rotate(5deg);}
-    50%{transform:rotate(-3deg);}
-    68%{transform:rotate(1.5deg);}
-    100%{transform:rotate(0deg);}
+    0%{transform:rotate(0deg);} 8%{transform:rotate(9deg);} 20%{transform:rotate(-7deg);}
+    34%{transform:rotate(5deg);} 50%{transform:rotate(-3deg);} 68%{transform:rotate(1.5deg);} 100%{transform:rotate(0deg);}
   }
-  .strike-ring{
-    position:absolute; width:40%; height:40%; border-radius:50%;
-    border:1.5px solid rgba(212,175,55,0); pointer-events:none;
-  }
-  .status-line{
-    display:flex; align-items:center; gap:9px; font-size:12.5px; color:var(--muted);
-    margin-top:6px; font-family:var(--sans);
-  }
+  .status-line{ display:flex; align-items:center; gap:9px; font-size:12px; color:var(--muted); margin-top:2px; }
   .status-dot{ width:7px; height:7px; border-radius:50%; background:var(--gold); box-shadow:0 0 8px var(--gold); animation:pulseDot 1.6s ease-in-out infinite; }
   @keyframes pulseDot{ 0%,100%{opacity:.4;} 50%{opacity:1;} }
-  .hud{
-    position:fixed; bottom:calc(14px + env(safe-area-inset-bottom)); left:0; right:0;
-    text-align:center; font-size:10.5px; color:rgba(244,234,216,.32); letter-spacing:.05em;
-    font-family:var(--sans);
-  }
-  .lookup-prompt{
-    position:absolute; bottom:9%; left:50%; transform:translateX(-50%) translateY(14px);
-    opacity:0; transition:opacity .5s ease, transform .5s ease; width:88%;
-  }
+  .lookup-prompt{ position:absolute; bottom:8%; left:50%; transform:translateX(-50%) translateY(14px); opacity:0; transition:opacity .5s ease, transform .5s ease; width:88%; }
   .lookup-prompt.show{ opacity:1; transform:translateX(-50%) translateY(0); }
-  .lookup-arrow{ font-size:22px; display:block; margin-bottom:6px; animation:floatUp 1.6s ease-in-out infinite; }
+  .lookup-arrow{ font-size:20px; display:block; margin-bottom:4px; animation:floatUp 1.6s ease-in-out infinite; }
   @keyframes floatUp{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-8px);} }
 
-  /* ---------- Scene 3: Sky ---------- */
-  #scene-sky{
-    background:radial-gradient(ellipse at 50% 30%, var(--indigo-mid), var(--indigo-deep) 75%);
-    justify-content:flex-end; padding-bottom:6vh;
-  }
+  /* ---------- Scene 4: Sky ---------- */
+  #scene-sky{ background:radial-gradient(ellipse at 50% 30%, var(--indigo-mid), var(--indigo-deep) 75%); justify-content:flex-end; padding-bottom:6vh; }
   #star-canvas{ position:absolute; inset:0; width:100%; height:100%; }
   .sky-copy{ position:relative; z-index:5; }
-  .sky-count{
-    font-family:var(--serif); font-weight:700; font-size:15px; color:var(--gold-bright);
-    margin-top:6px;
-  }
-  .sky-count b{ font-size:19px; }
-
-  .fallback-row{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap; justify-content:center; }
+  .sky-count{ font-family:var(--serif); font-weight:700; font-size:14px; color:var(--gold-bright); margin-top:4px; }
+  .sky-count b{ font-size:18px; }
 
   @media (prefers-reduced-motion: reduce){
-    .bell-wrap.swing{ animation:none; }
-    .lookup-arrow{ animation:none; }
-    .status-dot{ animation:none; }
+    .bell-wrap.swing{ animation:none; } .lookup-arrow{ animation:none; } .status-dot{ animation:none; } .breath-ring{ animation:none; }
   }
 </style>
 </head>
 <body>
 
-<div class="badge">互動原型・提案二　叩響心鐘 · 點亮星空羊群</div>
+<div class="badge">互動原型・木魚淨心 · 心香祈願 · 叩鐘迴向</div>
 
-<!-- ================= Scene 1 : Intro ================= -->
+<!-- ================= Scene 0 : Intro ================= -->
 <section class="scene active" id="scene-intro">
   <svg class="intro-glyph" viewBox="0 0 64 64" fill="none">
     <path d="M32 6c11 0 18 9 18 20v6l4 8H10l4-8v-6c0-11 7-20 18-20z" stroke="var(--gold)" stroke-width="2.2" stroke-linejoin="round"/>
@@ -158,17 +152,88 @@
     <path d="M32 6V2" stroke="var(--gold)" stroke-width="2.2" stroke-linecap="round"/>
   </svg>
   <div class="eyebrow">祈福體驗 · 測試版</div>
-  <h1 class="headline">叩響心鐘<br>點亮星空羊群</h1>
-  <p class="sub">握緊手機，做出「撞鐘」的動作。<br>鐘聲響起、掌心震動之後，抬頭望向天空，<br>為自己點亮一顆吉羊星。</p>
+  <h1 class="headline">木魚淨心<br>心香祈願・叩鐘迴向</h1>
+  <p class="sub">這是一段三段式的祈福旅程：先靜心、再祈願、最後叩鐘迴向，抬頭點亮屬於你的星空。</p>
+  <div class="journey-steps">
+    <div class="journey-step"><b>01</b>木魚淨心</div>
+    <div class="journey-step"><b>02</b>心香祈願</div>
+    <div class="journey-step"><b>03</b>叩鐘迴向</div>
+  </div>
   <button class="btn" id="btn-start">開始體驗</button>
-  <p class="permission-note" id="permission-note">此為技術測試頁面，需要裝置的動作感應與音效權限。若使用 iPhone，點擊後會跳出授權視窗，請選擇「允許」。</p>
+  <p class="permission-note" id="permission-note">此為技術測試頁面，第三步「叩鐘迴向」需要裝置的動作與方向感應權限。若使用 iPhone，點擊後會跳出授權視窗，請選擇「允許」。</p>
 </section>
 
-<!-- ================= Scene 2 : Bell ================= -->
+<!-- ================= Scene 1 : 木魚淨心 ================= -->
+<section class="scene" id="scene-fish">
+  <div class="eyebrow">步驟一 · 木魚淨心</div>
+  <h1 class="headline">閉目調息<br>輕敲木魚三聲</h1>
+  <p class="sub">沉澱心神，準備開始這趟祈福旅程</p>
+  <div class="fish-stage">
+    <div class="breath-ring"></div>
+    <div class="fish-wrap" id="fish-wrap">
+      <svg viewBox="0 0 200 170" fill="none">
+        <defs>
+          <linearGradient id="woodGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#a9612f"/>
+            <stop offset="55%" stop-color="#7a3f1c"/>
+            <stop offset="100%" stop-color="#4a230f"/>
+          </linearGradient>
+        </defs>
+        <ellipse cx="100" cy="150" rx="58" ry="8" fill="#1a0f0a"/>
+        <path d="M20 100c0-46 36-78 80-78s80 32 80 78-36 60-80 60S20 146 20 100z" fill="url(#woodGrad)" stroke="#2b1808" stroke-width="1.5"/>
+        <path d="M46 92c10-18 32-28 54-24" stroke="rgba(255,220,170,.3)" stroke-width="3" stroke-linecap="round" fill="none"/>
+        <path d="M74 66c-14 8-14 44 0 60" stroke="#2b1808" stroke-width="4" stroke-linecap="round" fill="none"/>
+        <circle cx="146" cy="82" r="6" fill="#2b1808"/>
+      </svg>
+    </div>
+  </div>
+  <div class="step-dots" id="fish-dots">
+    <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+  </div>
+  <p class="sub" id="fish-status">輕點木魚，敲響第一聲</p>
+  <div class="fallback-row"><button class="btn ghost" id="btn-force-fish">桌面測試：模擬敲擊</button></div>
+</section>
+
+<!-- ================= Scene 2 : 心香祈願 ================= -->
+<section class="scene" id="scene-incense">
+  <div class="eyebrow">步驟二 · 心香祈願</div>
+  <h1 class="headline">心中默念心願<br>長按螢幕點燃心香</h1>
+  <p class="sub" id="incense-sub">持續按住，讓心香緩緩升起</p>
+  <div class="incense-stage" id="incense-stage">
+    <canvas id="smoke-canvas"></canvas>
+    <svg class="press-ring-svg" viewBox="0 0 100 100">
+      <circle class="press-ring-track" cx="50" cy="50" r="45"/>
+      <circle class="press-ring-fill" id="press-ring-fill" cx="50" cy="50" r="45" stroke-dasharray="283" stroke-dashoffset="283"/>
+    </svg>
+    <div class="censer-wrap">
+      <svg viewBox="0 0 200 160" fill="none">
+        <defs>
+          <linearGradient id="bronzeGrad2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
+          </linearGradient>
+        </defs>
+        <path d="M45 70c0-10 8-16 55-16s55 6 55 16v18c0 10-8 16-55 16s-55-6-55-16z" fill="url(#bronzeGrad2)" stroke="#2b1808" stroke-width="1.5"/>
+        <ellipse cx="100" cy="70" rx="55" ry="10" fill="#a9772f"/>
+        <path d="M60 104l-10 30M140 104l10 30M100 108v28" stroke="url(#bronzeGrad2)" stroke-width="7" stroke-linecap="round"/>
+        <rect x="97" y="18" width="6" height="54" rx="3" fill="#e8d9b0"/>
+        <circle cx="100" cy="16" r="4.5" fill="#ffb15c" id="incense-tip"/>
+      </svg>
+    </div>
+  </div>
+  <p class="press-hint" id="press-hint">按住不放…</p>
+  <div class="quote-card" id="quote-card">
+    <p class="quote-text" id="quote-text">願所敲的每一聲鐘、所點的每一炷香，都化作對摯愛之人最溫柔的祝福。</p>
+    <p class="quote-attr">— 年度法語（正式文字請置換為授權來源）</p>
+    <button class="btn" id="btn-to-bell" style="margin-top:14px;">前往叩鐘迴向</button>
+  </div>
+  <div class="fallback-row" id="incense-fallback-row"><button class="btn ghost" id="btn-force-incense">桌面測試：模擬點香完成</button></div>
+</section>
+
+<!-- ================= Scene 3 : 叩鐘迴向 ================= -->
 <section class="scene" id="scene-bell">
-  <div class="eyebrow" id="bell-eyebrow">請握緊手機</div>
-  <h1 class="headline" style="font-size:clamp(22px,6vw,32px); margin-bottom:4px;">做出撞鐘的動作</h1>
-  <p class="sub" style="margin-bottom:4px;">像敲響一口古鐘一樣，向前輕輕一揮</p>
+  <div class="eyebrow">步驟三 · 叩鐘迴向</div>
+  <h1 class="headline" style="font-size:clamp(20px,5.6vw,30px);">手握手機，輕向前推<br>叩響平安大鐘</h1>
+  <p class="sub" style="margin-bottom:2px;">將功德迴向給所愛之人 · 需連叩三聲</p>
 
   <div class="bell-stage">
     <canvas id="ripple-canvas"></canvas>
@@ -176,9 +241,7 @@
       <svg viewBox="0 0 200 220" fill="none">
         <defs>
           <linearGradient id="bronzeGrad" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="#caa14a"/>
-            <stop offset="45%" stop-color="#8a5a24"/>
-            <stop offset="100%" stop-color="#4a2c12"/>
+            <stop offset="0%" stop-color="#caa14a"/><stop offset="45%" stop-color="#8a5a24"/><stop offset="100%" stop-color="#4a2c12"/>
           </linearGradient>
         </defs>
         <rect x="92" y="6" width="16" height="18" rx="3" fill="url(#bronzeGrad)"/>
@@ -190,34 +253,30 @@
     </div>
   </div>
 
-  <div class="status-line" id="status-line"><span class="status-dot"></span><span id="status-text">感應中，等待撞擊…</span></div>
+  <div class="step-dots" id="bell-dots">
+    <span class="step-dot"></span><span class="step-dot"></span><span class="step-dot"></span>
+  </div>
+  <div class="status-line"><span class="status-dot"></span><span id="status-text">感應中，等待撞擊…</span></div>
 
   <div class="lookup-prompt" id="lookup-prompt">
     <span class="lookup-arrow">↑</span>
-    <p class="sub" style="margin-bottom:0;">鐘聲已響，將手機朝向天空</p>
-    <div class="fallback-row">
-      <button class="btn ghost" id="btn-force-sky">看不到反應？點此仰望星空</button>
-    </div>
+    <p class="sub" style="margin-bottom:0;">鐘聲已響，請拿起手機，抬頭望向天空</p>
+    <div class="fallback-row"><button class="btn ghost" id="btn-force-sky">看不到反應？點此仰望星空</button></div>
   </div>
 
-  <div class="fallback-row" id="fallback-strike-row">
-    <button class="btn ghost" id="btn-force-strike">桌面測試：模擬撞鐘</button>
-  </div>
-
+  <div class="fallback-row" id="fallback-strike-row"><button class="btn ghost" id="btn-force-strike">桌面測試：模擬撞鐘</button></div>
   <div class="hud" id="hud">motion 尚未偵測</div>
 </section>
 
-<!-- ================= Scene 3 : Sky ================= -->
+<!-- ================= Scene 4 : Sky ================= -->
 <section class="scene" id="scene-sky">
   <canvas id="star-canvas"></canvas>
   <div class="sky-copy">
     <div class="eyebrow">吉羊座 · 已點亮</div>
-    <h1 class="headline" style="font-size:clamp(24px,6.5vw,34px);">你的心燈，已加入星海</h1>
-    <p class="sub">與此刻所有仰望天空的人，一同點亮這片星空</p>
+    <h1 class="headline" style="font-size:clamp(22px,6vw,32px);">功德已迴向<br>心燈已加入星海</h1>
+    <p class="sub">與此刻所有仰望天空的人，一同點亮這片星空與漫天祈福天燈</p>
     <p class="sky-count"><b id="light-count">—</b> 人已點亮心燈</p>
-    <div class="fallback-row">
-      <button class="btn ghost" id="btn-reset">重新體驗</button>
-    </div>
+    <div class="fallback-row"><button class="btn ghost" id="btn-reset">重新體驗</button></div>
   </div>
 </section>
 
@@ -225,85 +284,361 @@
 (function(){
   "use strict";
 
-  var STRIKE_THRESHOLD = 16;      // m/s^2 magnitude of delta-acceleration to count as a "strike"
-  var STRIKE_COOLDOWN   = 1200;   // ms
-  var SKY_BETA_MIN = -150, SKY_BETA_MAX = -30; // generous "phone tilted toward sky" window
+  var STRIKE_THRESHOLD = 16;
+  var STRIKE_COOLDOWN   = 900;
+  var SKY_BETA_MIN = -150, SKY_BETA_MAX = -30;
+  var FISH_TARGET = 3, BELL_TARGET = 3;
+  var HOLD_DURATION = 2600; // ms to light incense
 
-  var sceneIntro = document.getElementById('scene-intro');
-  var sceneBell  = document.getElementById('scene-bell');
-  var sceneSky   = document.getElementById('scene-sky');
-  var scenes = [sceneIntro, sceneBell, sceneSky];
-
-  function showScene(el){
-    scenes.forEach(function(s){ s.classList.toggle('active', s === el); });
+  var scenes = {
+    intro: document.getElementById('scene-intro'),
+    fish: document.getElementById('scene-fish'),
+    incense: document.getElementById('scene-incense'),
+    bell: document.getElementById('scene-bell'),
+    sky: document.getElementById('scene-sky')
+  };
+  function showScene(name){
+    Object.keys(scenes).forEach(function(k){ scenes[k].classList.toggle('active', k === name); });
   }
 
-  var state = 'intro'; // intro -> armed -> struck -> sky
+  var state = 'intro';
   var audioCtx = null;
-
-  /* ---------------- Audio: synthesized temple bell ---------------- */
   function ensureAudio(){
-    if (!audioCtx){
-      var AC = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AC();
-    }
+    if (!audioCtx){ var AC = window.AudioContext || window.webkitAudioContext; audioCtx = new AC(); }
     if (audioCtx.state === 'suspended') audioCtx.resume();
     return audioCtx;
   }
 
-  function playBell(){
-    var ctx = ensureAudio();
-    var now = ctx.currentTime;
-    var master = ctx.createGain();
-    master.gain.value = 0.85;
-    master.connect(ctx.destination);
+  /* ---------------- Audio: wood-block knock ---------------- */
+  function playWoodKnock(){
+    // A real mokugyo/wood-block knock is a short, FIXED-pitch hollow "tock" —
+    // not a pitch glide (that reads as an electronic "boop"). Two fixed
+    // resonances (body + hollow overtone) plus a sharp filtered transient.
+    var ctx = ensureAudio(); var now = ctx.currentTime;
+    var master = ctx.createGain(); master.gain.value = 0.95; master.connect(ctx.destination);
 
-    // inharmonic partials approximate a struck bronze bell
+    var osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = 520;
+    var og = ctx.createGain();
+    og.gain.setValueAtTime(0.0001, now);
+    og.gain.exponentialRampToValueAtTime(0.6, now + 0.004);
+    og.gain.exponentialRampToValueAtTime(0.0001, now + 0.11);
+    osc.connect(og).connect(master); osc.start(now); osc.stop(now + 0.14);
+
+    var osc2 = ctx.createOscillator(); osc2.type = 'sine'; osc2.frequency.value = 260;
+    var og2 = ctx.createGain();
+    og2.gain.setValueAtTime(0.0001, now);
+    og2.gain.exponentialRampToValueAtTime(0.35, now + 0.004);
+    og2.gain.exponentialRampToValueAtTime(0.0001, now + 0.16);
+    osc2.connect(og2).connect(master); osc2.start(now); osc2.stop(now + 0.2);
+
+    var dur = 0.03;
+    var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
+    var d = buf.getChannelData(0);
+    for (var i = 0; i < d.length; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / d.length, 2);
+    var noise = ctx.createBufferSource(); noise.buffer = buf;
+    var filt = ctx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 2200; filt.Q.value = 2.2;
+    var ng = ctx.createGain(); ng.gain.value = 0.7;
+    noise.connect(filt).connect(ng).connect(master); noise.start(now);
+  }
+
+  /* ---------------- Audio: temple bell (deeper + longer on final strike) ---------------- */
+  function playBell(isFinal){
+    var ctx = ensureAudio(); var now = ctx.currentTime;
+    var master = ctx.createGain(); master.gain.value = isFinal ? 0.95 : 0.8; master.connect(ctx.destination);
     var partials = [1, 1.99, 2.41, 3.06, 3.54, 4.23, 5.4];
     var fundamental = 108;
+    var tail = isFinal ? 6.5 : 3.6;
     partials.forEach(function(ratio, i){
-      var osc = ctx.createOscillator();
-      osc.type = 'sine';
-      osc.frequency.value = fundamental * ratio;
-      var g = ctx.createGain();
-      var amp = 0.55 / (i + 1);
+      var osc = ctx.createOscillator(); osc.type = 'sine'; osc.frequency.value = fundamental * ratio;
+      var g = ctx.createGain(); var amp = 0.55 / (i + 1);
       g.gain.setValueAtTime(0.0001, now);
       g.gain.linearRampToValueAtTime(amp, now + 0.015);
-      g.gain.exponentialRampToValueAtTime(0.0001, now + 4.2 + i * 0.35);
-      osc.connect(g).connect(master);
-      osc.start(now);
-      osc.stop(now + 5);
+      g.gain.exponentialRampToValueAtTime(0.0001, now + tail + i * 0.35);
+      osc.connect(g).connect(master); osc.start(now); osc.stop(now + tail + 1.5);
     });
-
-    // strike transient
     var dur = 0.06;
     var buf = ctx.createBuffer(1, Math.floor(ctx.sampleRate * dur), ctx.sampleRate);
     var data = buf.getChannelData(0);
-    for (var i = 0; i < data.length; i++){
-      data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    for (var i = 0; i < data.length; i++) data[i] = (Math.random() * 2 - 1) * (1 - i / data.length);
+    var noise = ctx.createBufferSource(); noise.buffer = buf;
+    var filt = ctx.createBiquadFilter(); filt.type = 'bandpass'; filt.frequency.value = 900; filt.Q.value = 0.7;
+    var ng = ctx.createGain(); ng.gain.value = isFinal ? 0.6 : 0.5;
+    noise.connect(filt).connect(ng).connect(master); noise.start(now);
+  }
+
+  function vibrateBellStrike(count, isFinal){
+    if (!navigator.vibrate) return;
+    if (isFinal) navigator.vibrate([300, 50, 150, 50, 90, 50, 50]); // 由強漸弱，模擬撞木餘震
+    else if (count === 1) navigator.vibrate([200, 40, 90]);
+    else navigator.vibrate([240, 40, 110]);
+  }
+
+  /* ================= Stage 1 : 木魚淨心 ================= */
+  var fishWrap = document.getElementById('fish-wrap');
+  var fishDots = document.getElementById('fish-dots').children;
+  var fishStatus = document.getElementById('fish-status');
+  var fishCount = 0;
+
+  function updateFishDots(){
+    for (var i = 0; i < fishDots.length; i++) fishDots[i].classList.toggle('filled', i < fishCount);
+  }
+
+  function handleFishTap(){
+    if (state !== 'fish' || fishCount >= FISH_TARGET) return;
+    fishCount++;
+    playWoodKnock();
+    if (navigator.vibrate) navigator.vibrate(35);
+    fishWrap.classList.remove('knock'); void fishWrap.offsetWidth; fishWrap.classList.add('knock');
+    updateFishDots();
+    if (fishCount >= FISH_TARGET){
+      fishStatus.textContent = '心神已定';
+      setTimeout(goIncense, 700);
+    } else {
+      fishStatus.textContent = '已敲 ' + fishCount + ' / ' + FISH_TARGET + ' 聲';
     }
-    var noise = ctx.createBufferSource();
-    noise.buffer = buf;
-    var filt = ctx.createBiquadFilter();
-    filt.type = 'bandpass';
-    filt.frequency.value = 900;
-    filt.Q.value = 0.7;
-    var ng = ctx.createGain();
-    ng.gain.value = 0.5;
-    noise.connect(filt).connect(ng).connect(master);
-    noise.start(now);
+  }
+  fishWrap.addEventListener('pointerdown', function(e){ e.preventDefault(); handleFishTap(); });
+  document.getElementById('btn-force-fish').addEventListener('click', handleFishTap);
+
+  function goFish(){
+    state = 'fish'; fishCount = 0; updateFishDots();
+    fishStatus.textContent = '輕點木魚，敲響第一聲';
+    showScene('fish');
   }
 
-  /* ---------------- Vibration ---------------- */
-  function vibrateStrike(){
-    if (navigator.vibrate) navigator.vibrate([300, 50, 100, 50]);
+  /* ================= Stage 2 : 心香祈願 ================= */
+  var smokeCanvas = document.getElementById('smoke-canvas');
+  var smctx = smokeCanvas.getContext('2d');
+  var incenseStage = document.getElementById('incense-stage');
+  var pressRingFill = document.getElementById('press-ring-fill');
+  var pressHint = document.getElementById('press-hint');
+  var quoteCard = document.getElementById('quote-card');
+  var incenseFallbackRow = document.getElementById('incense-fallback-row');
+
+  var smokeParticles = [];
+  var silhouetteParticles = [];
+  var incenseProgress = 0;
+  var isHolding = false;
+  var incenseDone = false;
+  var smokeRAF = null;
+  var tipPoint = { x: 0.5, y: 0.12 }; // relative to stage
+
+  var GOAT_SHAPE = [
+    [0,-0.52],[-0.34,-0.36],[-0.56,-0.16],[-0.5,0.04],[-0.34,0.10],
+    [-0.24,0.16],[0,0.5],[0.24,0.16],[0.34,0.10],[0.5,0.04],
+    [0.56,-0.16],[0.34,-0.36],[0,-0.52]
+  ];
+
+  function sizeSmokeCanvas(){
+    var rect = smokeCanvas.getBoundingClientRect();
+    smokeCanvas.width = rect.width * devicePixelRatio;
+    smokeCanvas.height = rect.height * devicePixelRatio;
   }
 
-  /* ---------------- Ripple particles (Canvas 2D) ---------------- */
+  function tipPx(){
+    var w = smokeCanvas.width, h = smokeCanvas.height;
+    return { x: w * tipPoint.x, y: h * tipPoint.y };
+  }
+
+  function spawnSmoke(){
+    var tip = tipPx();
+    smokeParticles.push({
+      x: tip.x + (Math.random()-0.5)*6*devicePixelRatio,
+      y: tip.y,
+      vy: -(0.35 + Math.random()*0.3) * devicePixelRatio,
+      sway: Math.random()*Math.PI*2,
+      swaySpeed: 0.03 + Math.random()*0.02,
+      size: (3 + Math.random()*3) * devicePixelRatio,
+      life: 1,
+      decay: 0.006 + Math.random()*0.004
+    });
+  }
+
+  function pointInPolygon(x, y, poly){
+    var inside = false;
+    for (var i=0, j=poly.length-1; i<poly.length; j=i++){
+      var xi=poly[i][0], yi=poly[i][1], xj=poly[j][0], yj=poly[j][1];
+      var intersect = ((yi>y) !== (yj>y)) && (x < (xj-xi)*(y-yi)/((yj-yi)||0.0001)+xi);
+      if (intersect) inside = !inside;
+    }
+    return inside;
+  }
+
+  function buildSilhouetteTargets(){
+    var tip = tipPx();
+    var w = smokeCanvas.width;
+    var scale = w * 0.62;
+    var cx = tip.x, cy = tip.y - w * 0.42;
+    var targets = [];
+    var tries = 0;
+    while (targets.length < 70 && tries < 4000){
+      tries++;
+      var rx = (Math.random()*2-1), ry = (Math.random()*2-1);
+      if (pointInPolygon(rx, ry, GOAT_SHAPE)){
+        targets.push({ x: cx + rx*scale, y: cy + ry*scale });
+      }
+    }
+    return targets;
+  }
+
+  var convergenceFallbackTimer = null;
+  function beginConvergence(){
+    var targets = buildSilhouetteTargets();
+    var tip = tipPx();
+    silhouetteParticles = targets.map(function(t){
+      return { x: tip.x, y: tip.y, tx: t.x, ty: t.y, size: (2+Math.random()*1.6)*devicePixelRatio, alpha: 0 };
+    });
+    // Safety net: the "have all particles arrived" check below is a visual
+    // nicety, not something the flow should ever depend on to proceed. If it
+    // doesn't resolve within 6s for any reason, show the quote anyway rather
+    // than leaving the user stuck on this screen.
+    clearTimeout(convergenceFallbackTimer);
+    convergenceFallbackTimer = setTimeout(function(){
+      if (!quoteCard.classList.contains('show')){ silhouetteParticles = []; showQuote(); }
+    }, 6000);
+  }
+
+  function animateSmoke(){
+    // NOTE: sizeSmokeCanvas() must NOT be called here. Resetting
+    // canvas.width/height forces a layout reflow and reallocates the whole
+    // backing bitmap — doing that ~60x/sec on a canvas this large is what
+    // was freezing the page after lighting the incense. Size once on scene
+    // entry / resize instead (see goIncense() and the resize listener).
+    smctx.clearRect(0, 0, smokeCanvas.width, smokeCanvas.height);
+
+    for (var i = smokeParticles.length - 1; i >= 0; i--){
+      var p = smokeParticles[i];
+      p.y += p.vy; p.sway += p.swaySpeed; p.x += Math.sin(p.sway) * 0.5 * devicePixelRatio;
+      p.life -= p.decay; p.size += 0.06 * devicePixelRatio;
+      if (p.life <= 0){ smokeParticles.splice(i,1); continue; }
+      smctx.globalAlpha = Math.max(p.life,0) * 0.5;
+      smctx.fillStyle = '#f4ead8';
+      smctx.beginPath(); smctx.arc(p.x, p.y, p.size, 0, Math.PI*2); smctx.fill();
+    }
+    smctx.globalAlpha = 1;
+
+    if (silhouetteParticles.length){
+      var allArrived = true;
+      silhouetteParticles.forEach(function(sp){
+        sp.x += (sp.tx - sp.x) * 0.06;
+        sp.y += (sp.ty - sp.y) * 0.06;
+        sp.alpha = Math.min(sp.alpha + 0.02, 1);
+        if (Math.abs(sp.tx-sp.x) > 1 || Math.abs(sp.ty-sp.y) > 1) allArrived = false;
+        smctx.globalAlpha = sp.alpha * 0.85;
+        smctx.fillStyle = '#ffd875';
+        smctx.shadowColor = '#ffd875'; smctx.shadowBlur = 6*devicePixelRatio;
+        smctx.beginPath(); smctx.arc(sp.x, sp.y, sp.size, 0, Math.PI*2); smctx.fill();
+        smctx.shadowBlur = 0;
+      });
+      smctx.globalAlpha = 1;
+      if (allArrived && !silhouetteParticles.holdStarted){
+        silhouetteParticles.holdStarted = true;
+        setTimeout(function(){
+          var fadeStep = setInterval(function(){
+            var alive = false;
+            silhouetteParticles.forEach(function(sp){ sp.alpha -= 0.03; if (sp.alpha>0) alive = true; });
+            if (!alive){ clearInterval(fadeStep); clearTimeout(convergenceFallbackTimer); silhouetteParticles = []; showQuote(); }
+          }, 40);
+        }, 1400);
+      }
+    }
+
+    smokeRAF = requestAnimationFrame(animateSmoke);
+  }
+
+  function showQuote(){
+    quoteCard.classList.add('show');
+  }
+
+  function updatePressRing(progress){
+    var circumference = 283;
+    pressRingFill.setAttribute('stroke-dashoffset', String(circumference * (1 - progress)));
+  }
+
+  var holdStart = null;
+  var decayRAF = null;
+  function startHold(){
+    if (state !== 'incense' || incenseDone) return;
+    isHolding = true; holdStart = performance.now() - incenseProgress * HOLD_DURATION;
+    if (decayRAF){ cancelAnimationFrame(decayRAF); decayRAF = null; }
+    pressHint.textContent = '按住不放…';
+    stepHold();
+  }
+  function stepHold(){
+    if (!isHolding) return;
+    var elapsed = performance.now() - holdStart;
+    incenseProgress = Math.min(1, elapsed / HOLD_DURATION);
+    updatePressRing(incenseProgress);
+    if (Math.random() < 0.35 + incenseProgress*0.4) spawnSmoke();
+    if (incenseProgress >= 1){
+      isHolding = false; incenseDone = true;
+      pressHint.textContent = '心香已點燃';
+      incenseFallbackRow.style.display = 'none';
+      for (var i=0;i<10;i++) spawnSmoke();
+      beginConvergence();
+      return;
+    }
+    requestAnimationFrame(stepHold);
+  }
+  function endHold(){
+    if (!isHolding) return;
+    isHolding = false;
+    if (incenseDone) return;
+    pressHint.textContent = '鬆手了，再按住一次';
+    decayLoop();
+  }
+  function decayLoop(){
+    if (isHolding || incenseDone) return;
+    incenseProgress = Math.max(0, incenseProgress - 0.012);
+    updatePressRing(incenseProgress);
+    if (incenseProgress > 0) decayRAF = requestAnimationFrame(decayLoop);
+  }
+
+  incenseStage.addEventListener('pointerdown', function(e){ e.preventDefault(); startHold(); });
+  window.addEventListener('pointerup', endHold);
+  incenseStage.addEventListener('pointerleave', endHold);
+
+  document.getElementById('btn-force-incense').addEventListener('click', function(){
+    if (state !== 'incense' || incenseDone) return;
+    incenseProgress = 1; incenseDone = true; updatePressRing(1);
+    pressHint.textContent = '心香已點燃';
+    incenseFallbackRow.style.display = 'none';
+    for (var i=0;i<10;i++) spawnSmoke();
+    beginConvergence();
+  });
+
+  document.getElementById('btn-to-bell').addEventListener('click', goBell);
+
+  function goIncense(){
+    state = 'incense'; incenseProgress = 0; incenseDone = false; isHolding = false;
+    smokeParticles = []; silhouetteParticles = [];
+    quoteCard.classList.remove('show');
+    incenseFallbackRow.style.display = 'flex';
+    pressHint.textContent = '按住不放…';
+    updatePressRing(0);
+    showScene('incense');
+    sizeSmokeCanvas();
+    if (smokeRAF) cancelAnimationFrame(smokeRAF);
+    animateSmoke();
+  }
+
+  /* ================= Stage 3 : 叩鐘迴向 ================= */
   var rippleCanvas = document.getElementById('ripple-canvas');
   var rctx = rippleCanvas.getContext('2d');
   var particles = [];
   var rippleRAF = null;
+  var bellWrap = document.getElementById('bell-wrap');
+  var statusText = document.getElementById('status-text');
+  var lookupPrompt = document.getElementById('lookup-prompt');
+  var fallbackStrikeRow = document.getElementById('fallback-strike-row');
+  var hud = document.getElementById('hud');
+  var bellDots = document.getElementById('bell-dots').children;
+  var bellCount = 0;
+  var strikeLocked = false;
+
+  function updateBellDots(){
+    for (var i = 0; i < bellDots.length; i++) bellDots[i].classList.toggle('filled', i < bellCount);
+  }
 
   function sizeRippleCanvas(){
     var rect = rippleCanvas.getBoundingClientRect();
@@ -311,27 +646,22 @@
     rippleCanvas.height = rect.height * devicePixelRatio;
   }
 
-  function spawnRipple(){
+  function spawnRipple(scale){
     sizeRippleCanvas();
     var cx = rippleCanvas.width / 2, cy = rippleCanvas.height / 2;
     var colors = ['#ffd875', '#d4af37', '#e8613f', '#c0392b'];
     particles = [];
-    var n = 90;
+    var n = Math.floor(90 * scale);
     for (var i = 0; i < n; i++){
       var angle = (Math.PI * 2 * i) / n + Math.random() * 0.4;
-      var speed = (2.4 + Math.random() * 3.2) * devicePixelRatio;
+      var speed = (2.4 + Math.random() * 3.2) * devicePixelRatio * scale;
       particles.push({
-        x: cx, y: cy,
-        vx: Math.cos(angle) * speed,
-        vy: Math.sin(angle) * speed,
-        life: 1,
-        decay: 0.012 + Math.random() * 0.012,
-        size: (2 + Math.random() * 3) * devicePixelRatio,
-        color: colors[i % colors.length]
+        x: cx, y: cy, vx: Math.cos(angle)*speed, vy: Math.sin(angle)*speed,
+        life: 1, decay: 0.012 + Math.random()*0.012,
+        size: (2 + Math.random()*3) * devicePixelRatio, color: colors[i % colors.length]
       });
     }
-    // shockwave ring state, drawn alongside particles
-    particles.ring = { r: 0, maxR: Math.min(cx, cy) * 0.95, life: 1 };
+    particles.ring = { r: 0, maxR: Math.min(cx, cy) * 0.95 * scale, life: 1 };
     if (rippleRAF) cancelAnimationFrame(rippleRAF);
     animateRipple();
   }
@@ -339,117 +669,87 @@
   function animateRipple(){
     rctx.clearRect(0, 0, rippleCanvas.width, rippleCanvas.height);
     var alive = false;
-
     var ring = particles.ring;
     if (ring && ring.life > 0){
-      ring.r += (ring.maxR - ring.r) * 0.09;
-      ring.life -= 0.02;
-      rctx.beginPath();
-      rctx.arc(rippleCanvas.width/2, rippleCanvas.height/2, ring.r, 0, Math.PI*2);
+      ring.r += (ring.maxR - ring.r) * 0.09; ring.life -= 0.02;
+      rctx.beginPath(); rctx.arc(rippleCanvas.width/2, rippleCanvas.height/2, ring.r, 0, Math.PI*2);
       rctx.strokeStyle = 'rgba(255,216,117,' + Math.max(ring.life,0) + ')';
-      rctx.lineWidth = 2 * devicePixelRatio;
-      rctx.stroke();
-      alive = true;
+      rctx.lineWidth = 2 * devicePixelRatio; rctx.stroke(); alive = true;
     }
-
     for (var i = 0; i < particles.length; i++){
-      var p = particles[i];
-      if (p.life <= 0) continue;
-      p.x += p.vx; p.y += p.vy;
-      p.vx *= 0.965; p.vy *= 0.965;
-      p.life -= p.decay;
+      var p = particles[i]; if (p.life <= 0) continue;
+      p.x += p.vx; p.y += p.vy; p.vx *= 0.965; p.vy *= 0.965; p.life -= p.decay;
       if (p.life > 0){
-        alive = true;
-        rctx.globalAlpha = Math.max(p.life, 0);
-        rctx.fillStyle = p.color;
-        rctx.beginPath();
-        rctx.arc(p.x, p.y, p.size * p.life, 0, Math.PI * 2);
-        rctx.fill();
+        alive = true; rctx.globalAlpha = Math.max(p.life,0); rctx.fillStyle = p.color;
+        rctx.beginPath(); rctx.arc(p.x, p.y, p.size*p.life, 0, Math.PI*2); rctx.fill();
       }
     }
     rctx.globalAlpha = 1;
     if (alive) rippleRAF = requestAnimationFrame(animateRipple);
   }
 
-  /* ---------------- Strike flow ---------------- */
-  var bellWrap = document.getElementById('bell-wrap');
-  var statusText = document.getElementById('status-text');
-  var lookupPrompt = document.getElementById('lookup-prompt');
-  var fallbackStrikeRow = document.getElementById('fallback-strike-row');
-  var hud = document.getElementById('hud');
-
   function triggerStrike(){
-    if (state !== 'armed') return;
-    state = 'struck';
-    statusText.textContent = '鐘聲響起…';
-    fallbackStrikeRow.style.display = 'none';
-
-    playBell();
-    vibrateStrike();
-    spawnRipple();
-
-    bellWrap.classList.remove('swing');
-    void bellWrap.offsetWidth; // restart animation
-    bellWrap.classList.add('swing');
-
+    if (state !== 'bell' || strikeLocked || bellCount >= BELL_TARGET) return;
+    strikeLocked = true;
+    bellCount++; updateBellDots();
+    var isFinal = bellCount >= BELL_TARGET;
+    playBell(isFinal);
+    vibrateBellStrike(bellCount, isFinal);
+    spawnRipple(isFinal ? 1.6 : 1);
+    bellWrap.classList.remove('swing'); void bellWrap.offsetWidth; bellWrap.classList.add('swing');
+    statusText.textContent = isFinal ? '鐘聲迴盪，功德迴向…' : ('已叩 ' + bellCount + ' / ' + BELL_TARGET + ' 聲');
     setTimeout(function(){
-      lookupPrompt.classList.add('show');
-      statusText.textContent = '請將手機朝向天空';
-    }, 900);
+      strikeLocked = false;
+      if (isFinal){
+        fallbackStrikeRow.style.display = 'none';
+        setTimeout(function(){
+          lookupPrompt.classList.add('show');
+          statusText.textContent = '請將手機朝向天空';
+        }, 700);
+      } else {
+        statusText.textContent = '感應中，再叩一聲…';
+      }
+    }, isFinal ? 1300 : 900);
   }
 
-  /* ---------------- Motion: detect the bell-strike gesture ---------------- */
   var lastStrikeTime = 0;
   function onDeviceMotion(e){
     var acc = e.acceleration && (e.acceleration.x || e.acceleration.y || e.acceleration.z) ? e.acceleration : e.accelerationIncludingGravity;
     if (!acc) return;
     var mag = Math.sqrt((acc.x||0)*(acc.x||0) + (acc.y||0)*(acc.y||0) + (acc.z||0)*(acc.z||0));
-    hud.textContent = '加速度感應中 · ' + mag.toFixed(1) + ' m/s²';
+    if (state === 'bell') hud.textContent = '加速度感應中 · ' + mag.toFixed(1) + ' m/s²';
     var now = performance.now();
-    if (state === 'armed' && mag > STRIKE_THRESHOLD && now - lastStrikeTime > STRIKE_COOLDOWN){
-      lastStrikeTime = now;
-      triggerStrike();
+    if (state === 'bell' && bellCount < BELL_TARGET && !strikeLocked && mag > STRIKE_THRESHOLD && now - lastStrikeTime > STRIKE_COOLDOWN){
+      lastStrikeTime = now; triggerStrike();
     }
   }
 
-  /* ---------------- Orientation: detect "looking at the sky" ---------------- */
-  var lastBeta = null;
   function onDeviceOrientation(e){
-    if (typeof e.beta === 'number'){
-      lastBeta = e.beta;
-      if (state === 'struck'){
-        hud.textContent = '傾斜角 β ' + e.beta.toFixed(0) + '°（面向天空區間約 ' + SKY_BETA_MIN + '° ~ ' + SKY_BETA_MAX + '°）';
-        if (e.beta > SKY_BETA_MIN && e.beta < SKY_BETA_MAX){
-          goToSky();
-        }
-      }
+    if (typeof e.beta === 'number' && state === 'bell' && bellCount >= BELL_TARGET){
+      hud.textContent = '傾斜角 β ' + e.beta.toFixed(0) + '°（面向天空區間約 ' + SKY_BETA_MIN + '° ~ ' + SKY_BETA_MAX + '°）';
+      if (e.beta > SKY_BETA_MIN && e.beta < SKY_BETA_MAX) goSky();
     }
   }
 
-  function goToSky(){
-    if (state !== 'struck') return;
-    state = 'sky';
-    showScene(sceneSky);
-    startStarfield();
+  document.getElementById('btn-force-sky').addEventListener('click', function(){ if (bellCount >= BELL_TARGET) goSky(); });
+  document.getElementById('btn-force-strike').addEventListener('click', triggerStrike);
+
+  function goBell(){
+    state = 'bell'; bellCount = 0; strikeLocked = false; updateBellDots();
+    lookupPrompt.classList.remove('show');
+    fallbackStrikeRow.style.display = 'flex';
+    statusText.textContent = '感應中，等待撞擊…';
+    if (smokeRAF){ cancelAnimationFrame(smokeRAF); smokeRAF = null; }
+    clearTimeout(convergenceFallbackTimer);
+    showScene('bell');
   }
 
-  document.getElementById('btn-force-sky').addEventListener('click', goToSky);
-  document.getElementById('btn-force-strike').addEventListener('click', function(){
-    if (state === 'armed') triggerStrike();
-  });
-
-  /* ---------------- Starfield + constellation ---------------- */
+  /* ================= Stage 4 : Sky + lanterns ================= */
   var starCanvas = document.getElementById('star-canvas');
   var sctx = starCanvas.getContext('2d');
-  var stars = [], constellationPts = [], otherLights = [];
+  var stars = [], constellationPts = [], lanterns = [];
   var skyRAF = null;
   var igniteProgress = 0;
-
-  var GOAT_SHAPE = [
-    [0,-0.52],[-0.34,-0.36],[-0.56,-0.16],[-0.5,0.04],[-0.34,0.10],
-    [-0.24,0.16],[0,0.5],[0.24,0.16],[0.34,0.10],[0.5,0.04],
-    [0.56,-0.16],[0.34,-0.36],[0,-0.52]
-  ];
   var GOAT_EYES = [[-0.12,-0.08],[0.12,-0.08]];
 
   function sizeStarCanvas(){
@@ -461,138 +761,115 @@
     sizeStarCanvas();
     var w = starCanvas.width, h = starCanvas.height;
     stars = [];
-    var n = Math.floor((w * h) / 9000);
-    for (var i = 0; i < n; i++){
-      stars.push({
-        x: Math.random() * w,
-        y: Math.random() * h * 0.82,
-        r: Math.random() * 1.4 * devicePixelRatio + 0.3,
-        tw: Math.random() * Math.PI * 2,
-        speed: 0.01 + Math.random() * 0.02
-      });
+    var n = Math.floor((w*h)/9000);
+    for (var i=0;i<n;i++){
+      stars.push({ x: Math.random()*w, y: Math.random()*h*0.82, r: Math.random()*1.4*devicePixelRatio+0.3, tw: Math.random()*Math.PI*2, speed: 0.01+Math.random()*0.02 });
     }
-    var cx = w * 0.5, cy = h * 0.36, scale = Math.min(w, h) * 0.34;
-    constellationPts = GOAT_SHAPE.map(function(p){ return { x: cx + p[0]*scale, y: cy + p[1]*scale }; });
-    var eyePts = GOAT_EYES.map(function(p){ return { x: cx + p[0]*scale, y: cy + p[1]*scale }; });
-    constellationPts.eyes = eyePts;
+    var cx = w*0.5, cy = h*0.34, scale = Math.min(w,h)*0.32;
+    constellationPts = GOAT_SHAPE.map(function(p){ return { x: cx+p[0]*scale, y: cy+p[1]*scale }; });
+    constellationPts.eyes = GOAT_EYES.map(function(p){ return { x: cx+p[0]*scale, y: cy+p[1]*scale }; });
 
-    otherLights = [];
-    var m = 46;
-    for (var j = 0; j < m; j++){
-      otherLights.push({
-        x: Math.random() * w,
-        y: h * 0.15 + Math.random() * h * 0.6,
-        r: (1.2 + Math.random() * 1.8) * devicePixelRatio,
-        tw: Math.random() * Math.PI * 2,
-        speed: 0.015 + Math.random() * 0.02
+    lanterns = [];
+    var m = 16;
+    for (var j=0;j<m;j++){
+      lanterns.push({
+        x: Math.random()*w, y: h + Math.random()*h,
+        vy: (0.25+Math.random()*0.35)*devicePixelRatio,
+        sway: Math.random()*Math.PI*2, swaySpeed: 0.01+Math.random()*0.015,
+        size: (7+Math.random()*7)*devicePixelRatio
       });
     }
   }
 
+  function drawLantern(x,y,size){
+    sctx.save();
+    sctx.globalAlpha = 0.85;
+    sctx.fillStyle = '#ffb15c';
+    sctx.shadowColor = '#ffb15c'; sctx.shadowBlur = size*1.4;
+    sctx.beginPath();
+    sctx.moveTo(x-size*0.42, y-size*0.5);
+    sctx.quadraticCurveTo(x-size*0.62, y, x-size*0.42, y+size*0.5);
+    sctx.lineTo(x+size*0.42, y+size*0.5);
+    sctx.quadraticCurveTo(x+size*0.62, y, x+size*0.42, y-size*0.5);
+    sctx.closePath(); sctx.fill();
+    sctx.shadowBlur = 0;
+    sctx.fillStyle = 'rgba(255,235,200,.55)';
+    sctx.fillRect(x-size*0.3, y-size*0.58, size*0.6, size*0.14);
+    sctx.restore();
+  }
+
   function startStarfield(){
-    buildSky();
-    igniteProgress = 0;
-    var startCount = 12480 + Math.floor(Math.random() * 30);
+    buildSky(); igniteProgress = 0;
+    var startCount = 12480 + Math.floor(Math.random()*30);
     var counterEl = document.getElementById('light-count');
-    var target = startCount + 1;
-    var shown = startCount;
+    var target = startCount+1, shown = startCount;
     var counterTimer = setInterval(function(){
-      shown += 1;
-      counterEl.textContent = shown.toLocaleString('zh-Hant');
+      shown += 1; counterEl.textContent = shown.toLocaleString('zh-Hant');
       if (shown >= target) clearInterval(counterTimer);
     }, 220);
     if (skyRAF) cancelAnimationFrame(skyRAF);
     animateSky();
   }
 
-  function animateSky(t){
+  function animateSky(){
     var w = starCanvas.width, h = starCanvas.height;
-    sctx.clearRect(0, 0, w, h);
+    sctx.clearRect(0,0,w,h);
 
     stars.forEach(function(s){
-      s.tw += s.speed;
-      var a = 0.35 + Math.sin(s.tw) * 0.35 + 0.3;
-      sctx.globalAlpha = Math.max(a, 0.1);
-      sctx.fillStyle = '#eef1ff';
-      sctx.beginPath();
-      sctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      sctx.fill();
+      s.tw += s.speed; var a = 0.35+Math.sin(s.tw)*0.35+0.3;
+      sctx.globalAlpha = Math.max(a,0.1); sctx.fillStyle = '#eef1ff';
+      sctx.beginPath(); sctx.arc(s.x,s.y,s.r,0,Math.PI*2); sctx.fill();
     });
-
-    otherLights.forEach(function(s){
-      s.tw += s.speed;
-      var a = 0.4 + Math.sin(s.tw) * 0.3 + 0.3;
-      sctx.globalAlpha = Math.max(a, 0.15);
-      sctx.fillStyle = '#ffd875';
-      sctx.shadowColor = '#ffd875';
-      sctx.shadowBlur = 6 * devicePixelRatio;
-      sctx.beginPath();
-      sctx.arc(s.x, s.y, s.r, 0, Math.PI*2);
-      sctx.fill();
-      sctx.shadowBlur = 0;
-    });
-
     sctx.globalAlpha = 1;
 
-    if (igniteProgress < 1) igniteProgress = Math.min(1, igniteProgress + 0.012);
-    var revealCount = Math.floor(constellationPts.length * igniteProgress);
+    lanterns.forEach(function(l){
+      l.y -= l.vy; l.sway += l.swaySpeed;
+      var x = l.x + Math.sin(l.sway)*10*devicePixelRatio;
+      if (l.y < -40*devicePixelRatio){ l.y = h + 40*devicePixelRatio; l.x = Math.random()*w; }
+      drawLantern(x, l.y, l.size);
+    });
 
-    sctx.strokeStyle = 'rgba(255,216,117,' + (0.75 * igniteProgress) + ')';
-    sctx.lineWidth = 1.6 * devicePixelRatio;
+    if (igniteProgress < 1) igniteProgress = Math.min(1, igniteProgress+0.012);
+    var revealCount = Math.floor(constellationPts.length * igniteProgress);
+    sctx.strokeStyle = 'rgba(255,216,117,' + (0.75*igniteProgress) + ')';
+    sctx.lineWidth = 1.6*devicePixelRatio;
     sctx.beginPath();
-    for (var i = 0; i < revealCount; i++){
-      var p = constellationPts[i];
-      if (i === 0) sctx.moveTo(p.x, p.y); else sctx.lineTo(p.x, p.y);
-    }
+    for (var i=0;i<revealCount;i++){ var p=constellationPts[i]; if (i===0) sctx.moveTo(p.x,p.y); else sctx.lineTo(p.x,p.y); }
     sctx.stroke();
 
-    for (var j = 0; j < revealCount; j++){
+    for (var j=0;j<revealCount;j++){
       var pt = constellationPts[j];
-      var pulse = 1.6 + Math.sin(performance.now()/260 + j) * 0.6;
-      sctx.fillStyle = '#fff3d6';
-      sctx.shadowColor = '#ffd875';
-      sctx.shadowBlur = 14 * devicePixelRatio;
-      sctx.beginPath();
-      sctx.arc(pt.x, pt.y, pulse * devicePixelRatio, 0, Math.PI*2);
-      sctx.fill();
-      sctx.shadowBlur = 0;
+      var pulse = 1.6 + Math.sin(performance.now()/260+j)*0.6;
+      sctx.fillStyle = '#fff3d6'; sctx.shadowColor = '#ffd875'; sctx.shadowBlur = 14*devicePixelRatio;
+      sctx.beginPath(); sctx.arc(pt.x, pt.y, pulse*devicePixelRatio, 0, Math.PI*2); sctx.fill(); sctx.shadowBlur = 0;
     }
-
     if (igniteProgress > 0.6){
       constellationPts.eyes.forEach(function(pt){
-        sctx.fillStyle = '#fff3d6';
-        sctx.shadowColor = '#ffd875';
-        sctx.shadowBlur = 10 * devicePixelRatio;
-        sctx.beginPath();
-        sctx.arc(pt.x, pt.y, 1.8 * devicePixelRatio, 0, Math.PI*2);
-        sctx.fill();
-        sctx.shadowBlur = 0;
+        sctx.fillStyle = '#fff3d6'; sctx.shadowColor = '#ffd875'; sctx.shadowBlur = 10*devicePixelRatio;
+        sctx.beginPath(); sctx.arc(pt.x,pt.y,1.8*devicePixelRatio,0,Math.PI*2); sctx.fill(); sctx.shadowBlur = 0;
       });
     }
-
     skyRAF = requestAnimationFrame(animateSky);
   }
 
   window.addEventListener('resize', function(){
     if (state === 'sky') buildSky();
+    if (state === 'incense') sizeSmokeCanvas();
   });
 
-  /* ---------------- Start / permissions ---------------- */
-  var permissionNote = document.getElementById('permission-note');
+  function goSky(){
+    state = 'sky'; showScene('sky'); startStarfield();
+  }
 
-  // iOS Safari refuses to expose/trigger the sensor permission APIs at all
-  // outside a secure context (https:// or localhost). Opening the file directly
-  // via file:// or over plain http:// will make requestPermission silently
-  // no-op — no dialog, no error, sensors just never fire. Surface that clearly
-  // instead of failing silently.
+  /* ================= Start / permissions / reset ================= */
+  var permissionNote = document.getElementById('permission-note');
   if (!window.isSecureContext){
-    permissionNote.innerHTML = '⚠️ 目前並非安全連線（https）。iOS 上動作／方向感應權限只有在 https 或 localhost 下才會跳出授權視窗，直接開啟本機檔案或 http 網址時不會有任何提示、感應也不會作用。請將此檔案部署到 https 網址（或用 <code>localhost</code>）後再測試，暫時可先用畫面下方的「模擬」按鈕測試流程。';
+    permissionNote.innerHTML = '⚠️ 目前並非安全連線（https）。iOS 上動作／方向感應權限只有在 https 或 localhost 下才會跳出授權視窗，直接開啟本機檔案或 http 網址時不會有任何提示、感應也不會作用。請部署到 https 網址後再測試，暫時可先用畫面下方的「模擬」按鈕測試流程。';
     permissionNote.style.color = 'var(--ember-bright)';
   }
 
   document.getElementById('btn-start').addEventListener('click', function(){
     ensureAudio();
-
     var motionApiExists = typeof DeviceMotionEvent !== 'undefined';
     var orientApiExists = typeof DeviceOrientationEvent !== 'undefined';
     var needsMotionPerm = motionApiExists && typeof DeviceMotionEvent.requestPermission === 'function';
@@ -603,54 +880,42 @@
       window.addEventListener('deviceorientation', onDeviceOrientation);
     }
 
-    function enterBellScene(){
-      state = 'armed';
-      showScene(sceneBell);
-      statusText.textContent = '感應中，等待撞擊…';
-    }
-
     if (needsMotionPerm || needsOrientPerm){
       Promise.all([
         needsMotionPerm ? DeviceMotionEvent.requestPermission() : Promise.resolve('granted'),
         needsOrientPerm ? DeviceOrientationEvent.requestPermission() : Promise.resolve('granted')
       ]).then(function(results){
-        attachListeners();
-        enterBellScene();
-        // Note: on iOS, motion + orientation share ONE system permission
-        // ("動作與方向") — calling both requestPermission() in the same click
-        // only shows a single dialog. That is expected, not a bug.
+        attachListeners(); goFish();
         var motionState = results[0], orientState = results[1];
-        if (motionState !== 'granted' || orientState !== 'granted'){
-          hud.textContent = '權限狀態 — 動作:' + motionState + ' / 方向:' + orientState + '（未授權時請用下方「模擬」按鈕測試）';
-        } else {
-          hud.textContent = '權限已授權，感應中…';
-        }
+        hud.textContent = (motionState==='granted' && orientState==='granted') ? '權限已授權，感應中…' :
+          ('權限狀態 — 動作:' + motionState + ' / 方向:' + orientState + '（未授權時請用模擬按鈕測試）');
       }).catch(function(err){
-        // requestPermission rejects (rather than resolving 'denied') when
-        // called outside a secure context or outside a user gesture.
-        attachListeners();
-        enterBellScene();
-        hud.textContent = '感應權限請求失敗：' + err.message + '（請確認為 https 連線，並直接點擊按鈕觸發）';
+        attachListeners(); goFish();
+        hud.textContent = '感應權限請求失敗：' + err.message + '（請確認為 https 連線）';
       });
     } else if (!motionApiExists && !orientApiExists){
-      attachListeners();
-      enterBellScene();
-      hud.textContent = '此瀏覽器不支援動作／方向感應 API，僅能用「模擬」按鈕測試';
+      attachListeners(); goFish();
+      hud.textContent = '此瀏覽器不支援動作／方向感應 API，僅能用模擬按鈕測試';
     } else {
-      attachListeners();
-      enterBellScene();
+      attachListeners(); goFish();
     }
   });
 
   document.getElementById('btn-reset').addEventListener('click', function(){
     state = 'intro';
-    lastStrikeTime = 0;
+    fishCount = 0; bellCount = 0; strikeLocked = false;
+    incenseProgress = 0; incenseDone = false; isHolding = false;
+    smokeParticles = []; silhouetteParticles = [];
     igniteProgress = 0;
     lookupPrompt.classList.remove('show');
     fallbackStrikeRow.style.display = 'flex';
+    incenseFallbackRow.style.display = 'flex';
+    quoteCard.classList.remove('show');
     bellWrap.classList.remove('swing');
     if (skyRAF) cancelAnimationFrame(skyRAF);
-    showScene(sceneIntro);
+    if (smokeRAF){ cancelAnimationFrame(smokeRAF); smokeRAF = null; }
+    clearTimeout(convergenceFallbackTimer);
+    showScene('intro');
   });
 
 })();
