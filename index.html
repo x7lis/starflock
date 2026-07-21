@@ -75,7 +75,7 @@
       <p class="text-gray-400 text-xs leading-relaxed max-w-xs mx-auto">閉上眼默念新年心願，長按下方按鈕點燃心香，鬆手即點燃。長按的時長完全由您心念所定。</p>
     </div>
     <div class="relative w-64 h-72 flex flex-col items-center justify-end pb-4">
-      <canvas id="smokeCanvas" class="absolute left-1/2 bottom-[30%] w-[340%] h-[220%] -translate-x-1/2 pointer-events-none"></canvas>
+      <canvas id="smokeCanvas" class="absolute left-1/2 bottom-[30%] w-[340%] h-[220%] -translate-x-1/2 pointer-events-none z-30"></canvas>
       <div class="relative w-4 h-28 flex justify-center items-end z-10">
         <div id="incenseAura" class="absolute top-0 w-2 h-2 rounded-full pointer-events-none opacity-0" style="background:radial-gradient(circle, rgba(245,158,11,0.65), rgba(245,158,11,0) 70%); transform:scale(1);"></div>
         <div id="incenseTip" class="absolute top-0 w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_#f00] hidden"></div>
@@ -334,8 +334,9 @@ fishContinueBtn.addEventListener('click', function(){
   if (tapTimestamps.length < 3) return;
   var last = tapTimestamps[tapTimestamps.length-1], prev = tapTimestamps[tapTimestamps.length-2];
   gesture.N = tapTimestamps.length; gesture.t_interval = Math.round(last-prev);
-  state = 'incense'; goIncense();
+  state = 'incense';
   setProgress(2); showStage('stageIncense');
+  goIncense();
 });
 
 function goFish(){
@@ -520,6 +521,11 @@ function goIncense(){
   incenseAura.style.opacity='0'; incenseAura.style.transform='scale(1)';
   incenseStatus.textContent='長按上方按鈕開始心香祈願';
   sizeSmokeCanvas();
+  if (smokeCanvas.width === 0 || smokeCanvas.height === 0){
+    // Defensive fallback: if the section wasn't actually laid out yet when
+    // measured (0×0 canvas draws nothing, silently), re-measure next frame.
+    requestAnimationFrame(sizeSmokeCanvas);
+  }
   if (smokeRAF) cancelAnimationFrame(smokeRAF);
   animateSmoke();
 }
